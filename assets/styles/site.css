@@ -8,6 +8,32 @@
 @media(max-width:680px){body.with-mobile-cta{padding-bottom:66px}.shell{width:calc(100% - 40px)}.section{padding:72px 0}.section.compact{padding:58px 0}.site-header{height:67px}.brand img{width:137px}.menu{display:block}.site-nav{display:none;position:absolute;left:0;right:0;top:66px;background:#fff;border-bottom:1px solid var(--line);padding:18px 20px;flex-direction:column;align-items:stretch;gap:0}.site-nav.open{display:flex}.site-nav a{padding:13px 0;border-bottom:1px solid var(--line);font-size:10px}.site-nav .button{margin-top:12px}.display{font-size:48px;line-height:.9}.hero{padding-top:22px;padding-bottom:58px;gap:26px}.hero h1{font-size:56px;line-height:.86;margin-bottom:20px}.hero .lead{font-size:25px}.hero p:not(.eyebrow):not(.lead){font-size:13px}.hero-media{height:300px;margin-left:-20px;margin-right:-20px}.dark-hero{padding-left:20px;padding-right:20px}.dark-hero .hero-media{margin-left:0;margin-right:0}.hero-proof{margin-top:33px}.hero-proof b{font-size:22px}.hero-proof span{font-size:9px}.hero-actions{align-items:stretch}.hero-actions .button{width:100%}.section-head{margin-bottom:33px}.section-head>p{font-size:13px}.mini-grid,.question-grid,.compare,.choice-row,.stat-row,.meeting-list{grid-template-columns:1fr}.mini-card{min-height:150px;padding:23px}.question{min-height:140px;padding:23px}.route{gap:30px}.route-item{padding:19px 0}.project-list{gap:16px}.project{min-height:0}.project-photo{min-height:260px;max-height:300px}.project-copy{padding:31px 24px}.project-copy h3{font-size:47px}.compare-card{padding:27px 23px}.compare-card h3{font-size:39px}.stat{min-height:100px}.banner{padding:30px 0}.banner .shell{display:block}.banner h2{font-size:36px}.banner p{margin:13px 0 20px}.banner .button{width:100%}.steps{grid-template-columns:1fr}.step{min-height:145px}.meeting-item{min-height:110px;padding:21px}.trust-media{height:280px}.lead-form{padding:27px 22px;margin:0 -2px}.faq{margin:0}.footer-inner{grid-template-columns:1fr auto}.footer-inner p{display:none}.mobile-cta{display:block;position:fixed;left:12px;right:12px;bottom:12px;z-index:45}.mobile-cta .button{width:100%;box-shadow:0 8px 25px rgba(0,0,0,.24)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 
+/* Cross-landing QA: stable wrapping, readable mobile grids and touch targets. */
+h1,h2,h3,.display{min-width:0;text-wrap:balance}
+p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
+.menu{width:44px;height:44px}
+.lead-form input,.lead-form select,.lead-form textarea,.quiz-contact-step input[type="text"],.quiz-contact-step input[type="tel"],.quiz-contact-step input:not([type]){min-height:44px}
+.text-link{min-height:44px;align-items:center}
+.mini-grid>*,.question-grid>*,.steps>*,.stat-row>*,.meeting-list>*,.choice-row>*,.economics-grid>*,.layout-grid>*,.scenario-grid>*{min-width:0}
+@media(max-width:680px){
+  .mini-grid,.question-grid,.steps,.stat-row,.meeting-list,.choice-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mini-card,.question,.step,.stat{padding:18px 15px;min-height:148px}
+  .mini-card .num{margin-bottom:18px}
+  .question h3{font-size:23px}
+  .step h3{margin-top:18px}
+  .meeting-item{grid-template-columns:34px 1fr;padding:17px 14px;gap:9px}
+  .meeting-item p{font-size:12px}
+  .economics-grid,.layout-grid,.scenario-grid,.three-scenarios{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .economics-card{min-height:158px;padding:19px 16px}
+  .economics-card strong{font-size:34px}
+  .layout-grid>div,.scenario-grid>div{min-height:118px;padding:13px 11px}
+}
+@media(max-width:390px){
+  .mini-card,.question,.step,.stat{padding:16px 12px}
+  .mini-card h3,.step h3{font-size:14px}
+  .mini-card p,.step p,.question p{font-size:10px}
+}
+
 /* Dubai + Abu Dhabi landing */
 .uae-page .uae-hero{grid-template-columns:.92fr 1.08fr;gap:clamp(42px,5vw,78px);min-height:570px;padding-top:48px;padding-bottom:48px}
 .uae-page .uae-hero .hero-copy{max-width:650px}
@@ -453,4 +479,17 @@
   .about-reason-list-plain article{grid-template-columns:60px 1fr;gap:12px}
   .about-direct-contact>div{grid-template-columns:1fr 1fr}
   .about-direct-contact .button{min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center}
+}
+
+/* Keep numeric comparison blocks compact on phones. */
+@media(max-width:680px){
+  .hero-proof{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero-proof>div{border-bottom:1px solid var(--line)}
+  .hero-proof>div:nth-child(2){border-right:0}
+  .hero-proof>div:last-child:nth-child(odd){grid-column:1/-1;border-bottom:0}
+  .dark-hero .hero-proof>div{border-bottom-color:var(--dark-line)}
+  .about-hero-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .about-hero-stats div:nth-child(2){border-right:0}
+  .about-hero-stats div:last-child:nth-child(odd){grid-column:1/-1}
+  .uae-page .economics-grid,.uae-page .layout-grid,.uae-page .scenario-grid,.uae-page .three-scenarios{grid-template-columns:repeat(2,minmax(0,1fr))}
 }

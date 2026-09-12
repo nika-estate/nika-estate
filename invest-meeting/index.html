@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Бесплатная онлайн-встреча с брокером Nika Estate: подбор недвижимости в Дубае и Абу-Даби, расчёт доходности, первого взноса и расходов.">
   <title>Инвестиционная встреча онлайн — Nika Estate</title>
-  <link rel="stylesheet" href="../assets/styles/site.css">
+  <link rel="icon" href="../assets/logo-nika-estate.png">
+  <link rel="stylesheet" href="../assets/styles/site.css?v=20260913-3">
   <style>
     .invest-page{--meeting-gold:#b28a53;--meeting-dark:#121211}
     .invest-page .button:after{display:none}
@@ -117,7 +118,8 @@
       .meeting-hero .hero-lead{font-size:15px;line-height:1.3}
       .meeting-hero-actions{display:block;margin-top:15px}
       .meeting-hero-note{display:block;margin-top:8px;text-align:center}
-      .meeting-facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:14px}
+      .meeting-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:14px}
+      .meeting-fact:last-child:nth-child(odd){grid-column:1/-1}
       .meeting-fact{min-height:62px;border-radius:12px;padding:8px 7px;font-size:10px;line-height:1.22}
       .benefit-intro .lead{font-size:18px}
       .benefit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -126,9 +128,10 @@
       .benefit-card h3{font-size:18px;line-height:1.08}
       .benefit-card p{font-size:11px;line-height:1.4}
       .block-action .button{min-width:0}
-      .meeting-plan-grid{grid-template-columns:1fr}
-      .meeting-plan-item{grid-column:auto!important;min-height:88px;padding:19px 17px;grid-template-columns:38px 1fr}
-      .meeting-plan-item p{font-size:14px}
+      .meeting-plan-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .meeting-plan-item{grid-column:auto!important;min-height:124px;padding:17px 14px;grid-template-columns:1fr;gap:9px}
+      .meeting-plan-item:last-child{grid-column:1/-1!important;min-height:88px;grid-template-columns:34px 1fr}
+      .meeting-plan-item p{font-size:12px}
       .meeting-visual{height:285px}
       .meeting-visual img{object-position:58% center}
       .meeting-visual-copy{left:20px;right:20px;bottom:20px;max-width:none;padding:16px 17px;font-size:14px}
@@ -143,7 +146,8 @@
       .projects-consultation .button{min-width:0;width:100%}
       .compact-trust{gap:28px}
       .compact-trust-media{height:250px;margin:0 -20px}
-      .compact-trust-copy ul{grid-template-columns:1fr}
+      .compact-trust-copy ul{grid-template-columns:1fr 1fr;gap:0 14px}
+      .compact-trust-copy li{font-size:10px}
       .meeting-cta .shell{grid-template-columns:1fr;gap:20px}
       .meeting-cta h2{font-size:27px}
       .invest-request .lead{font-size:19px}
@@ -241,7 +245,7 @@
 
   <footer class="site-footer"><div class="shell footer-inner"><img src="../assets/logo-nika-estate.png" alt="Nika Estate"><p>Инвестиционная встреча онлайн по&nbsp;недвижимости Дубая и&nbsp;Абу‑Даби.<br>Все расчёты строятся по&nbsp;параметрам конкретного объекта.</p><a href="#top">Наверх ↑</a></div></footer>
   <div class="mobile-cta is-hidden"><a class="button gold" href="#request">Записаться на встречу</a></div>
-  <script src="../assets/scripts/site.js"></script>
+  <script src="../assets/scripts/site.js?v=20260913-3"></script>
   <script src="../assets/scripts/lead-capture.js" data-endpoint="https://script.google.com/macros/s/AKfycbwioz7fVEzsnDXOz5EOG5f7Db1detqxZYDZF1T8OqyU2DAeUW-_P5envHK6vwCtcNKAbg/exec" data-landing-name="Инвестиционная встреча онлайн" data-offer-name="Онлайн-консультация по инвестициям в недвижимость ОАЭ"></script>
 </body>
 </html>
