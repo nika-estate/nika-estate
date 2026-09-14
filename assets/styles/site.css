@@ -37,8 +37,10 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
 /* Dubai + Abu Dhabi landing */
 .uae-page .uae-hero{grid-template-columns:.92fr 1.08fr;gap:clamp(42px,5vw,78px);min-height:570px;padding-top:48px;padding-bottom:48px}
 .uae-page .uae-hero .hero-copy{max-width:650px}
-.uae-page .uae-hero h1{font-size:clamp(48px,5vw,74px);line-height:.91;margin:0}
-.uae-page .uae-hero-subtitle{font:400 clamp(22px,2.2vw,30px)/1.08 var(--serif);letter-spacing:-.025em;color:var(--gold);margin:24px 0 0;max-width:590px}
+.uae-page .uae-hero h1{font-size:clamp(42px,4.25vw,62px);line-height:.93;margin:0}
+.uae-page .uae-hero h1 span,.uae-page .uae-hero h1 em{display:block}
+.uae-page .uae-hero h1 em{color:var(--gold);font-style:italic;margin-top:8px}
+.uae-page .uae-hero-subtitle{font:400 clamp(19px,1.8vw,25px)/1.15 var(--serif);letter-spacing:-.02em;color:var(--gold);margin:24px 0 0;max-width:590px}
 .uae-page .uae-hero .hero-actions{margin-top:27px}
 .uae-page .uae-hero .hero-media{height:430px}
 .compact-head{align-items:center;margin-bottom:40px}
@@ -50,7 +52,7 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
 .city-photo img{height:100%;object-fit:cover}
 .city-copy{padding:27px 29px 30px}
 .city-copy .eyebrow{margin-bottom:10px}
-.city-copy h3{font:400 37px/.95 var(--serif);letter-spacing:-.03em;margin:0 0 19px}
+.city-copy h3{font:400 34px/.98 var(--serif);letter-spacing:-.03em;margin:0 0 19px}
 .city-copy ul{list-style:none;padding:0;margin:0}
 .city-copy li{font-size:13px;padding:9px 0;border-bottom:1px solid var(--line)}
 .city-copy li:last-child{border-bottom:0}
@@ -67,14 +69,18 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
 .uae-page .projects-heading{grid-template-columns:1.2fr .8fr;align-items:end}
 .uae-page .projects-heading .display{font-size:clamp(47px,5vw,73px);line-height:.91}
 .uae-page .projects-heading .display em{display:block;margin-top:10px}
-.uae-project-grid{grid-template-columns:repeat(4,1fr);gap:14px}
-.uae-project-grid .project-card-photo{height:190px}
-.uae-project-grid .project-card-copy{padding:22px 19px 23px}
-.uae-project-grid .project-card-copy h3{font-size:34px;line-height:.94;margin:2px 0 12px}
-.uae-project-grid .project-card-copy>p:not(.eyebrow){font-size:12px;line-height:1.48;min-height:54px}
-.uae-project-grid .chips{margin:15px 0 21px}
-.uae-project-grid .chip{font-size:9px;padding:6px 8px}
+.uae-project-grid{grid-template-columns:repeat(2,1fr);gap:18px}
+.uae-project-grid .project-card-photo{height:270px}
+.uae-project-grid .project-card-copy{padding:27px 25px 29px}
+.uae-project-grid .project-card-copy h3{font-size:43px;line-height:.94;margin:2px 0 12px}
+.uae-project-grid .project-card-copy>p:not(.eyebrow){font-size:13px;line-height:1.48;min-height:42px}
 .uae-project-grid .text-link{font-size:9px}
+.project-metrics{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin:20px 0 22px}
+.project-metrics>div{background:var(--sand);padding:13px 12px;min-height:92px}
+.project-metrics dt{font-size:8px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.project-metrics dd{font-size:11px;line-height:1.42;font-weight:600;margin:0}
+.project-metrics>div:last-child dd{color:var(--gold)}
+.project-disclaimer{font-size:10px;line-height:1.5;color:var(--muted);max-width:900px;margin:22px 0 0}
 .economics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
 .economics-card{background:#fff;padding:25px 22px;min-height:185px;display:flex;flex-direction:column}
 .economics-card span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
@@ -129,10 +135,17 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
 .keep-together{white-space:nowrap}
 .uae-page .banner h2{max-width:540px;font-size:38px}
 .uae-page .request-section .lead{font-size:29px;max-width:530px}
+.uae-about-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(42px,6vw,82px);align-items:center}
+.uae-about-photo{height:440px;overflow:hidden;background:#2a2926}
+.uae-about-photo img{height:100%;object-fit:cover;object-position:center}
+.uae-about-copy .display{font-size:clamp(48px,5vw,70px);line-height:.92}
+.uae-about-copy .lead{font-size:25px;line-height:1.15;color:#fff;margin:27px 0 23px}
+.uae-about-copy ul{list-style:none;padding:0;margin:0 0 29px;border-top:1px solid var(--dark-line)}
+.uae-about-copy li{font-size:12px;color:#d2cdc5;padding:11px 0;border-bottom:1px solid var(--dark-line)}
 
 @media(max-width:900px){
   .uae-page .uae-hero{grid-template-columns:1fr;min-height:0}
-  .uae-page .uae-hero h1{font-size:64px;max-width:800px}
+  .uae-page .uae-hero h1{font-size:52px;max-width:800px}
   .uae-page .uae-hero .hero-media{height:390px}
   .uae-project-grid{grid-template-columns:repeat(2,1fr)}
   .economics-grid{grid-template-columns:repeat(2,1fr)}
@@ -143,12 +156,15 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
   .case-columns{grid-template-columns:1fr}
   .layout-grid,.scenario-grid{grid-template-columns:repeat(2,1fr)}
   .three-scenarios{grid-template-columns:repeat(3,1fr)}
+  .uae-about-grid{grid-template-columns:1fr;gap:34px}
+  .uae-about-photo{height:390px}
 }
 @media(max-width:680px){
   .uae-page .section{padding:62px 0}
   .uae-page .uae-hero{padding-top:27px;padding-bottom:38px;gap:27px}
-  .uae-page .uae-hero h1{font-size:41px;line-height:.93}
-  .uae-page .uae-hero-subtitle{font-size:21px;line-height:1.12;margin-top:17px}
+  .uae-page .uae-hero h1{font-size:36px;line-height:.96}
+  .uae-page .uae-hero h1 em{margin-top:7px}
+  .uae-page .uae-hero-subtitle{font-size:19px;line-height:1.14;margin-top:17px}
   .uae-page .uae-hero .hero-actions{margin-top:21px}
   .uae-page .uae-hero .hero-media{height:240px}
   .compact-head{margin-bottom:28px}
@@ -165,6 +181,9 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
   .uae-project-grid .project-card-copy{padding:22px 20px 24px}
   .uae-project-grid .project-card-copy h3{font-size:37px}
   .uae-project-grid .project-card-copy>p:not(.eyebrow){min-height:0}
+  .project-metrics{margin:17px 0 19px}
+  .project-metrics>div{padding:12px 10px;min-height:96px}
+  .project-metrics dd{font-size:10px}
   .economics-grid{grid-template-columns:1fr}
   .economics-card{min-height:145px;padding:22px 20px}
   .economics-card strong{font-size:39px;margin:20px 0 9px}
@@ -187,6 +206,11 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
   .case-table b{max-width:55%}
   .uae-page .banner h2{font-size:31px}
   .uae-page .request-section .lead{font-size:24px}
+  .uae-about-photo{height:255px;margin:0 -20px}
+  .uae-about-copy .display{font-size:40px}
+  .uae-about-copy .lead{font-size:22px;margin:22px 0 20px}
+  .uae-about-copy .button{width:100%}
+  .uae-page .mobile-cta .button{font-size:9px;letter-spacing:.055em;padding:0 11px;gap:12px}
 }
 
 /* Dubai / UAE selection landing */
@@ -209,6 +233,7 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
 .quiz-step[hidden],.telegram-field[hidden],.selected-project[hidden]{display:none!important}
 .quiz-step legend{width:100%;font:400 clamp(31px,3.2vw,46px)/1 var(--serif);letter-spacing:-.025em;margin:0 0 28px}
 .quiz-hint{color:var(--muted);font-size:12px;margin:-13px 0 25px;max-width:540px}
+.quiz-goal-note{margin:16px 0 0;line-height:1.45}
 .quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .quiz-options.three-options{grid-template-columns:1fr}
 .quiz-option{position:relative;cursor:pointer}
