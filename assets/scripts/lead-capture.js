@@ -139,16 +139,26 @@
   }
 
   function send(form) {
-    if (!pageConfig.endpoint || !form.checkValidity()) return;
+    if (!pageConfig.endpoint || !form.checkValidity()) return Promise.resolve(false);
 
     const payload = buildPayload(form);
-    fetch(pageConfig.endpoint, {
+    return fetch(pageConfig.endpoint, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
       body: JSON.stringify(payload),
       keepalive: true
-    }).catch(() => {});
+    }).then(() => {
+      document.dispatchEvent(new CustomEvent('nika:lead-sent', {
+        detail: {
+          formType: payload.form_type === 'Квиз' ? 'quiz' : 'mini_form',
+          formId: payload.form_id,
+          landingName: payload.landing_name,
+          offerName: payload.offer_name
+        }
+      }));
+      return true;
+    }).catch(() => false);
   }
 
   function init(root) {
