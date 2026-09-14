@@ -39,7 +39,7 @@
   const usd = (value) => value / 3.6725;
   const amountText = (value) => `AED ${formatAed.format(value)} · ≈ $${formatUsd.format(usd(value))}`;
 
-  const paymentUnit = document.querySelector('[data-payment-unit]');
+  const paymentUnitButtons = [...document.querySelectorAll('[data-payment-unit]')];
   const paymentRates = {
     bookingPlusDld: 0.24,
     construction50: 0.3,
@@ -48,13 +48,23 @@
     post60: 0.4
   };
   const updatePaymentPlans = () => {
-    if (!paymentUnit) return;
-    const price = Number(paymentUnit.value);
+    const activeUnit = paymentUnitButtons.find((button) => button.classList.contains('is-active'));
+    if (!activeUnit) return;
+    const price = Number(activeUnit.dataset.paymentUnit);
     document.querySelectorAll('[data-payment-amount]').forEach((node) => {
       node.textContent = amountText(price * paymentRates[node.dataset.paymentAmount]);
     });
   };
-  paymentUnit?.addEventListener('change', updatePaymentPlans);
+  paymentUnitButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      paymentUnitButtons.forEach((item) => {
+        const selected = item === button;
+        item.classList.toggle('is-active', selected);
+        item.setAttribute('aria-pressed', String(selected));
+      });
+      updatePaymentPlans();
+    });
+  });
   updatePaymentPlans();
 
   const calcUnitButtons = [...document.querySelectorAll('[data-calc-unit]')];
