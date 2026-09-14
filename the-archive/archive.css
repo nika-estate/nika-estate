@@ -324,3 +324,12 @@ body.modal-open{overflow:hidden}
   .developer-proof li{font-size:14px}.developer-stats span{font-size:13px}.location-times span{font-size:12px}.location-context p{font-size:14px}
   .layout-modal-copy dt{font-size:12px}.layout-modal-copy dd{font-size:13px}.layout-modal-copy>p:not(.archive-kicker){font-size:14px}
 }
+
+/* Keep the project signature elegant without the uneven synthetic italic. */
+.archive-hero h1 span{
+  font-family:Georgia,"Times New Roman",serif;
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-.02em;
+  line-height:1;
+}

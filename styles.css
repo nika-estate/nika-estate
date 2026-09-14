@@ -153,3 +153,13 @@ h1,h2,h3{min-width:0;text-wrap:balance}p,li,dd{overflow-wrap:break-word;text-wra
   .quiz-intro li,.quiz-hint,.quiz-option small{font-size:14px}
   .location-title>p:not(.eyebrow),.location-card>p:not(.eyebrow){font-size:15px}
 }
+
+/* Calm, readable italic for Cyrillic accent lines. */
+:root{--serif:Georgia,"Times New Roman",serif}
+h1 em,h2 em{
+  font-family:Georgia,"Times New Roman",serif;
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-.025em;
+  line-height:.98;
+}
