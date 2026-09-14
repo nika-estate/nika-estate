@@ -39,22 +39,35 @@ document.querySelectorAll('.residence-toggle').forEach((button) => button.addEve
 
 const requestForm = document.querySelector('.request-form');
 
-function updateTelegramField() {
-  const telegramField = requestForm?.querySelector('[data-telegram-field]');
+function checkedValue(form, name) {
+  return form.querySelector(`[name="${name}"]:checked`)?.value || '';
+}
+
+function updateTelegramField(form) {
+  const telegramField = form?.querySelector('[data-telegram-field]');
   const telegramInput = telegramField?.querySelector('input');
   if (!telegramField || !telegramInput) return;
-  const needsTelegram = requestForm.elements.messenger.value === 'Telegram';
+  const needsTelegram = checkedValue(form, 'messenger') === 'Telegram';
   telegramField.hidden = !needsTelegram;
   telegramInput.required = needsTelegram;
 }
 
-requestForm?.addEventListener('change', (event) => {
-  if (event.target.name === 'messenger') updateTelegramField();
+document.querySelectorAll('form').forEach((form) => {
+  form.addEventListener('change', (event) => {
+    if (event.target.name === 'messenger') updateTelegramField(form);
+  });
+  updateTelegramField(form);
+});
+
+document.querySelectorAll('[data-project-link]').forEach((link) => {
+  link.addEventListener('click', () => {
+    if (requestForm?.elements.project) requestForm.elements.project.value = link.dataset.projectLink;
+  });
 });
 
 requestForm?.addEventListener('submit', (event) => {
   event.preventDefault();
-  updateTelegramField();
+  updateTelegramField(requestForm);
   if (!requestForm.checkValidity()) {
     requestForm.reportValidity();
     return;
@@ -62,11 +75,13 @@ requestForm?.addEventListener('submit', (event) => {
   const name = requestForm.elements.name.value.trim();
   const phone = requestForm.elements.phone.value.trim();
   const goal = requestForm.elements.goal.value.trim();
-  const messenger = requestForm.elements.messenger.value;
+  const project = requestForm.elements.project.value.trim();
+  const messenger = checkedValue(requestForm, 'messenger');
   const telegram = requestForm.elements.telegram.value.trim();
   const status = requestForm.querySelector('.form-success');
   const text = [
-    'Здравствуйте! Хочу получить подбор по City Walk и Central Park.',
+    'Здравствуйте! Хочу записаться на инвестиционную консультацию по City Walk и Central Park.',
+    project ? `Интересует: ${project}.` : '',
     `Имя: ${name}.`,
     `Телефон: ${phone}.`,
     `Связаться: ${messenger}.`,
@@ -77,4 +92,94 @@ requestForm?.addEventListener('submit', (event) => {
   window.open(`https://wa.me/971508698020?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
 });
 
-updateTelegramField();
+const quiz = document.querySelector('[data-quiz-form]');
+
+if (quiz) {
+  const steps = [...quiz.querySelectorAll('[data-quiz-step]')];
+  const counter = quiz.querySelector('[data-quiz-counter]');
+  const progress = quiz.querySelector('[data-quiz-progress]');
+  let activeStep = 0;
+  let autoAdvanceTimer;
+
+  function renderQuiz() {
+    steps.forEach((step, index) => {
+      step.hidden = index !== activeStep;
+      const nextButton = step.querySelector('[data-quiz-next]');
+      if (nextButton) nextButton.disabled = false;
+    });
+    counter.textContent = `${activeStep + 1} из ${steps.length}`;
+    progress.style.width = `${((activeStep + 1) / steps.length) * 100}%`;
+  }
+
+  function stepHasAnswer(step) {
+    const radios = [...step.querySelectorAll('input[type="radio"][required]')];
+    if (!radios.length || radios.some((input) => input.checked)) return true;
+    radios[0].setCustomValidity('Выберите один вариант');
+    radios[0].reportValidity();
+    radios[0].setCustomValidity('');
+    return false;
+  }
+
+  quiz.querySelectorAll('[data-quiz-next]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (!stepHasAnswer(steps[activeStep])) return;
+      activeStep = Math.min(activeStep + 1, steps.length - 1);
+      renderQuiz();
+    });
+  });
+
+  quiz.querySelectorAll('[data-quiz-back]').forEach((button) => {
+    button.addEventListener('click', () => {
+      activeStep = Math.max(activeStep - 1, 0);
+      renderQuiz();
+    });
+  });
+
+  quiz.addEventListener('change', (event) => {
+    if (!event.target.matches('.quiz-option input')) return;
+    event.target.closest('.quiz-options').querySelectorAll('.quiz-option').forEach((option) => {
+      option.classList.toggle('is-selected', option.querySelector('input').checked);
+    });
+    if (!quiz.hasAttribute('data-quiz-auto-advance') || activeStep >= steps.length - 1) return;
+    const currentStep = steps[activeStep];
+    const nextButton = currentStep.querySelector('[data-quiz-next]');
+    if (nextButton) nextButton.disabled = true;
+    window.clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = window.setTimeout(() => {
+      if (steps[activeStep] !== currentStep || !stepHasAnswer(currentStep)) return;
+      activeStep += 1;
+      renderQuiz();
+    }, 320);
+  });
+
+  quiz.addEventListener('submit', (event) => {
+    event.preventDefault();
+    updateTelegramField(quiz);
+    if (!quiz.checkValidity()) {
+      quiz.reportValidity();
+      return;
+    }
+    const data = new FormData(quiz);
+    const messenger = checkedValue(quiz, 'messenger');
+    const telegram = (data.get('telegram') || '').toString().trim();
+    const line = (label, field) => {
+      const value = (data.get(field) || '').toString().trim();
+      return value ? `${label}: ${value}.` : '';
+    };
+    const text = [
+      'Здравствуйте! Хочу получить презентации и планировки Thyme и Erin.',
+      line('Цель', 'quiz_goal'),
+      line('Бюджет', 'quiz_budget'),
+      line('Срок покупки', 'quiz_timing'),
+      line('Имя', 'name'),
+      line('Телефон', 'phone'),
+      messenger ? `Связаться: ${messenger}.` : '',
+      telegram ? `Telegram: ${telegram}.` : ''
+    ].filter(Boolean).join('\n');
+    const status = quiz.querySelector('[data-form-status]');
+    if (status) status.textContent = 'Ответы сохранены. Открываем сообщение для Nika Estate…';
+    window.open(`https://wa.me/971508698020?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+  });
+
+  renderQuiz();
+}
