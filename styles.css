@@ -130,3 +130,26 @@ h1,h2,h3{min-width:0;text-wrap:balance}p,li,dd{overflow-wrap:break-word;text-wra
   .location-title h2{font-size:50px}.location-title>p:not(.eyebrow){font-size:13px}
   .mobile-request{font-size:9px;letter-spacing:.07em}
 }
+
+/* Readability pass: larger descriptions, facts and bullet copy. */
+.hero-facts dd{font-size:14px;line-height:1.42}
+.residence-details ul{font-size:16px;line-height:1.5}
+.availability-note{font-size:15px;line-height:1.5}
+.amenity-grid p,.journey-grid p{font-size:15px;line-height:1.5}
+.consultation-list li{font-size:16px;line-height:1.5}
+.project-compare-copy>p:not(.eyebrow),.floorplan-copy>p:not(.eyebrow){font-size:16px;line-height:1.55}
+.project-compare-copy dl div{font-size:14px;line-height:1.45}
+.quiz-intro li,.quiz-hint,.quiz-option small{font-size:14px;line-height:1.5}
+.location-title>p:not(.eyebrow),.location-card>p:not(.eyebrow){font-size:17px;line-height:1.55}
+
+@media(max-width:640px){
+  .hero-facts dd{font-size:12px}
+  .residence-details ul{font-size:15px}
+  .availability-note{font-size:13px}
+  .amenity-grid p{font-size:13px}.journey-grid p{font-size:14px}
+  .consultation-list li{font-size:14px}
+  .project-compare-copy>p:not(.eyebrow),.floorplan-copy>p:not(.eyebrow){font-size:15px}
+  .project-compare-copy dl div{font-size:14px}
+  .quiz-intro li,.quiz-hint,.quiz-option small{font-size:14px}
+  .location-title>p:not(.eyebrow),.location-card>p:not(.eyebrow){font-size:15px}
+}

@@ -291,3 +291,36 @@ body.modal-open{overflow:hidden}
 }
 
 @media(prefers-reduced-motion:reduce){.gallery-thumbs button{transition:none}}
+
+/* Readability pass: descriptions and supporting figures. */
+.archive-hero-facts span{font-size:12px;line-height:1.4}
+.archive-feature-grid p{font-size:15px;line-height:1.5}
+.archive-heading-row>p{font-size:18px;line-height:1.55}
+.amenity-grid p{font-size:14px;line-height:1.5}
+.layout-card dt{font-size:13px;line-height:1.45}
+.layout-card dd{font-size:14px;line-height:1.45}
+.layout-plan-note{font-size:13px!important;line-height:1.5}
+.archive-cta-copy{font-size:16px;line-height:1.55}
+.payment-plan-card li span,.payment-plan-card li strong{font-size:16px;line-height:1.45}
+.calculator-field legend,.calculator-range>span,.calculator-summary span,.calculator-summary small,.calculator-scenarios dt{font-size:13px;line-height:1.4}
+.calc-segments button{font-size:14px}
+.calculator-scenarios dd small{font-size:12px;line-height:1.4}
+.developer-proof li{font-size:14px;line-height:1.5}
+.developer-stats span{font-size:13px;line-height:1.4}
+.location-times span{font-size:13px;line-height:1.45}
+.location-context p{font-size:14px;line-height:1.5}
+.layout-modal-copy dt{font-size:13px}.layout-modal-copy dd{font-size:14px}.layout-modal-copy>p:not(.archive-kicker){font-size:15px;line-height:1.6}
+
+@media(max-width:760px){
+  .archive-heading-row>p{font-size:15px}
+  .archive-hero-facts span{font-size:12px}
+  .archive-feature-grid p{font-size:15px}.amenity-grid p{font-size:14px}
+  .layout-card dt,.layout-plan-note{font-size:13px!important}
+  .layout-card dd{font-size:14px}
+  .archive-cta-copy{font-size:15px}
+  .payment-plan-card li span,.payment-plan-card li strong{font-size:15px}
+  .calculator-field legend,.calculator-range>span,.calculator-summary span,.calculator-summary small,.calculator-scenarios dt{font-size:12px}
+  .calc-segments button{font-size:13px}
+  .developer-proof li{font-size:14px}.developer-stats span{font-size:13px}.location-times span{font-size:12px}.location-context p{font-size:14px}
+  .layout-modal-copy dt{font-size:12px}.layout-modal-copy dd{font-size:13px}.layout-modal-copy>p:not(.archive-kicker){font-size:14px}
+}

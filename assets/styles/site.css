@@ -518,3 +518,49 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
   .about-hero-stats div:last-child:nth-child(odd){grid-column:1/-1}
   .uae-page .economics-grid,.uae-page .layout-grid,.uae-page .scenario-grid,.uae-page .three-scenarios{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* Readability pass: make explanatory copy and bullet descriptions legible. */
+.hero p:not(.eyebrow):not(.lead){font-size:17px;line-height:1.55}
+.hero-proof span{font-size:14px;line-height:1.42}
+.section-head>p{font-size:17px;line-height:1.55}
+.mini-card p,.question p,.route-item p,.compare-card li,.trust-copy li,.faq-answer{font-size:16px;line-height:1.52}
+.project-copy>p:not(.eyebrow),.meeting-item p,.banner p{font-size:17px;line-height:1.52}
+.choice span,.stat span,.step p{font-size:15px;line-height:1.5}
+.city-copy li{font-size:16px;line-height:1.5}
+.uae-project-grid .project-card-copy>p:not(.eyebrow),.case-copy>p:not(.eyebrow){font-size:16px;line-height:1.55}
+.project-metrics dd,.economics-card p,.case-table>div,.payment-steps span,.layout-grid b,.layout-grid span,.scenario-grid span,.scenario-grid small{font-size:13px;line-height:1.45}
+.case-facts span,.case-table small{font-size:12px;line-height:1.45}
+.uae-about-copy li{font-size:15px;line-height:1.5}
+.quiz-intro li,.quiz-hint,.quiz-option small{font-size:14px;line-height:1.5}
+.project-card-copy>p:not(.eyebrow),.floorplan-copy>p:not(.eyebrow){font-size:16px;line-height:1.55}
+.about-hero-stats dd{font-size:12px;line-height:1.42}
+.about-trust p,.about-service-grid p,.about-project-copy>p:not(.eyebrow),.place-card p,.about-reason-list p,.about-reason-list-plain p{font-size:14px;line-height:1.52}
+.about-project-copy dl div,.about-market-copy dl div{font-size:13px;line-height:1.45}
+.about-market-copy>p:not(.eyebrow){font-size:16px;line-height:1.58}
+.about-form-points li,.about-cta-band .consultation-points p{font-size:15px;line-height:1.5}
+.about-project-copy>p.project-purpose{font-size:13px;line-height:1.5}
+.about-page .about-hero-lead,.about-cta-main>p:not(.eyebrow){font-size:17px;line-height:1.55}
+
+@media(max-width:680px){
+  .hero p:not(.eyebrow):not(.lead){font-size:16px}
+  .section-head>p{font-size:15px}
+  .hero-proof span{font-size:12px}
+  .mini-card p,.question p,.route-item p,.compare-card li,.trust-copy li,.faq-answer{font-size:13px}
+  .project-copy>p:not(.eyebrow),.meeting-item p,.banner p{font-size:14px}
+  .choice span,.stat span,.step p{font-size:13px}
+  .city-copy li{font-size:15px}
+  .uae-project-grid .project-card-copy>p:not(.eyebrow),.case-copy>p:not(.eyebrow){font-size:15px}
+  .project-metrics dd,.economics-card p,.case-table>div,.payment-steps span,.layout-grid b,.layout-grid span,.scenario-grid span,.scenario-grid small{font-size:13px}
+  .case-facts span,.case-table small{font-size:12px}
+  .uae-about-copy li{font-size:13px}
+  .quiz-intro li,.quiz-hint,.quiz-option small{font-size:14px}
+  .project-card-copy>p:not(.eyebrow),.floorplan-copy>p:not(.eyebrow){font-size:15px}
+  .about-page .about-hero-stats dd{font-size:11px}
+  .about-trust p,.about-service-grid p,.about-service-grid-simple p{font-size:12px}
+  .about-project-copy>p:not(.eyebrow),.place-card p,.about-reason-list p,.about-reason-list-plain p{font-size:13px}
+  .about-project-copy dl div,.about-market-copy dl div{font-size:13px}
+  .about-market-copy>p:not(.eyebrow){font-size:14px}
+  .about-form-points li,.about-cta-band .consultation-points p{font-size:14px}
+  .about-project-copy>p.project-purpose{font-size:13px}
+  .about-page .about-hero-lead,.about-cta-main>p:not(.eyebrow){font-size:16px}
+}
