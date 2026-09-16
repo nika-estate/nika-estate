@@ -20,7 +20,7 @@ test('three Cyprus prototypes keep independent offers and shared lead routing', 
     assert.match(html, /class="lead-form cyprus-form"/);
     assert.match(html, /data-landing-name="cyprus-/);
     assert.match(html, /data-offer-name=/);
-    assert.match(html, /data-cyprus-flow=/, `${name} should show value before the form`);
+    assert.ok((html.match(/<section\b/g) || []).length <= 3, `${name} should stay concise`);
   }
 });
 
@@ -29,24 +29,23 @@ test('Cyprus prototype assets and shared interaction code are present', () => {
     assert.ok(fs.statSync(path.join(root, 'assets/images/cyprus', image)).size > 200000, `${image} should be a usable visual asset`);
   }
   const styles = fs.readFileSync(path.join(root, 'assets/styles/site.css'), 'utf8') + fs.readFileSync(path.join(root, 'assets/styles/cyprus.css'), 'utf8');
-  const script = fs.readFileSync(path.join(root, 'assets/scripts/cyprus-landing.js'), 'utf8');
   assert.match(styles, /@media\(max-width:680px\)/);
   assert.match(styles, /prefers-reduced-motion/);
-  assert.match(script, /data-flow-result/);
-  assert.match(script, /ЕС \/ ЕЭЗ/);
 });
 
 test('offers show a concrete product and decision criteria above the form', () => {
   const residency = fs.readFileSync(path.join(root, 'cyprus/eligibility/index.html'), 'utf8');
   const selection = fs.readFileSync(path.join(root, 'cyprus/city-match/index.html'), 'utf8');
   const meeting = fs.readFileSync(path.join(root, 'cyprus/investment-memo/index.html'), 'utf8');
+  assert.match(residency, /ПМЖ на Кипре/);
   assert.match(residency, /€300 000 \+ VAT/);
   assert.match(residency, /граждан стран вне ЕС/);
+  assert.match(selection, /3 новостройки/);
   assert.match(selection, /от €220 000/);
   assert.match(selection, /Cypress Park/);
   assert.match(selection, /Seaside Residence/);
-  assert.match(meeting, /цена входа, VAT и расходы/);
-  assert.match(meeting, /5,44%/);
+  assert.match(meeting, /Сравним 3 новостройки/);
+  assert.match(meeting, /цену, VAT, платежи/);
 });
 
 test('prototype copy avoids prohibited outcome promises', () => {
