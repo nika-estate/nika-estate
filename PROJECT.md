@@ -50,6 +50,8 @@ Run all checks with `node --test tests/*.test.cjs`. Browser QA covers the seven 
 
 ## Content safeguards
 
+The investment-meeting landing uses an official The Archive exterior render with the Dubai skyline as its hero background, preloaded at high priority. Two additional lazy-loaded photo breaks show Central Park between the benefits and meeting plan, and The Archive between the project catalog and company introduction. They reuse existing brochure/gallery assets, have short project/location captions, and keep a compact 280 px height on phones. The viewport-height hero and all form/analytics wiring remain unchanged.
+
 Havencia by ALA is included in the four general multi-project routes: `dubai`, `uae`, `real-estate` and `invest-meeting`. The facade render comes from the client Drive folder. Unit 607 is a scenario based on the supplied offer: AED 665,400, 38.24 m², 20% + 4% DLD + AED 3,600 admin = AED 163,296 initial budget; 20/50/30 payment plan and June 2028 delivery in that offer. The public project card has different plan/timing, so the pages explicitly require a fresh unit-specific plan and contract date before booking. Rental scenarios are 5.5–6% annually before expenses and 4–5% after expenses, never a guarantee.
 
 Prices, unit availability, views, handover dates and payment plans are described as subject to confirmation. Rows marked for verification in the client registry are not published as current numeric offers.

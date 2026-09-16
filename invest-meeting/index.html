@@ -23,6 +23,7 @@
   <title>Инвестиционная встреча онлайн — Nika Estate</title>
   <link rel="icon" href="../assets/logo-nika-estate.png">
   <link rel="stylesheet" href="../assets/styles/site.css?v=20260916-7">
+  <link rel="preload" as="image" href="../assets/images/the-archive/official-exterior-06.webp" fetchpriority="high">
   <style>
     .invest-page{--meeting-gold:#b28a53;--meeting-dark:#121211;--meeting-header-height:78px}
     .invest-page .button:after{display:none}
@@ -35,7 +36,7 @@
     .invest-page .button{min-height:54px;padding:0 27px;font-size:14px}
 
     .meeting-hero{position:relative;min-height:calc(100vh - var(--meeting-header-height));min-height:calc(100svh - var(--meeting-header-height));display:flex;align-items:center;overflow:hidden;background:var(--meeting-dark);color:#fff}
-    .meeting-hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 54%}
+    .meeting-hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 50%}
     .meeting-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,5,.78) 0%,rgba(5,5,5,.65) 48%,rgba(5,5,5,.46) 100%)}
     .meeting-hero-inner{position:relative;z-index:1;padding:clamp(56px,8vh,96px) 0}
     .meeting-badge{display:inline-flex;align-items:center;min-height:34px;padding:0 15px;border-radius:999px;background:var(--meeting-gold);font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
@@ -71,6 +72,11 @@
     .meeting-visual img{width:100%;height:100%;object-fit:cover;object-position:center 54%}
     .meeting-visual:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.28)}
     .meeting-visual-copy{position:absolute;z-index:1;left:max(24px,calc((100vw - 1180px)/2));bottom:34px;max-width:650px;padding:20px 23px;background:rgba(12,12,12,.86);color:#fff;font-size:18px;line-height:1.45}
+    .meeting-photo{height:clamp(280px,38vw,560px)}
+    .meeting-photo:after{background:linear-gradient(0deg,rgba(5,5,5,.72),rgba(5,5,5,0) 60%)}
+    .meeting-photo--park img{object-position:center 52%}
+    .meeting-photo--archive img{object-position:center 24%}
+    .meeting-photo-label{position:absolute;z-index:1;left:max(24px,calc((100vw - 1180px)/2));right:24px;bottom:30px;margin:0;color:#fff;font-size:clamp(18px,1.6vw,23px);font-weight:500;line-height:1.35;text-shadow:0 1px 12px rgba(0,0,0,.4)}
 
     .market-benchmark{display:grid;grid-template-columns:.7fr 1.3fr;gap:28px;align-items:center;padding:25px 28px;margin-bottom:18px;background:var(--meeting-dark);color:#fff}
     .market-benchmark strong{font:600 42px/1 var(--sans);color:#d7b57f;letter-spacing:-.04em}
@@ -126,8 +132,8 @@
       .invest-page .display{font-size:31px;line-height:1.06}
       .invest-page .button{min-height:58px;font-size:14px;width:100%}
       .invest-page{--meeting-header-height:67px}
-      .meeting-hero-bg{object-position:45% center}
-      .meeting-hero:after{background:linear-gradient(180deg,rgba(4,4,4,.48) 0%,rgba(4,4,4,.75) 48%,rgba(4,4,4,.88) 100%)}
+      .meeting-hero-bg{object-position:28% center}
+      .meeting-hero:after{background:linear-gradient(180deg,rgba(4,4,4,.38) 0%,rgba(4,4,4,.66) 48%,rgba(4,4,4,.82) 100%)}
       .meeting-hero-inner{padding:clamp(34px,6svh,56px) 0}
       .meeting-badge{min-height:32px;font-size:13px}
       .meeting-hero h1{font-size:30px;line-height:1.02;margin:12px 0 10px;letter-spacing:-.03em}
@@ -152,6 +158,10 @@
       .meeting-visual{height:285px}
       .meeting-visual img{object-position:58% center}
       .meeting-visual-copy{left:20px;right:20px;bottom:20px;max-width:none;padding:16px 17px;font-size:17px}
+      .meeting-photo{height:280px}
+      .meeting-photo--park img{object-position:center center}
+      .meeting-photo--archive img{object-position:42% center}
+      .meeting-photo-label{left:20px;right:20px;bottom:22px;font-size:18px}
       .market-benchmark{grid-template-columns:1fr;gap:10px;padding:22px 20px}
       .market-benchmark strong{font-size:37px}
       .investment-project-grid{grid-template-columns:1fr}
@@ -184,7 +194,7 @@
 
   <main id="content">
     <section class="meeting-hero" id="top" data-mobile-cta-cover>
-      <img class="meeting-hero-bg" src="../assets/images/portfolio/abu-saadiyat.jpg" alt="Интерьер премиальной резиденции на острове Саадият в Абу-Даби">
+      <img class="meeting-hero-bg" src="../assets/images/the-archive/official-exterior-06.webp" width="1500" height="844" fetchpriority="high" decoding="async" alt="Рендер фасада The Archive by Imtiaz с панорамой Дубая">
       <div class="shell meeting-hero-inner">
         <span class="meeting-badge">Online · один на один</span>
         <h1><span class="hero-title-line">Инвестиционная встреча</span><span class="hero-title-line">по&nbsp;недвижимости</span><span class="hero-title-line hero-title-location">в&nbsp;Дубае и&nbsp;Абу‑Даби</span></h1>
@@ -206,6 +216,11 @@
       </div>
       <div class="block-action"><a class="button gold" href="#request">Получить консультацию</a></div>
     </div></section>
+
+    <figure class="meeting-visual meeting-photo meeting-photo--park" id="meeting-photo-park">
+      <img src="../assets/images/central-park-garden.jpg" width="1173" height="791" loading="lazy" decoding="async" alt="Дома и зелёный парк Central Park at City Walk в Дубае">
+      <figcaption class="meeting-photo-label">Central Park at City Walk · Дубай</figcaption>
+    </figure>
 
     <section class="section meeting-plan" id="meeting" data-mobile-cta-cover><div class="shell">
       <div class="section-head"><div><p class="eyebrow">Персональный план действий</p><h2 class="display">Что вы получите <em>на встрече</em></h2></div><p>Разберём вашу ситуацию простыми словами и соберём понятный план покупки.</p></div>
@@ -240,6 +255,11 @@
       <p class="project-note">* Havencia: Unit 607 из клиентского предложения; вход включает 20%, 4% DLD и AED 3 600 административного сбора. В предложении передача — июнь 2028 года; публичные срок и схема оплаты отличаются. Проверяем цену, наличие, дату по договору и свежий план именно по лоту перед бронированием. Доходность — сценарий, не гарантия. <a href="https://aladevelopments.com/projects/havencia/" target="_blank" rel="noopener">ALA Developments</a> · <a href="https://jre.ae/projects/havencia" target="_blank" rel="noopener">Карточка проекта</a>.</p>
       <div class="projects-consultation"><p class="eyebrow">Подбор и расчёт</p><h3>Запишитесь на консультацию с опытным брокером, чтобы получить подборку лучших инвестиционных объектов и прогноз доходности под ваши возможности и цели.</h3><a class="button gold" href="#request">Получить консультацию</a></div>
     </div></section>
+
+    <figure class="meeting-visual meeting-photo meeting-photo--archive" id="meeting-photo-archive">
+      <img src="../assets/images/the-archive/official-exterior-01.webp" width="1500" height="844" loading="lazy" decoding="async" alt="Внешний вид The Archive by Imtiaz в районе DLRC, Дубай">
+      <figcaption class="meeting-photo-label">The Archive by Imtiaz · Дубай, DLRC</figcaption>
+    </figure>
 
     <section class="section warm" id="nika" data-mobile-cta-cover><div class="shell compact-trust">
       <div class="compact-trust-media"><img src="../assets/images/portfolio/nika-team.jpg" loading="lazy" alt="Команда Nika Estate в Дубае"></div>
