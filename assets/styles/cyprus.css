@@ -1,0 +1,83 @@
+.cyprus-page{--cyprus-deep:#20251f;--cyprus-sand:#f3eee5;--cyprus-ocean:#e7eff0;--cyprus-rust:#7b6044;background:#fff}
+.cyprus-page .site-header{position:relative}
+.cyprus-page .hero{min-height:620px;padding-top:38px;padding-bottom:48px}
+.cyprus-page .hero h1{font-size:clamp(54px,6.3vw,94px);max-width:650px}
+.cyprus-page .hero .lead{max-width:510px;margin:0 0 21px}
+.cyprus-page .hero-media{height:520px}
+.cyprus-page .hero-media:after{content:"";position:absolute;inset:auto 0 0;height:28%;background:linear-gradient(transparent,rgba(0,0,0,.38));pointer-events:none}
+.cyprus-page .hero-media .caption{z-index:1;background:transparent;padding:0;font-size:13px}
+.cyprus-page .hero-proof{grid-template-columns:repeat(2,1fr);max-width:480px;margin-top:35px}
+.cyprus-page .hero-proof b{font-size:22px}
+.cyprus-page .hero-proof span{font-size:13px}
+.cyprus-page .section{padding:92px 0}
+.cyprus-page .display{font-size:clamp(49px,5.5vw,78px);line-height:.92}
+.cyprus-page .display em{display:block;margin-top:7px}
+.cyprus-page .section-head{grid-template-columns:1fr .85fr;gap:55px;margin-bottom:38px}
+.cyprus-page .section-head .muted{font-size:17px;line-height:1.55}
+.cyprus-panel{background:var(--cyprus-sand)}
+.cyprus-panel.dark{background:var(--cyprus-deep)}
+.value-grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:clamp(30px,5vw,72px);align-items:start}
+.value-intro{position:sticky;top:104px}
+.value-intro .lead{font-size:26px;line-height:1.16;margin:24px 0 0;max-width:390px}
+.flow-card{background:#fff;padding:clamp(25px,4vw,47px);border:1px solid var(--line)}
+.flow-card h2{font:400 clamp(38px,4vw,57px)/.95 var(--serif);letter-spacing:-.04em;margin:0 0 12px}
+.flow-card>p{color:var(--muted);font-size:16px;margin:0 0 25px}
+.flow-fields{display:grid;gap:20px}
+.flow-field{border-top:1px solid var(--line);padding-top:19px}
+.flow-field>span{display:block;font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:11px}
+.flow-options{display:flex;gap:8px;flex-wrap:wrap}
+.flow-option{border:1px solid var(--line);background:#fff;min-height:48px;padding:11px 15px;color:var(--ink);font:600 14px/1.25 var(--sans);cursor:pointer;transition:background .18s,border-color .18s,color .18s;max-width:100%;text-align:left}
+.flow-option:hover,.flow-option.is-selected{background:var(--ink);border-color:var(--ink);color:#fff}
+.flow-option:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.flow-result{margin-top:25px;padding:22px 22px 24px;background:var(--cyprus-ocean);border-left:3px solid var(--gold)}
+.flow-result[hidden]{display:none}
+.flow-result small{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#4b6569}
+.flow-result h3{font:400 31px/.98 var(--serif);letter-spacing:-.03em;margin:9px 0 10px}
+.flow-result p{font-size:16px;margin:0;color:#3e4d4e;max-width:580px}
+.flow-result .button{margin-top:18px}
+.proof-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.proof-strip article{padding:24px 23px;min-height:150px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.proof-strip b{display:block;color:var(--gold);font:400 30px/1 var(--serif);margin-bottom:20px}
+.proof-strip p{font-size:15px;line-height:1.42;margin:0;color:var(--muted)}
+.cyprus-page .dark .proof-strip{border-color:var(--dark-line)}
+.cyprus-page .dark .proof-strip article{border-color:var(--dark-line)}
+.cyprus-page .dark .proof-strip p{color:#d3cec6}
+.material-preview{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.material-cover{background:var(--cyprus-deep);color:#fff;padding:clamp(28px,4vw,48px);min-height:360px;display:flex;flex-direction:column;justify-content:space-between}
+.material-cover .eyebrow{color:var(--gold-light)}
+.material-cover h3{font:400 clamp(43px,4.6vw,65px)/.9 var(--serif);letter-spacing:-.04em;margin:0;max-width:450px}
+.material-cover p{margin:0;color:#d8d2ca;font-size:16px;max-width:360px}
+.material-list{background:var(--cyprus-sand);padding:clamp(28px,4vw,48px);display:grid;align-content:center;gap:0}
+.material-list article{display:grid;grid-template-columns:43px 1fr;gap:15px;padding:17px 0;border-bottom:1px solid rgba(21,21,20,.18)}
+.material-list article:last-child{border-bottom:0}
+.material-list b{color:var(--gold);font:400 29px/1 var(--serif)}
+.material-list h3{font-size:17px;margin:0 0 4px}
+.material-list p{font-size:15px;margin:0;color:var(--muted)}
+.city-lines{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.city-line{min-height:300px;padding:clamp(27px,4vw,45px);display:flex;flex-direction:column;justify-content:flex-end;background-size:cover;background-position:center;position:relative;overflow:hidden;color:#fff}
+.city-line:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.76))}
+.city-line>*{position:relative}
+.city-line h3{font:400 clamp(45px,5vw,62px)/.9 var(--serif);margin:0 0 12px}
+.city-line p{font-size:16px;line-height:1.45;margin:0;max-width:420px}
+.city-line.limassol{background-image:linear-gradient(90deg,rgba(22,31,32,.15),rgba(22,31,32,.15)),url("../images/cyprus/city-match-hero.jpg");background-position:left center}
+.city-line.paphos{background-image:linear-gradient(90deg,rgba(22,31,32,.1),rgba(22,31,32,.1)),url("../images/cyprus/eligibility-hero.jpg");background-position:center bottom}
+.memo-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.memo-tiles article{background:#fff;min-height:185px;padding:25px 22px;display:flex;flex-direction:column}
+.memo-tiles span{font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.memo-tiles h3{font:400 32px/.98 var(--serif);margin:24px 0 10px}
+.memo-tiles p{font-size:15px;line-height:1.42;color:var(--muted);margin:0}
+.memo-tiles .note{margin-top:auto;color:var(--gold);font-size:14px;font-weight:600}
+.short-form-wrap{display:grid;grid-template-columns:1fr .92fr;gap:clamp(38px,6vw,85px);align-items:start}
+.short-form-wrap .lead{font-size:29px;line-height:1.15;margin:25px 0}
+.cyprus-form{background:#fff;border:1px solid var(--line);padding:34px}
+.cyprus-form label{display:block;font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:#6d675f;margin:0 0 18px}
+.cyprus-form input,.cyprus-form select{width:100%;display:block;border:0;border-bottom:1px solid #bcb2a5;background:transparent;border-radius:0;padding:12px 0 10px;font:400 17px var(--sans);color:var(--ink);outline:none;min-height:44px}
+.cyprus-form input:focus,.cyprus-form select:focus{border-color:var(--gold)}
+.cyprus-form .form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.cyprus-form .button{width:100%;margin-top:6px}
+.cyprus-form .form-note{font-size:13px;line-height:1.4;margin:14px 0 0;color:#77716a}
+.cyprus-form .form-status{min-height:23px;margin:11px 0 0;color:#63543f;font-size:14px}
+.cyprus-page .mobile-cta.is-hidden{opacity:0;pointer-events:none;transform:translateY(12px)}
+.cyprus-page .mobile-cta{transition:opacity .18s,transform .18s}
+@media(max-width:900px){.cyprus-page .hero{grid-template-columns:1fr;min-height:0;gap:30px}.cyprus-page .hero-media{height:400px}.value-grid,.short-form-wrap{grid-template-columns:1fr;gap:35px}.value-intro{position:static}.cyprus-page .section-head{grid-template-columns:1fr;gap:18px}.material-preview{grid-template-columns:1fr}.city-lines{grid-template-columns:1fr}.city-line{min-height:285px}}
+@media(max-width:680px){.cyprus-page .section{padding:62px 0}.cyprus-page .hero{padding-top:26px;padding-bottom:35px}.cyprus-page .hero h1{font-size:42px;line-height:.9}.cyprus-page .hero .lead{font-size:22px;line-height:1.12;margin-bottom:16px}.cyprus-page .hero-media{height:310px;margin-left:-20px;margin-right:-20px}.cyprus-page .hero-proof{margin-top:28px;gap:12px}.cyprus-page .hero-proof b{font-size:21px}.cyprus-page .hero-proof span{font-size:12px}.cyprus-page .display{font-size:42px}.value-grid{gap:27px}.value-intro .lead{font-size:23px;margin-top:18px}.flow-card{padding:24px 18px}.flow-card h2{font-size:35px}.flow-options{gap:7px}.flow-option{font-size:13px;padding:10px 12px;min-height:45px}.flow-result{padding:19px 17px 21px}.flow-result h3{font-size:29px}.flow-result p{font-size:15px}.flow-result .button{width:100%;font-size:12px;letter-spacing:.06em;padding:0 12px;gap:12px}.proof-strip{grid-template-columns:1fr}.proof-strip article{min-height:112px;padding:20px 17px;display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start}.proof-strip b{margin:0;font-size:29px}.proof-strip p{font-size:14px}.material-cover{min-height:285px;padding:27px 22px}.material-cover h3{font-size:44px}.material-list{padding:21px 19px}.material-list article{padding:14px 0}.city-line{min-height:250px;padding:26px 20px}.city-line h3{font-size:45px}.memo-tiles{grid-template-columns:1fr}.memo-tiles article{min-height:145px;padding:21px 19px}.memo-tiles h3{font-size:31px;margin:18px 0 7px}.cyprus-form{padding:26px 20px}.cyprus-form .form-row{grid-template-columns:1fr;gap:0}.cyprus-page .mobile-cta .button{font-size:12px;letter-spacing:.055em;padding:0 11px;gap:11px}}

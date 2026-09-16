@@ -22,3 +22,7 @@ The Archive project landing:
 - No floor-plan image was included in the client brochure or published in the official Imtiaz gallery at the time of review. The landing therefore asks the broker to send the official plan of the selected available unit instead of showing an unverified generic plan.
 
 All factual location and amenity wording is based on supplied brochures and cited official sources. Availability, price and unit-specific characteristics are intentionally not fixed in the landing and should be checked before lead-campaign launch.
+
+Cyprus prototype assets:
+
+- `assets/images/cyprus/eligibility-hero.jpg`, `city-match-hero.jpg`, `investment-memo-hero.jpg` — generated on 2026-09-17 with OpenAI Image Generation for prototype-only Cyprus landing pages. They are illustrative editorial visuals, not photographs of a named project, and contain no factual property claims. Replace with approved local photography or developer material before a production campaign.

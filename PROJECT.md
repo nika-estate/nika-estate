@@ -14,6 +14,7 @@
 - `https://nika-estate.github.io/nika-estate/invest-meeting/` — online investment consultation
 - `https://nika-estate.github.io/nika-estate/real-estate/` — conversion landing for property selection in the UAE and Saudi Arabia, with current projects and 2026 market yield benchmarks
 - `https://nika-estate.github.io/nika-estate/the-archive/` — The Archive by Imtiaz project landing
+- `/cyprus/eligibility/`, `/cyprus/city-match/`, `/cyprus/investment-memo/` — unpublished local prototypes for three South Cyprus lead-generation funnels. They are not campaign-ready until a Cyprus lawyer approves legal wording and the broker supplies current objects, prices and rights-cleared media.
 
 ## Lead routing
 
