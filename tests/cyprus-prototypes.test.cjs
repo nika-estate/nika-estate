@@ -5,9 +5,9 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const routes = [
-  ['eligibility', 'cyprus/eligibility/index.html', 'Предварительный разбор инвестиционного маршрута'],
-  ['city match', 'cyprus/city-match/index.html', 'Карта районов Limassol и Paphos'],
-  ['investment memo', 'cyprus/investment-memo/index.html', 'Инвестиционное мемо по 3 новостройкам']
+  ['permanent residency', 'cyprus/eligibility/index.html', 'ПМЖ через'],
+  ['new-build selection', 'cyprus/city-match/index.html', 'Новостройки'],
+  ['investment meeting', 'cyprus/investment-memo/index.html', 'Онлайн-встреча']
 ];
 
 test('three Cyprus prototypes keep independent offers and shared lead routing', () => {
@@ -34,6 +34,19 @@ test('Cyprus prototype assets and shared interaction code are present', () => {
   assert.match(styles, /prefers-reduced-motion/);
   assert.match(script, /data-flow-result/);
   assert.match(script, /ЕС \/ ЕЭЗ/);
+});
+
+test('offers show a concrete product and decision criteria above the form', () => {
+  const residency = fs.readFileSync(path.join(root, 'cyprus/eligibility/index.html'), 'utf8');
+  const selection = fs.readFileSync(path.join(root, 'cyprus/city-match/index.html'), 'utf8');
+  const meeting = fs.readFileSync(path.join(root, 'cyprus/investment-memo/index.html'), 'utf8');
+  assert.match(residency, /€300 000 \+ VAT/);
+  assert.match(residency, /граждан стран вне ЕС/);
+  assert.match(selection, /от €220 000/);
+  assert.match(selection, /Cypress Park/);
+  assert.match(selection, /Seaside Residence/);
+  assert.match(meeting, /цена входа, VAT и расходы/);
+  assert.match(meeting, /5,44%/);
 });
 
 test('prototype copy avoids prohibited outcome promises', () => {

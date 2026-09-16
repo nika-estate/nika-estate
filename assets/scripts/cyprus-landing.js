@@ -1,19 +1,17 @@
 (function () {
   const copy = {
     eligibility: {
-      third: { title: 'Ваш первый шаг — проверить исходные условия', text: 'Не нужно выбирать квартиру вслепую. Уточним гражданство, состав семьи и бюджет, затем покажем, какие новостройки имеет смысл смотреть.' },
-      eu: { title: 'Начните с города и дома, а не со статуса', text: 'Для граждан ЕС инвестиционный маршрут обычно не должен быть первым фильтром. Сначала подберём сценарий жизни и объекты под него.' },
-      unsure: { title: 'Сначала уточним гражданство', text: 'Этого достаточно, чтобы не прислать вам неподходящую схему. Затем разберём семью, бюджет и первые объекты.' }
+      third: { title: 'Подберём объекты под ПМЖ', text: 'Проверим первую продажу, цену от €300 000 без VAT и то, подходит ли объект под состав вашей семьи.' },
+      eu: { title: 'Подберём жильё без маршрута ПМЖ', text: 'Для граждан ЕС/ЕЭЗ сначала смотрим объект и условия покупки. Пришлём три варианта под ваш бюджет.' },
+      unsure: { title: 'Сначала уточним гражданство', text: 'Это один вопрос, который определяет, подбирать ли новостройку под ПМЖ или обычную покупку.' }
     },
     city: {
-      city: { title: 'Начните с Limassol', text: 'В подборке покажем районы, где деловой ритм, сервисы и городская жизнь не требуют долгих поездок.' },
-      calm: { title: 'Начните с Paphos', text: 'В подборке покажем районы, где дом и повседневный ритм важнее плотной городской среды.' },
-      balance: { title: 'Сравните два сценария', text: 'Не будем назначать победителя за вас. Покажем по одному разумному маршруту для Limassol и Paphos.' }
+      budget: { title: 'Соберём три объекта с ценами', text: 'Покажем варианты под ваш бюджет: где находится объект, когда его сдадут, сколько стоит и как устроена оплата.' }
     },
     memo: {
-      income: { title: 'Сначала проверим модель аренды', text: 'В мемо покажем, откуда берётся спрос, какие расходы уже известны и где расчёт зависит от допущений.' },
-      capital: { title: 'Сначала разложим платёжный план', text: 'В мемо покажем сумму входа, этапы оплаты, срок готовности и факторы, от которых зависит выход из сделки.' },
-      home: { title: 'Сначала разделим две задачи', text: 'В мемо сравним, что работает для собственного проживания и что может быть разумным для аренды — это не всегда один объект.' }
+      income: { title: 'Сравним сценарии аренды', text: 'На встрече разберём спрос, расходы и допущения — без обещания фиксированного процента.' },
+      capital: { title: 'Разложим срок и выход из сделки', text: 'Сравним графики платежей, сроки сдачи и то, что может повлиять на стоимость объекта.' },
+      home: { title: 'Сверим жизнь и экономику объекта', text: 'Посмотрим, можно ли совместить собственное проживание с арендным сценарием без самообмана.' }
     }
   };
 
@@ -27,14 +25,19 @@
     const form = document.querySelector(flow.dataset.formTarget || '');
     const required = (flow.dataset.required || '').split(',').filter(Boolean);
 
+    function messageFor() {
+      if (type === 'eligibility') {
+        if (values.citizenship === 'ЕС / ЕЭЗ') return copy.eligibility.eu;
+        if (values.citizenship === 'Нужно уточнить') return copy.eligibility.unsure;
+        return copy.eligibility.third;
+      }
+      if (type === 'city') return copy.city.budget;
+      return copy.memo[values.goal] || copy.memo.capital;
+    }
+
     function render() {
       if (!required.every((key) => values[key])) return;
-      let message = copy[type];
-      if (type === 'eligibility') {
-        message = values.citizenship === 'ЕС / ЕЭЗ' ? copy.eligibility.eu : (values.citizenship === 'Нужно уточнить' ? copy.eligibility.unsure : copy.eligibility.third);
-      }
-      if (type === 'city') message = copy.city[values.rhythm] || copy.city.balance;
-      if (type === 'memo') message = copy.memo[values.goal] || copy.memo.capital;
+      const message = messageFor();
       title.textContent = message.title;
       text.textContent = message.text;
       result.hidden = false;
@@ -43,16 +46,13 @@
           const input = form.querySelector(`[name="${key}"]`);
           if (input) input.value = value;
         });
-        const goal = form.querySelector('[name="goal"]');
-        if (goal && values.goal) goal.value = values.goal;
       }
     }
 
     flow.querySelectorAll('[data-flow-option]').forEach((button) => {
       button.addEventListener('click', () => {
         const key = button.dataset.flowKey;
-        const value = button.dataset.flowValue;
-        values[key] = value;
+        values[key] = button.dataset.flowValue;
         flow.querySelectorAll(`[data-flow-option][data-flow-key="${key}"]`).forEach((item) => {
           item.classList.toggle('is-selected', item === button);
           item.setAttribute('aria-pressed', String(item === button));
@@ -67,7 +67,7 @@
   document.querySelectorAll('.cyprus-form').forEach((form) => {
     form.addEventListener('submit', () => {
       const status = form.querySelector('[data-form-status]');
-      if (status) status.textContent = 'Проверяем заявку и готовим сообщение для Nika Estate…';
+      if (status) status.textContent = 'Отправляем заявку в Nika Estate…';
     });
   });
 }());
