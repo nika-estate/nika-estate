@@ -9,6 +9,7 @@
     landingName: sourceScript.dataset.landingName || document.title,
     offerName: sourceScript.dataset.offerName || ''
   };
+  const pendingForms = new WeakMap();
 
   function text(value) {
     return value == null ? '' : String(value).trim();
@@ -140,17 +141,24 @@
 
   function send(form) {
     if (!pageConfig.endpoint || !form.checkValidity()) return Promise.resolve(false);
+    if (pendingForms.has(form)) return pendingForms.get(form);
 
     const payload = buildPayload(form);
-    return fetch(pageConfig.endpoint, {
+    const request = fetch(pageConfig.endpoint, {
       method: 'POST',
-      mode: 'no-cors',
+      mode: 'cors',
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
       body: JSON.stringify(payload),
       keepalive: true
-    }).then(() => {
+    }).then(async (response) => {
+      if (!response.ok || response.type === 'opaque') return false;
+      const result = await response.json();
+      if (result.ok !== true || result.lead_id !== payload.lead_id) return false;
+
       document.dispatchEvent(new CustomEvent('nika:lead-sent', {
         detail: {
+          confirmed: true,
+          leadId: payload.lead_id,
           formType: payload.form_type === 'Квиз' ? 'quiz' : 'mini_form',
           formId: payload.form_id,
           landingName: payload.landing_name,
@@ -158,7 +166,9 @@
         }
       }));
       return true;
-    }).catch(() => false);
+    }).catch(() => false).finally(() => pendingForms.delete(form));
+    pendingForms.set(form, request);
+    return request;
   }
 
   function init(root) {

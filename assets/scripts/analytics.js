@@ -1,5 +1,8 @@
 (function (window, document) {
+  if (window.NikaAnalytics) return;
   const counterId = 112565381;
+  const metaPixelId = '1758103622093263';
+  const trackedLeads = new Set();
 
   window.ym = window.ym || function () {
     (window.ym.a = window.ym.a || []).push(arguments);
@@ -33,6 +36,11 @@
 
   document.addEventListener('nika:lead-sent', (event) => {
     const detail = event.detail || {};
+    // Only the lead endpoint's matching success acknowledgement can convert.
+    if (detail.confirmed !== true || !detail.leadId) return;
+    if (trackedLeads.has(detail.leadId)) return;
+    trackedLeads.add(detail.leadId);
+
     const params = {
       form_type: detail.formType || '',
       form_id: detail.formId || '',
@@ -42,6 +50,13 @@
 
     reachGoal('lead_sent', params);
     reachGoal(detail.formType === 'quiz' ? 'quiz_sent' : 'mini_form_sent', params);
+
+    if (typeof window.fbq === 'function') {
+      // Metadata only: never send names, phone numbers or form answers to Meta.
+      window.fbq('track', 'Lead', params, { eventID: detail.leadId });
+      window.fbq('trackCustom', detail.formType === 'quiz' ? 'QuizLead' : 'MiniFormLead',
+        params, { eventID: detail.leadId + ':' + detail.formType });
+    }
   });
 
   document.addEventListener('click', (event) => {
@@ -68,5 +83,5 @@
     });
   }, true);
 
-  window.NikaAnalytics = { counterId, reachGoal };
+  window.NikaAnalytics = { counterId, metaPixelId, reachGoal };
 }(window, document));

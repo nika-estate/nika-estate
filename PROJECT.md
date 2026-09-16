@@ -28,6 +28,19 @@ The Google Apps Script asset served through `?asset=lead-capture` had invalid Ja
 3. If forms promote different offers, set `data-offer-name` on each form.
 4. Keep contact field names compatible: `name`, `phone` or `contact`, `email`, `telegram`, `whatsapp`, `messenger`.
 5. Verify that the form is bound once and send one clearly marked test lead before launch.
+6. Include Meta Pixel `1758103622093263` early in `head`, with the noscript image in `body`, and the shared `analytics.js` module before lead capture.
+
+## Conversion tracking
+
+Meta Pixel `1758103622093263` starts asynchronously in the head of all seven landings and queues `PageView` immediately. Automatic pixel configuration is disabled; conversions are sent explicitly after the shared Google endpoint returns HTTP success and JSON `{ok: true, lead_id: <matching request id>}`. An opaque/no-cors response, failed request, invalid form or missing/mismatched acknowledgement cannot trigger a conversion. Pending double submissions are coalesced.
+
+- `Lead` — standard Meta event for every confirmed form submission; use as the primary advertising conversion.
+- `QuizLead` — custom secondary event for quiz submissions.
+- `MiniFormLead` — custom secondary event for ordinary forms.
+
+Meta receives only the landing/offer labels and form type/ID, not names, phone numbers, emails or form answers. Each successful submission has a unique event ID; duplicate success events are ignored. The same confirmed event also triggers existing Yandex goals `lead_sent` plus `quiz_sent` or `mini_form_sent`.
+
+Run the dependency-free regression checks with `node --test tests/tracking.test.cjs`. The live endpoint's matching acknowledgement and CORS support were verified on 2026-09-16 using a synthetic lead marked `ТЕСТ Meta / удалить` (ID `qa-meta-a00903f5-70f2-40e7-8899-dfc3f4239d24`). Pixel-account receipt still needs verification after publication, preferably through Meta Test Events.
 
 ## Content safeguards
 
