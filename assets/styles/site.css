@@ -273,6 +273,9 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
 .project-card-copy>p:not(.eyebrow){font-size:13px;color:var(--muted);margin:0;min-height:40px}
 .project-card-copy .chips{margin:20px 0}
 .project-card-copy .text-link{margin-top:auto;align-self:flex-start}
+.project-card-featured{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)}
+.project-card-featured .project-card-photo{height:100%;min-height:430px}
+.project-card-featured .project-card-photo img{object-position:center 42%}
 .selected-project{margin:-10px 0 24px;padding:12px 14px;border-left:3px solid var(--gold);background:#fff;font-size:12px;color:var(--muted)}
 .selected-project strong{color:var(--ink)}
 .direct-contact{border-top:1px solid var(--line);margin-top:58px;padding-top:28px;display:grid;grid-template-columns:1fr auto;gap:16px 30px;align-items:center}
@@ -367,11 +370,14 @@ p,li,dd{overflow-wrap:break-word;text-wrap:pretty}
 .about-project-copy dd{margin:0;text-align:right;font-weight:600}
 .about-project-copy .text-link{margin-top:auto;align-self:flex-start}
 .about-project-card-wide{grid-column:span 3;display:grid;grid-template-columns:1.3fr .7fr}
-.about-project-card-wide .about-project-photo{height:360px}
+.about-project-card-wide .about-project-photo{height:100%;min-height:520px}
 .about-photo-pair{display:grid;grid-template-columns:1.1fr .9fr;gap:2px}
 .about-photo-pair img{min-width:0}
 .about-project-card-wide .about-project-copy{padding:42px 38px}
 .about-yield-note{font-size:10px;line-height:1.55;color:var(--muted);max-width:920px;margin:22px 0 0}
+.about-project-card-wide .about-project-copy{min-width:0}
+@media(max-width:900px){.project-card-featured{grid-template-columns:1fr}.project-card-featured .project-card-photo{height:300px;min-height:0}}
+@media(max-width:680px){.about-project-card-wide .about-project-photo{min-height:0}}
 .about-cta-band{background:var(--gold);color:#fff;padding:39px 0}
 .about-cta-band .shell{display:grid;grid-template-columns:1fr .72fr auto;gap:42px;align-items:center}
 .about-cta-band .eyebrow{color:#fff;margin-bottom:10px}

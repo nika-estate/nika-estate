@@ -11,6 +11,7 @@ Additional portfolio assets:
 - OSUS Eye imagery — rendered from the client-supplied sales induction presentation; public copy uses the later official OSUS figures where the presentation conflicts.
 - Abu Dhabi / Saadiyat image — public Nika Estate UAE catalog image.
 - Nika Estate team image — collected public Nika Estate brand material.
+- `assets/images/portfolio/havencia-ala.jpg` — optimized facade render from the client Havencia Google Drive folder, file `17qoYYxkagyCLE-mO6PjkqdS1sVf-ED5B` (`facade_View01-copy.jpeg`). Project amenities cross-checked against `https://aladevelopments.com/projects/havencia/`; unit-specific price, area and payment terms use the supplied Unit 607 offer, not the conflicting public plan at `https://jre.ae/projects/havencia`. No unverified apartment-count claim is used.
 
 The Archive project landing:
 
