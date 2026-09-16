@@ -42,6 +42,12 @@ Meta receives only the landing/offer labels and form type/ID, not names, phone n
 
 Run the dependency-free regression checks with `node --test tests/tracking.test.cjs`. The live endpoint's matching acknowledgement and CORS support were verified on 2026-09-16 using a synthetic lead marked `ТЕСТ Meta / удалить` (ID `qa-meta-a00903f5-70f2-40e7-8899-dfc3f4239d24`). Pixel-account receipt still needs verification after publication, preferably through Meta Test Events.
 
+## Readability and consultation hero
+
+The consultation hero on `invest-meeting` fills at least the visible screen below the header: `100svh - 78px` on desktop/tablet, `100svh - 67px` on phones, with a `100vh` fallback. It has no fixed height, so content remains visible on unusually small screens. Supporting text declarations below 18 px were enlarged by 2–3 px across all three stylesheet families and the consultation page's inline styles, including mobile overrides and form captions. Body copy is now 18 px. Mobile cards retain compact two-column layouts; grid tracks, contact buttons and tablet navigation wrap instead of overflowing.
+
+Run all checks with `node --test tests/*.test.cjs`. Browser QA covers the seven routes at widths 320, 375, 390, 768, 1280 and 1440 px.
+
 ## Content safeguards
 
 Havencia by ALA is included in the four general multi-project routes: `dubai`, `uae`, `real-estate` and `invest-meeting`. The facade render comes from the client Drive folder. Unit 607 is a scenario based on the supplied offer: AED 665,400, 38.24 m², 20% + 4% DLD + AED 3,600 admin = AED 163,296 initial budget; 20/50/30 payment plan and June 2028 delivery in that offer. The public project card has different plan/timing, so the pages explicitly require a fresh unit-specific plan and contract date before booking. Rental scenarios are 5.5–6% annually before expenses and 4–5% after expenses, never a guarantee.
