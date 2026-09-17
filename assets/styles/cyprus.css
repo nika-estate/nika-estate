@@ -84,6 +84,34 @@
 .cyprus-compact .section{padding:72px 0}
 .cyprus-compact .hero-copy>p:not(.eyebrow):not(.lead){display:none}
 .cyprus-compact .short-form-wrap .lead{margin-bottom:16px}
+.audience-grid,.service-grid,.compare-grid,.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--line);background:var(--line)}
+.audience-grid article,.service-grid article,.compare-grid article,.result-grid article{min-height:205px;padding:clamp(23px,3vw,36px);background:#fff}
+.audience-grid b,.service-grid span{display:block;color:var(--gold);font:400 32px/1 var(--serif);margin-bottom:30px}
+.audience-grid h3,.service-grid h3,.compare-grid h3{font:400 clamp(29px,3.2vw,43px)/.95 var(--serif);letter-spacing:-.035em;margin:0 0 14px}
+.audience-grid p,.service-grid p,.compare-grid p{margin:0;color:var(--muted);font-size:15px;line-height:1.46}
+.catalog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.catalog-grid article{min-height:255px;padding:clamp(24px,3vw,37px);background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;align-items:flex-start}
+.dark .catalog-grid article{background:transparent;border-color:var(--dark-line)}
+.catalog-grid h3{font:400 clamp(35px,3.5vw,48px)/.94 var(--serif);letter-spacing:-.04em;margin:0 0 18px}
+.catalog-grid .eyebrow{margin-bottom:22px}
+.catalog-grid p{font-size:15px;line-height:1.45;margin:0;color:var(--muted)}
+.dark .catalog-grid p{color:#d8d2ca}
+.catalog-grid .catalog-price{font:600 25px/1.05 var(--sans);letter-spacing:-.04em;color:var(--ink);margin:0 0 16px}
+.dark .catalog-grid .catalog-price{color:#fff}
+.catalog-grid .catalog-price small{font:400 14px var(--sans);letter-spacing:0}
+.catalog-grid a{margin-top:auto;padding-top:22px;color:var(--gold-light);font-size:13px;font-weight:600}
+.section:not(.dark) .catalog-grid a{color:var(--gold)}
+.catalog-grid-four{grid-template-columns:repeat(4,1fr)}
+.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.location-grid article{min-height:265px;padding:clamp(28px,4vw,48px);background:var(--cyprus-sand)}
+.location-grid h3{font:400 clamp(37px,4vw,56px)/.94 var(--serif);letter-spacing:-.04em;margin:30px 0 16px;max-width:530px}
+.location-grid p:not(.eyebrow){margin:0;max-width:440px;color:var(--muted);font-size:16px;line-height:1.48}
+.compare-grid article{background:transparent;border-color:var(--dark-line)}
+.compare-grid h3{color:#fff}
+.compare-grid p{color:#d8d2ca}
+.result-grid article{min-height:168px;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:18px}
+.result-grid b{font:400 clamp(44px,4vw,62px)/1 var(--serif);color:var(--gold)}
+.result-grid p{margin:0;color:var(--muted);font-size:15px;line-height:1.4}
 .short-form-wrap{display:grid;grid-template-columns:1fr .92fr;gap:clamp(38px,6vw,85px);align-items:start}
 .short-form-wrap .lead{font-size:29px;line-height:1.15;margin:25px 0}
 .cyprus-form{background:#fff;border:1px solid var(--line);padding:34px}
@@ -96,5 +124,5 @@
 .cyprus-form .form-status{min-height:23px;margin:11px 0 0;color:#63543f;font-size:14px}
 .cyprus-page .mobile-cta.is-hidden{opacity:0;pointer-events:none;transform:translateY(12px)}
 .cyprus-page .mobile-cta{transition:opacity .18s,transform .18s}
-@media(max-width:900px){.cyprus-page .hero{grid-template-columns:1fr;min-height:0;gap:30px}.cyprus-page .hero-media{height:400px}.value-grid,.short-form-wrap{grid-template-columns:1fr;gap:35px}.value-intro{position:static}.cyprus-page .section-head{grid-template-columns:1fr;gap:18px}.material-preview{grid-template-columns:1fr}.city-lines{grid-template-columns:1fr}.city-line{min-height:285px}.proof-strip-four{grid-template-columns:repeat(2,1fr)}.object-grid,.object-grid-two{grid-template-columns:1fr}}
-@media(max-width:680px){.cyprus-page .section{padding:62px 0}.cyprus-compact .section{padding:54px 0}.cyprus-page .hero{padding-top:26px;padding-bottom:35px}.cyprus-page .hero h1{font-size:42px;line-height:.9}.cyprus-page .hero .lead{font-size:22px;line-height:1.12;margin-bottom:16px}.cyprus-page .hero-media{height:310px;margin-left:-20px;margin-right:-20px}.cyprus-page .hero-proof{margin-top:28px;gap:12px}.cyprus-page .hero-proof-four{gap:0}.cyprus-page .hero-proof b{font-size:21px}.cyprus-page .hero-proof span{font-size:12px}.cyprus-page .display{font-size:42px}.value-grid{gap:27px}.value-intro .lead{font-size:23px;margin-top:18px}.flow-card{padding:24px 18px}.flow-card h2{font-size:35px}.flow-options{gap:7px}.flow-option{font-size:13px;padding:10px 12px;min-height:45px}.flow-result{padding:19px 17px 21px}.flow-result h3{font-size:29px}.flow-result p{font-size:15px}.flow-result .button{width:100%;font-size:12px;letter-spacing:.06em;padding:0 12px;gap:12px}.proof-strip{grid-template-columns:1fr}.proof-strip article{min-height:112px;padding:20px 17px;display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start}.proof-strip b{margin:0;font-size:29px}.proof-strip p{font-size:14px}.material-cover{min-height:285px;padding:27px 22px}.material-cover h3{font-size:44px}.material-list{padding:21px 19px}.material-list article{padding:14px 0}.city-line{min-height:250px;padding:26px 20px}.city-line h3{font-size:45px}.memo-tiles{grid-template-columns:1fr}.memo-tiles article{min-height:145px;padding:21px 19px}.memo-tiles h3{font-size:31px;margin:18px 0 7px}.object-card{min-height:230px;padding:25px 20px}.object-card h3{font-size:40px}.cyprus-form{padding:26px 20px}.cyprus-form .form-row{grid-template-columns:1fr;gap:0}.cyprus-page .mobile-cta .button{font-size:12px;letter-spacing:.055em;padding:0 11px;gap:11px}}
+@media(max-width:900px){.cyprus-page .hero{grid-template-columns:1fr;min-height:0;gap:30px}.cyprus-page .hero-media{height:400px}.value-grid,.short-form-wrap{grid-template-columns:1fr;gap:35px}.value-intro{position:static}.cyprus-page .section-head{grid-template-columns:1fr;gap:18px}.material-preview{grid-template-columns:1fr}.city-lines{grid-template-columns:1fr}.city-line{min-height:285px}.proof-strip-four{grid-template-columns:repeat(2,1fr)}.object-grid,.object-grid-two,.catalog-grid,.catalog-grid-four{grid-template-columns:1fr}.audience-grid,.service-grid,.compare-grid,.result-grid{grid-template-columns:1fr}.location-grid{grid-template-columns:1fr}}
+@media(max-width:680px){.cyprus-page .section{padding:62px 0}.cyprus-compact .section{padding:54px 0}.cyprus-page .hero{padding-top:26px;padding-bottom:35px}.cyprus-page .hero h1{font-size:42px;line-height:.9}.cyprus-page .hero .lead{font-size:22px;line-height:1.12;margin-bottom:16px}.cyprus-page .hero-media{height:310px;margin-left:-20px;margin-right:-20px}.cyprus-page .hero-proof{margin-top:28px;gap:12px}.cyprus-page .hero-proof-four{gap:0}.cyprus-page .hero-proof b{font-size:21px}.cyprus-page .hero-proof span{font-size:12px}.cyprus-page .display{font-size:42px}.value-grid{gap:27px}.value-intro .lead{font-size:23px;margin-top:18px}.flow-card{padding:24px 18px}.flow-card h2{font-size:35px}.flow-options{gap:7px}.flow-option{font-size:13px;padding:10px 12px;min-height:45px}.flow-result{padding:19px 17px 21px}.flow-result h3{font-size:29px}.flow-result p{font-size:15px}.flow-result .button{width:100%;font-size:12px;letter-spacing:.06em;padding:0 12px;gap:12px}.proof-strip{grid-template-columns:1fr}.proof-strip article{min-height:112px;padding:20px 17px;display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start}.proof-strip b{margin:0;font-size:29px}.proof-strip p{font-size:14px}.material-cover{min-height:285px;padding:27px 22px}.material-cover h3{font-size:44px}.material-list{padding:21px 19px}.material-list article{padding:14px 0}.city-line{min-height:250px;padding:26px 20px}.city-line h3{font-size:45px}.memo-tiles{grid-template-columns:1fr}.memo-tiles article{min-height:145px;padding:21px 19px}.memo-tiles h3{font-size:31px;margin:18px 0 7px}.object-card{min-height:230px;padding:25px 20px}.object-card h3{font-size:40px}.audience-grid article,.service-grid article,.compare-grid article{min-height:0;padding:25px 20px}.audience-grid b,.service-grid span{margin-bottom:20px}.catalog-grid article{min-height:220px;padding:25px 20px}.catalog-grid h3{font-size:41px}.location-grid article{min-height:225px;padding:28px 21px}.location-grid h3{font-size:41px;margin-top:22px}.result-grid article{min-height:125px;padding:24px 20px}.cyprus-form{padding:26px 20px}.cyprus-form .form-row{grid-template-columns:1fr;gap:0}.cyprus-page .mobile-cta .button{font-size:12px;letter-spacing:.055em;padding:0 11px;gap:11px}}

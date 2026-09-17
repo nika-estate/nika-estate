@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const routes = [
   ['permanent residency', 'cyprus/eligibility/index.html', 'ПМЖ через'],
   ['new-build selection', 'cyprus/city-match/index.html', 'Новостройки'],
-  ['investment meeting', 'cyprus/investment-memo/index.html', 'Онлайн-встреча']
+  ['investment consultation', 'cyprus/investment-memo/index.html', 'Онлайн-консультация']
 ];
 
 test('three Cyprus prototypes keep independent offers and shared lead routing', () => {
@@ -20,7 +20,8 @@ test('three Cyprus prototypes keep independent offers and shared lead routing', 
     assert.match(html, /class="lead-form cyprus-form"/);
     assert.match(html, /data-landing-name="cyprus-/);
     assert.match(html, /data-offer-name=/);
-    assert.ok((html.match(/<section\b/g) || []).length <= 3, `${name} should stay concise`);
+    const sections = (html.match(/<section\b/g) || []).length;
+    assert.ok(sections >= 5 && sections <= 6, `${name} should explain the offer in 5–6 blocks`);
   }
 });
 
@@ -37,15 +38,16 @@ test('offers show a concrete product and decision criteria above the form', () =
   const residency = fs.readFileSync(path.join(root, 'cyprus/eligibility/index.html'), 'utf8');
   const selection = fs.readFileSync(path.join(root, 'cyprus/city-match/index.html'), 'utf8');
   const meeting = fs.readFileSync(path.join(root, 'cyprus/investment-memo/index.html'), 'utf8');
-  assert.match(residency, /ПМЖ на Кипре/);
+  assert.match(residency, /Консультация по ПМЖ/);
   assert.match(residency, /€300 000 \+ VAT/);
   assert.match(residency, /граждан стран вне ЕС/);
-  assert.match(selection, /3 новостройки/);
+  assert.match(residency, /Marelia Valley/);
+  assert.match(selection, /Новостройки на Южном Кипре/);
   assert.match(selection, /от €220 000/);
   assert.match(selection, /Cypress Park/);
   assert.match(selection, /Seaside Residence/);
-  assert.match(meeting, /Сравним 3 новостройки/);
-  assert.match(meeting, /цену, VAT, платежи/);
+  assert.match(meeting, /Инвестиции и ПМЖ/);
+  assert.match(meeting, /Цена объекта, VAT, платежи/);
 });
 
 test('prototype copy avoids prohibited outcome promises', () => {
