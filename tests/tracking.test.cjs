@@ -43,7 +43,7 @@ class Form {
 }
 
 test('every landing exposes only lead forms, without agency phones or direct contacts', () => {
-  const allPages = [...pages, 'cyprus/eligibility/index.html', 'cyprus/city-match/index.html', 'cyprus/investment-memo/index.html'];
+  const allPages = [...pages, 'cyprus/eligibility/index.html', 'cyprus/city-match/index.html'];
   for (const page of allPages) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     assert.doesNotMatch(html, /href=["'](?:tel:|mailto:|https?:\/\/(?:wa\.me|t\.me|api\.whatsapp\.com|web\.whatsapp\.com))/i, page);

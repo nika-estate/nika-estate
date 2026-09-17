@@ -5,12 +5,11 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const routes = [
-  ['permanent residency', 'cyprus/eligibility/index.html', 'ПМЖ через'],
-  ['new-build selection', 'cyprus/city-match/index.html', 'Новостройки'],
-  ['investment consultation', 'cyprus/investment-memo/index.html', 'Онлайн-консультация']
+  ['property consultation', 'cyprus/eligibility/index.html', 'Подберём 3–5 новостроек'],
+  ['new-build selection', 'cyprus/city-match/index.html', 'Получите подборку новостроек']
 ];
 
-test('three Cyprus prototypes keep independent offers and shared lead routing', () => {
+test('two Cyprus prototypes keep independent offers and shared lead routing', () => {
   for (const [name, relativePath, offer] of routes) {
     const html = fs.readFileSync(path.join(root, relativePath), 'utf8');
     assert.match(html, new RegExp(offer));
@@ -26,7 +25,7 @@ test('three Cyprus prototypes keep independent offers and shared lead routing', 
 });
 
 test('Cyprus prototype assets and shared interaction code are present', () => {
-  for (const image of ['eligibility-hero.jpg', 'city-match-hero.jpg', 'investment-memo-hero.jpg']) {
+  for (const image of ['eligibility-hero.jpg', 'city-match-hero.jpg']) {
     assert.ok(fs.statSync(path.join(root, 'assets/images/cyprus', image)).size > 200000, `${image} should be a usable visual asset`);
   }
   const styles = fs.readFileSync(path.join(root, 'assets/styles/site.css'), 'utf8') + fs.readFileSync(path.join(root, 'assets/styles/cyprus.css'), 'utf8');
@@ -37,17 +36,17 @@ test('Cyprus prototype assets and shared interaction code are present', () => {
 test('offers show a concrete product and decision criteria above the form', () => {
   const residency = fs.readFileSync(path.join(root, 'cyprus/eligibility/index.html'), 'utf8');
   const selection = fs.readFileSync(path.join(root, 'cyprus/city-match/index.html'), 'utf8');
-  const meeting = fs.readFileSync(path.join(root, 'cyprus/investment-memo/index.html'), 'utf8');
-  assert.match(residency, /Консультация по ПМЖ/);
+  const legacyRoute = fs.readFileSync(path.join(root, 'cyprus/investment-memo/index.html'), 'utf8');
+  assert.match(residency, /Подберём 3–5 новостроек/);
   assert.match(residency, /€300 000 \+ VAT/);
-  assert.match(residency, /граждан стран вне ЕС/);
+  assert.match(residency, /Инвестиция/);
   assert.match(residency, /Marelia Valley/);
-  assert.match(selection, /Новостройки на Южном Кипре/);
+  assert.match(selection, /Получите подборку новостроек/);
   assert.match(selection, /от €220 000/);
   assert.match(selection, /Cypress Park/);
   assert.match(selection, /Seaside Residence/);
-  assert.match(meeting, /Инвестиции и ПМЖ/);
-  assert.match(meeting, /Цена объекта, VAT, платежи/);
+  assert.match(selection, /Что будет в подборке/);
+  assert.match(legacyRoute, /url=\.\.\/eligibility\//);
 });
 
 test('prototype copy avoids prohibited outcome promises', () => {
