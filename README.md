@@ -10,7 +10,7 @@ Static Russian-language landing pages in the Nika Estate brand style.
 - `/real-estate/` — conversion landing for property selection in the UAE and Saudi Arabia, with current projects and 2026 market yield benchmarks
 - `/the-archive/` — The Archive by Imtiaz project landing
 
-The visual system uses local Inter and Cormorant Garamond fonts, the real Nika Estate logo, editorial whitespace, black typography and the brand gold accent. Lead forms open the official Nika Estate WhatsApp with a prefilled message.
+The visual system uses local Inter and Cormorant Garamond fonts, the real Nika Estate logo, editorial whitespace, black typography and the brand gold accent. Visitors contact Nika Estate only through lead forms; agency phone numbers and direct contact links are not displayed, and submissions do not open messengers.
 
 ## Publication
 

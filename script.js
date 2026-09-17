@@ -65,33 +65,6 @@ document.querySelectorAll('[data-project-link]').forEach((link) => {
   });
 });
 
-requestForm?.addEventListener('submit', (event) => {
-  event.preventDefault();
-  updateTelegramField(requestForm);
-  if (!requestForm.checkValidity()) {
-    requestForm.reportValidity();
-    return;
-  }
-  const name = requestForm.elements.name.value.trim();
-  const phone = requestForm.elements.phone.value.trim();
-  const goal = requestForm.elements.goal.value.trim();
-  const project = requestForm.elements.project.value.trim();
-  const messenger = checkedValue(requestForm, 'messenger');
-  const telegram = requestForm.elements.telegram.value.trim();
-  const status = requestForm.querySelector('.form-success');
-  const text = [
-    'Здравствуйте! Хочу записаться на инвестиционную консультацию по City Walk и Central Park.',
-    project ? `Интересует: ${project}.` : '',
-    `Имя: ${name}.`,
-    `Телефон: ${phone}.`,
-    `Связаться: ${messenger}.`,
-    telegram ? `Telegram: ${telegram}.` : '',
-    goal ? `Задача: ${goal}.` : ''
-  ].filter(Boolean).join('\n');
-  status.textContent = 'Заявка заполнена. Открываем сообщение для Nika Estate…';
-  window.open(`https://wa.me/971508698020?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
-});
-
 const quiz = document.querySelector('[data-quiz-form]');
 
 if (quiz) {
@@ -150,35 +123,6 @@ if (quiz) {
       activeStep += 1;
       renderQuiz();
     }, 320);
-  });
-
-  quiz.addEventListener('submit', (event) => {
-    event.preventDefault();
-    updateTelegramField(quiz);
-    if (!quiz.checkValidity()) {
-      quiz.reportValidity();
-      return;
-    }
-    const data = new FormData(quiz);
-    const messenger = checkedValue(quiz, 'messenger');
-    const telegram = (data.get('telegram') || '').toString().trim();
-    const line = (label, field) => {
-      const value = (data.get(field) || '').toString().trim();
-      return value ? `${label}: ${value}.` : '';
-    };
-    const text = [
-      'Здравствуйте! Хочу получить презентации и планировки Thyme и Erin.',
-      line('Цель', 'quiz_goal'),
-      line('Бюджет', 'quiz_budget'),
-      line('Срок покупки', 'quiz_timing'),
-      line('Имя', 'name'),
-      line('Телефон', 'phone'),
-      messenger ? `Связаться: ${messenger}.` : '',
-      telegram ? `Telegram: ${telegram}.` : ''
-    ].filter(Boolean).join('\n');
-    const status = quiz.querySelector('[data-form-status]');
-    if (status) status.textContent = 'Ответы сохранены. Открываем сообщение для Nika Estate…';
-    window.open(`https://wa.me/971508698020?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
   });
 
   renderQuiz();

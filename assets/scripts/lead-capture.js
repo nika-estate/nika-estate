@@ -176,7 +176,35 @@
       if (form.dataset.nikaLeadBound === 'true') return;
       if (!form.querySelector('[name="phone"], [name="contact"], [name="email"]')) return;
       form.dataset.nikaLeadBound = 'true';
-      form.addEventListener('submit', () => send(form), true);
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+        if (form.dataset.nikaSubmitting === 'true') return;
+        const status = form.querySelector('[data-form-status], .form-success');
+        if (!pageConfig.endpoint) {
+          if (status) status.textContent = 'Не удалось отправить заявку. Попробуйте позже.';
+          return;
+        }
+        form.dataset.nikaSubmitting = 'true';
+        const buttons = [...form.querySelectorAll('button[type="submit"], input[type="submit"]')];
+        const disabledBefore = buttons.map((button) => button.disabled);
+        if (status) status.textContent = 'Отправляем заявку…';
+        // Build the payload before disabling controls. No messenger redirect or fallback.
+        const request = send(form);
+        buttons.forEach((button) => { button.disabled = true; });
+        form.setAttribute('aria-busy', 'true');
+        const confirmed = await request;
+        if (status) status.textContent = confirmed
+          ? 'Заявка отправлена. Брокер Nika Estate свяжется с вами выбранным способом.'
+          : 'Не удалось подтвердить отправку заявки. Попробуйте ещё раз.';
+        buttons.forEach((button, index) => { button.disabled = disabledBefore[index]; });
+        form.setAttribute('aria-busy', 'false');
+        form.dataset.nikaSubmitting = 'false';
+      }, true);
     });
   }
 

@@ -1,5 +1,3 @@
-const WHATSAPP_NUMBER = '971508698020';
-
 const menu = document.querySelector('.menu');
 const nav = document.querySelector('.site-nav');
 
@@ -24,10 +22,6 @@ document.querySelectorAll('.faq-button').forEach((button) => {
     button.setAttribute('aria-expanded', String(open));
   });
 });
-
-function openWhatsApp(message) {
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
-}
 
 function checkedValue(form, name) {
   return form.querySelector(`[name="${name}"]:checked`)?.value || '';
@@ -139,40 +133,6 @@ if (quiz) {
     }
   });
 
-  quiz.addEventListener('submit', (event) => {
-    event.preventDefault();
-    updateTelegramField(quiz);
-
-    if (!quiz.checkValidity()) {
-      quiz.reportValidity();
-      return;
-    }
-
-    const data = new FormData(quiz);
-    const messenger = checkedValue(quiz, 'messenger');
-    const telegram = (data.get('telegram') || '').toString().trim();
-    const quizLine = (label, field) => {
-      const value = (data.get(field) || '').toString().trim();
-      return value ? `${label}: ${value}.` : '';
-    };
-    const message = [
-      'Здравствуйте! Хочу получить подбор объектов.',
-      quizLine('Цель', 'quiz_goal'),
-      quizLine('Первый платёж', 'quiz_budget'),
-      quizLine('Регион', 'quiz_region'),
-      quizLine('Формат', 'quiz_type'),
-      quizLine('Срок покупки', 'quiz_timing'),
-      quizLine('Имя', 'name'),
-      quizLine('Телефон', 'phone'),
-      messenger ? `Связаться: ${messenger}.` : '',
-      telegram ? `Telegram: ${telegram}.` : ''
-    ].filter(Boolean).join('\n');
-
-    const status = quiz.querySelector('[data-form-status]');
-    if (status) status.textContent = 'Подборка заполнена. Открываем сообщение для Nika Estate…';
-    openWhatsApp(message);
-  });
-
   renderQuiz();
 }
 
@@ -186,40 +146,6 @@ document.querySelectorAll('[data-project-link]').forEach((link) => {
     const selected = consultationForm.querySelector('[data-selected-project]');
     selected.querySelector('strong').textContent = project;
     selected.hidden = false;
-  });
-});
-
-document.querySelectorAll('.lead-form').forEach((form) => {
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    updateTelegramField(form);
-
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
-
-    const data = new FormData(form);
-    const page = form.dataset.page || document.title;
-    const name = (data.get('name') || '').toString().trim();
-    const phone = (data.get('phone') || data.get('contact') || '').toString().trim();
-    const goal = (data.get('goal') || '').toString().trim();
-    const project = (data.get('project') || '').toString().trim();
-    const messenger = checkedValue(form, 'messenger') || 'WhatsApp';
-    const telegram = (data.get('telegram') || '').toString().trim();
-    const message = [
-      `Здравствуйте! Хочу обсудить: ${page}.`,
-      project ? `Интересует объект: ${project}.` : '',
-      `Имя: ${name}.`,
-      `Телефон: ${phone}.`,
-      goal ? `Цель: ${goal}.` : '',
-      `Связаться: ${messenger}.`,
-      telegram ? `Telegram: ${telegram}.` : ''
-    ].filter(Boolean).join('\n');
-
-    const status = form.querySelector('[data-form-status]');
-    if (status) status.textContent = 'Открываем сообщение для Nika Estate…';
-    openWhatsApp(message);
   });
 });
 

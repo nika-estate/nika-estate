@@ -18,7 +18,7 @@
 
 ## Lead routing
 
-All forms send a lead copy to the shared Google Sheets endpoint and then keep the existing WhatsApp flow. The shared browser module is `assets/scripts/lead-capture.js`; each page passes its landing and default offer names through `data-landing-name` and `data-offer-name`. Pages with more than one form set a separate `data-offer-name` on each form.
+All forms submit directly to the shared Google Sheets endpoint and stay on the landing. Agency phone numbers, call/email/messenger links and automatic WhatsApp redirects are removed; the visitor's contact field and preferred reply channel remain. The shared browser module is `assets/scripts/lead-capture.js`; each page passes its landing and default offer names through `data-landing-name` and `data-offer-name`. Pages with more than one form set a separate `data-offer-name` on each form. Success and conversion events require the handler's matching acknowledgement; an unconfirmed request shows a retry message.
 
 The Google Apps Script asset served through `?asset=lead-capture` had invalid JavaScript on 2026-09-11, so the repository uses a corrected local client module pointed at the same healthy POST endpoint. Do not replace it with the hosted asset until that deployment passes a JavaScript syntax check.
 

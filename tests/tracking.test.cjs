@@ -21,19 +21,86 @@ class Form {
     this.dataset = { offerName: 'Test offer' };
     this.fields = { name: 'Synthetic test', phone: '+971000000000', messenger: 'WhatsApp' };
     this.listeners = [];
+    this.status = { textContent: '' };
+    this.buttons = [{ disabled: false }];
+    this.attributes = {};
     this.elements = { namedItem: name => name in this.fields ? { value: this.fields[name] } : null };
   }
   checkValidity() { return this.valid; }
+  reportValidity() { this.reported = true; }
+  setAttribute(name, value) { this.attributes[name] = value; }
+  querySelectorAll() { return this.buttons; }
   matches() { return this.quiz; }
   getAttribute() { return ''; }
   addEventListener(type, callback, capture) { this.listeners.push({ type, callback, capture }); }
   querySelector(selector) {
+    if (selector.includes('data-form-status')) return this.status;
     if (selector.includes('data-quiz-next')) return null;
     const names = [...selector.matchAll(/\[name="([^"]+)"\]/g)].map(match => match[1]);
     const name = names.find(item => item in this.fields);
     return name ? { value: this.fields[name], labels: [{ textContent: name }] } : null;
   }
 }
+
+test('every landing exposes only lead forms, without agency phones or direct contacts', () => {
+  const allPages = [...pages, 'cyprus/eligibility/index.html', 'cyprus/city-match/index.html', 'cyprus/investment-memo/index.html'];
+  for (const page of allPages) {
+    const html = fs.readFileSync(path.join(root, page), 'utf8');
+    assert.doesNotMatch(html, /href=["'](?:tel:|mailto:|https?:\/\/(?:wa\.me|t\.me|api\.whatsapp\.com|web\.whatsapp\.com))/i, page);
+    assert.doesNotMatch(html, /97145574496|971508698020|\+971 4 557 4496|Удобнее связаться|class="[^"]*\b(?:direct-contact|request-direct|request-contacts)\b/, page);
+    assert.match(html, /name="phone"/, 'client contact stays on ' + page);
+    assert.match(html, /lead-capture\.js\?v=20260917-forms-only/, page);
+    assert.doesNotMatch(html, /(?:Откроется|откроется)[^<]*WhatsApp/, page);
+  }
+  for (const file of ['script.js', 'assets/scripts/site.js', 'assets/scripts/lead-capture.js']) {
+    assert.doesNotMatch(fs.readFileSync(path.join(root, file), 'utf8'), /window\.open|wa\.me|WHATSAPP_NUMBER|971508698020/, file);
+  }
+});
+
+for (const quiz of [false, true]) {
+  test('submit ' + (quiz ? 'quiz' : 'mini form') + ' stays on page and shows success only after acknowledgement', async () => {
+    const form = new Form(quiz);
+    const h = harness([form]);
+    let acknowledge;
+    h.respond((url, options) => new Promise(resolve => {
+      acknowledge = () => resolve({ ok: true, type: 'cors', json: async () => ({ ok: true, lead_id: JSON.parse(options.body).lead_id }) });
+    }));
+    const event = { prevented: false, stopped: false, preventDefault() { this.prevented = true; }, stopImmediatePropagation() { this.stopped = true; } };
+    const submit = form.listeners.find(listener => listener.type === 'submit').callback;
+    const pending = submit(event);
+    assert.equal(event.prevented, true);
+    assert.equal(event.stopped, true);
+    assert.equal(form.buttons[0].disabled, true);
+    assert.equal(form.attributes['aria-busy'], 'true');
+    assert.equal(form.status.textContent, 'Отправляем заявку…');
+    assert.equal(h.calls.meta.length, 0);
+    await submit(event);
+    assert.equal(h.calls.fetch.length, 1);
+    acknowledge();
+    await pending;
+    assert.match(form.status.textContent, /^Заявка отправлена/);
+    assert.equal(form.buttons[0].disabled, false);
+    assert.equal(form.attributes['aria-busy'], 'false');
+    assert.equal(h.calls.meta[0][1], 'Lead');
+  });
+}
+
+test('failed form submission allows retry and invalid contact never sends', async () => {
+  const form = new Form();
+  const h = harness([form]);
+  const submit = form.listeners.find(listener => listener.type === 'submit').callback;
+  const event = { preventDefault() {}, stopImmediatePropagation() {} };
+  h.respond(() => Promise.reject(new Error('Offline')));
+  await submit(event);
+  assert.match(form.status.textContent, /^Не удалось подтвердить/);
+  assert.equal(form.buttons[0].disabled, false);
+  assert.equal(form.dataset.nikaSubmitting, 'false');
+  assert.equal(h.calls.meta.length, 0);
+  form.valid = false;
+  await submit(event);
+  assert.equal(form.reported, true);
+  assert.equal(h.calls.fetch.length, 1);
+});
 
 function harness(forms = []) {
   const listeners = new Map();
@@ -85,7 +152,7 @@ test('all seven pages start the same async pixel in head, with valid body fallba
     assert.doesNotMatch(head, /<noscript>.*<img/);
     assert.match(html, /<body[^>]*>\s*<noscript><img[^>]*tr\?id=1758103622093263&amp;ev=PageView&amp;noscript=1/);
     assert.equal((html.match(/assets\/scripts\/analytics\.js\?v=20260916-1/g) || []).length, 1);
-    assert.equal((html.match(/assets\/scripts\/lead-capture\.js\?v=20260916-1/g) || []).length, 1);
+    assert.equal((html.match(/assets\/scripts\/lead-capture\.js\?v=20260917-forms-only/g) || []).length, 1);
     new vm.Script(head.match(/<script>([\s\S]*?)<\/script>/)[1]);
   }
 });
