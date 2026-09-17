@@ -126,3 +126,24 @@
 .cyprus-page .mobile-cta{transition:opacity .18s,transform .18s}
 @media(max-width:900px){.cyprus-page .hero{grid-template-columns:1fr;min-height:0;gap:30px}.cyprus-page .hero-media{height:400px}.value-grid,.short-form-wrap{grid-template-columns:1fr;gap:35px}.value-intro{position:static}.cyprus-page .section-head{grid-template-columns:1fr;gap:18px}.material-preview{grid-template-columns:1fr}.city-lines{grid-template-columns:1fr}.city-line{min-height:285px}.proof-strip-four{grid-template-columns:repeat(2,1fr)}.object-grid,.object-grid-two,.catalog-grid,.catalog-grid-four{grid-template-columns:1fr}.audience-grid,.service-grid,.compare-grid,.result-grid{grid-template-columns:1fr}.location-grid{grid-template-columns:1fr}}
 @media(max-width:680px){.cyprus-page .section{padding:62px 0}.cyprus-compact .section{padding:54px 0}.cyprus-page .hero{padding-top:26px;padding-bottom:35px}.cyprus-page .hero h1{font-size:42px;line-height:.9}.cyprus-page .hero .lead{font-size:22px;line-height:1.12;margin-bottom:16px}.cyprus-page .hero-media{height:310px;margin-left:-20px;margin-right:-20px}.cyprus-page .hero-proof{margin-top:28px;gap:12px}.cyprus-page .hero-proof-four{gap:0}.cyprus-page .hero-proof b{font-size:21px}.cyprus-page .hero-proof span{font-size:12px}.cyprus-page .display{font-size:42px}.value-grid{gap:27px}.value-intro .lead{font-size:23px;margin-top:18px}.flow-card{padding:24px 18px}.flow-card h2{font-size:35px}.flow-options{gap:7px}.flow-option{font-size:13px;padding:10px 12px;min-height:45px}.flow-result{padding:19px 17px 21px}.flow-result h3{font-size:29px}.flow-result p{font-size:15px}.flow-result .button{width:100%;font-size:12px;letter-spacing:.06em;padding:0 12px;gap:12px}.proof-strip{grid-template-columns:1fr}.proof-strip article{min-height:112px;padding:20px 17px;display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start}.proof-strip b{margin:0;font-size:29px}.proof-strip p{font-size:14px}.material-cover{min-height:285px;padding:27px 22px}.material-cover h3{font-size:44px}.material-list{padding:21px 19px}.material-list article{padding:14px 0}.city-line{min-height:250px;padding:26px 20px}.city-line h3{font-size:45px}.memo-tiles{grid-template-columns:1fr}.memo-tiles article{min-height:145px;padding:21px 19px}.memo-tiles h3{font-size:31px;margin:18px 0 7px}.object-card{min-height:230px;padding:25px 20px}.object-card h3{font-size:40px}.audience-grid article,.service-grid article,.compare-grid article{min-height:0;padding:25px 20px}.audience-grid b,.service-grid span{margin-bottom:20px}.catalog-grid article{min-height:220px;padding:25px 20px}.catalog-grid h3{font-size:41px}.location-grid article{min-height:225px;padding:28px 21px}.location-grid h3{font-size:41px;margin-top:22px}.result-grid article{min-height:125px;padding:24px 20px}.cyprus-form{padding:26px 20px}.cyprus-form .form-row{grid-template-columns:1fr;gap:0}.cyprus-page .mobile-cta .button{font-size:12px;letter-spacing:.055em;padding:0 11px;gap:11px}}
+
+
+/* Desktop: keep the offer readable instead of squeezing a display headline into a narrow column. */
+@media(min-width:901px){
+  .cyprus-page .hero{grid-template-columns:minmax(0,1.18fr) minmax(420px,.82fr);gap:clamp(36px,4.5vw,68px);min-height:600px;padding-top:44px;padding-bottom:52px}
+  .cyprus-page .hero-copy{min-width:0;max-width:680px}
+  .cyprus-page .hero h1{max-width:680px;font-size:clamp(52px,4.4vw,58px);line-height:.9;text-wrap:balance}
+  .cyprus-page .hero-media{height:clamp(420px,36vw,500px);min-width:0}
+  .cyprus-page .hero-proof{margin-top:29px;max-width:100%}
+  .cyprus-page .hero-proof-four{grid-template-columns:repeat(2,minmax(0,1fr));max-width:580px}
+  .cyprus-page .hero-proof:not(.hero-proof-four){grid-template-columns:repeat(3,minmax(0,1fr));max-width:580px}
+  .cyprus-page .hero-proof>div{min-width:0;padding:16px 12px}
+  .cyprus-page .hero-proof b{font-size:20px;white-space:nowrap}
+  .cyprus-page .hero-proof span{max-width:145px}
+}
+@media(min-width:901px) and (max-width:1100px){
+  .cyprus-page .hero{grid-template-columns:minmax(0,1fr) minmax(390px,.94fr);gap:38px}
+  .cyprus-page .hero h1{font-size:50px}
+  .cyprus-page .hero-media{height:430px}
+  .catalog-grid-four{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
