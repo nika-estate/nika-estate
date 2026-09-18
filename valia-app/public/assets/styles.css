@@ -3130,6 +3130,7 @@ a:focus-visible {
 }
 .fab-enquire {
   border: 1px solid var(--line-dark);
+  background: var(--ink);
 }
 .fab-enquire img {
   width: 17px;
