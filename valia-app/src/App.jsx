@@ -390,16 +390,28 @@ const planFrames = {
 };
 function PlanDrawing({ src, alt }) {
   const page = src.match(/plan-(\d+)-focus/)?.[1];
-  return f.jsx("svg", {
+  const clipId = "floor-plan-" + Gl.useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const [x, y, width, height] = planFrames[page].split(" ").map(Number);
+  return f.jsxs("svg", {
     className: "plan-drawing",
     viewBox: planFrames[page],
     role: "img",
     "aria-label": alt,
-    children: f.jsx("image", {
-      href: tt(src),
-      width: 1174,
-      height: 1095,
-    }),
+    children: [
+      f.jsx("defs", {
+        children: f.jsx("clipPath", {
+          id: clipId,
+          clipPathUnits: "userSpaceOnUse",
+          children: f.jsx("rect", { x, y, width, height }),
+        }),
+      }),
+      f.jsx("image", {
+        href: tt(src),
+        width: 1174,
+        height: 1095,
+        clipPath: `url(#${clipId})`,
+      }),
+    ],
   });
 }
 function ResponsiveDetails({ title, children }) {
