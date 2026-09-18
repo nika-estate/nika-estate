@@ -1,0 +1,53 @@
+name: Publish Nika Estate landings
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Valia dependencies
+        working-directory: valia-app
+        run: npm ci --no-audit --no-fund
+      - name: Verify lead tracking and translations
+        working-directory: valia-app
+        run: node --test tests/leads.test.cjs tests/locales.test.mjs
+      - name: Build both languages
+        working-directory: valia-app
+        run: npx vite build
+      - uses: actions/configure-pages@v5
+      - name: Preserve existing landings and add Valia
+        run: |
+          mkdir -p "$RUNNER_TEMP/pages/valia"
+          rsync -a --exclude=.git --exclude=.github --exclude=valia-app --exclude=tests ./ "$RUNNER_TEMP/pages/"
+          cp -a valia-app/dist/client/. "$RUNNER_TEMP/pages/valia/"
+          test -f "$RUNNER_TEMP/pages/index.html"
+          test -f "$RUNNER_TEMP/pages/the-archive/index.html"
+          test -f "$RUNNER_TEMP/pages/cyprus/investment-memo/index.html"
+          test -f "$RUNNER_TEMP/pages/valia/en/index.html"
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/pages
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy all landings
+        id: deployment
+        uses: actions/deploy-pages@v4
