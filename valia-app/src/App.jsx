@@ -370,6 +370,54 @@ function Ne({ src: T, alt: W, className: Z = "img-wide" }) {
     }),
   });
 }
+// Frame the apartment, not the blank page or the small building key plan.
+const planFrames = {
+  "03": "192 192 528 584",
+  "04": "192 192 528 584",
+  "05": "192 184 520 592",
+  "06": "192 176 528 600",
+  "07": "40 184 824 592",
+  "08": "40 184 824 592",
+  "09": "8 176 928 600",
+  10: "8 176 928 600",
+  11: "8 16 912 752",
+  12: "8 16 912 752",
+  13: "8 8 1056 784",
+  14: "8 8 1056 784",
+  17: "80 168 752 576",
+  18: "80 168 752 576",
+  19: "80 168 752 576",
+};
+function PlanDrawing({ src, alt }) {
+  const page = src.match(/plan-(\d+)-focus/)?.[1];
+  return f.jsx("svg", {
+    className: "plan-drawing",
+    viewBox: planFrames[page],
+    role: "img",
+    "aria-label": alt,
+    children: f.jsx("image", {
+      href: tt(src),
+      width: 1174,
+      height: 1095,
+    }),
+  });
+}
+function ResponsiveDetails({ title, children }) {
+  const [open, setOpen] = Gl.useState(false);
+  Gl.useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const update = () => setOpen(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+  return f.jsxs("details", {
+    className: "responsive-details",
+    open,
+    onToggle: (event) => setOpen(event.currentTarget.open),
+    children: [f.jsx("summary", { children: title }), children],
+  });
+}
 function _e({
   children: T = "Получить цены и планировки",
   onClick: W,
@@ -612,7 +660,7 @@ function v0() {
                           className: "hero-badge",
                           children: [
                             f.jsx("span", { className: "dot" }),
-                            "Новый проект · Emaar · Dubai Creek Harbour",
+                            "Новый проект · Emaar",
                           ],
                         }),
                         f.jsxs("h1", {
@@ -627,11 +675,7 @@ function v0() {
                           children: [
                             "Квартиры с ",
                             f.jsx("strong", { children: "1–4 спальнями" }),
-                            " у парка и набережной. Балконы, панорамные окна и инфраструктура для отдыха — в новом проекте Emaar. От ",
-                            f.jsx("strong", { children: "AED 1,96 млн" }),
-                            " с поэтапной оплатой ",
-                            f.jsx("strong", { children: "80/20" }),
-                            ". Подберём этаж, вид и планировку под вашу цель.",
+                            " у парка и набережной. Балконы, панорамные окна и отдых у дома.",
                           ],
                         }),
                         f.jsxs("div", {
@@ -666,13 +710,19 @@ function v0() {
                         f.jsxs("div", {
                           className: "hero-actions",
                           children: [
+                            f.jsx("button", {
+                              className: "btn btn-light hero-enquire",
+                              type: "button",
+                              onClick: El,
+                              children: "Получить цены и планировки",
+                            }),
                             f.jsx("a", {
-                              className: "btn btn-ghost",
+                              className: "hero-secondary",
                               href: "#plans",
                               children: "Планировки и площади",
                             }),
                             f.jsx("a", {
-                              className: "btn btn-ghost",
+                              className: "hero-secondary",
                               href: "#payment",
                               children: "Условия покупки",
                             }),
@@ -728,33 +778,44 @@ function v0() {
                       f.jsxs("p", {
                         children: [
                           f.jsx("strong", { children: "Valia by Emaar" }),
-                          " — высотный жилой проект в Dubai Creek Harbour. Здесь можно выбрать квартиру с видом на залив, парк или силуэт Дубая, не отказываясь от городской инфраструктуры.",
+                          " — квартиры у парка и набережной Dubai Creek Harbour. Вид на залив, парк или город зависит от выбранного лота.",
                         ],
                       }),
-                      f.jsx("p", {
-                        children:
-                          "Рядом — прогулочная набережная, марина и зелёные пространства. Напротив предусмотрен торгово-развлекательный центр Dubai Square, а по другую сторону канала — будущая станция Blue Line Metro.",
-                      }),
-                      f.jsx("ul", {
-                        className: "spec-list",
+                      f.jsx(ResponsiveDetails, {
+                        title: "Подробнее о проекте",
                         children: [
-                          ["Застройщик", "Emaar Properties"],
-                          ["Квартиры", "1, 2, 3 и 4 спальни"],
-                          ["Площадь с балконами", "75,89–237,93 м²"],
-                          ["Отделка", "Премиальные материалы"],
-                          ["Балкон", "В каждой квартире"],
-                        ].map(([m, j]) =>
-                          f.jsxs(
-                            "li",
-                            {
-                              children: [
-                                f.jsx("span", { className: "k", children: m }),
-                                f.jsx("span", { className: "v", children: j }),
-                              ],
-                            },
-                            m,
-                          ),
-                        ),
+                          f.jsx("p", {
+                            children:
+                              "Рядом — прогулочная набережная, марина и зелёные пространства. Напротив предусмотрен торгово-развлекательный центр Dubai Square, а по другую сторону канала — будущая станция Blue Line Metro.",
+                          }),
+                          f.jsx("ul", {
+                            className: "spec-list",
+                            children: [
+                              ["Застройщик", "Emaar Properties"],
+                              ["Квартиры", "1, 2, 3 и 4 спальни"],
+                              ["Площадь с балконами", "75,89–237,93 м²"],
+                              ["Отделка", "Премиальные материалы"],
+                              ["Балкон", "В каждой квартире"],
+                            ].map(([m, j]) =>
+                              f.jsxs(
+                                "li",
+                                {
+                                  children: [
+                                    f.jsx("span", {
+                                      className: "k",
+                                      children: m,
+                                    }),
+                                    f.jsx("span", {
+                                      className: "v",
+                                      children: j,
+                                    }),
+                                  ],
+                                },
+                                m,
+                              ),
+                            ),
+                          }),
+                        ],
                       }),
                       f.jsxs("div", {
                         className: "btn-row",
@@ -783,62 +844,65 @@ function v0() {
                         children:
                           "Набережная и марина района. Иллюстрация из референса, не фотография готового проекта.",
                       }),
-                      f.jsxs("div", {
-                        className: "reel-row",
-                        id: "video",
-                        children: [
-                          f.jsx("div", {
-                            className: "video-reel",
-                            children: videoLoaded
-                              ? f.jsx("iframe", {
-                                  title: "Valia — project video",
-                                  src: "https://www.youtube-nocookie.com/embed/7SPR5kxjI_M?autoplay=1",
-                                  allow:
-                                    "autoplay; encrypted-media; picture-in-picture",
-                                  allowFullScreen: true,
-                                })
-                              : f.jsxs("button", {
-                                  type: "button",
-                                  className: "video-start",
-                                  onClick: () => setVideoLoaded(true),
-                                  children: [
-                                    f.jsx("img", {
-                                      src: tt("video-poster.webp"),
-                                      alt: "Valia — Emaar",
-                                      loading: "lazy",
-                                    }),
-                                    f.jsx("span", {
-                                      children:
-                                        document.documentElement.lang === "en"
-                                          ? "Play project video"
-                                          : "Смотреть видео проекта",
-                                    }),
-                                  ],
+                      f.jsx(ResponsiveDetails, {
+                        title: "Видео проекта",
+                        children: f.jsxs("div", {
+                          className: "reel-row",
+                          id: "video",
+                          children: [
+                            f.jsx("div", {
+                              className: "video-reel",
+                              children: videoLoaded
+                                ? f.jsx("iframe", {
+                                    title: "Valia — project video",
+                                    src: "https://www.youtube-nocookie.com/embed/7SPR5kxjI_M?autoplay=1",
+                                    allow:
+                                      "autoplay; encrypted-media; picture-in-picture",
+                                    allowFullScreen: true,
+                                  })
+                                : f.jsxs("button", {
+                                    type: "button",
+                                    className: "video-start",
+                                    onClick: () => setVideoLoaded(true),
+                                    children: [
+                                      f.jsx("img", {
+                                        src: tt("video-poster.webp"),
+                                        alt: "Valia — Emaar",
+                                        loading: "lazy",
+                                      }),
+                                      f.jsx("span", {
+                                        children:
+                                          document.documentElement.lang === "en"
+                                            ? "Play project video"
+                                            : "Смотреть видео проекта",
+                                      }),
+                                    ],
+                                  }),
+                            }),
+                            f.jsxs("div", {
+                              className: "reel-note",
+                              children: [
+                                f.jsx("span", {
+                                  className: "eyebrow",
+                                  children: "Видео проекта",
                                 }),
-                          }),
-                          f.jsxs("div", {
-                            className: "reel-note",
-                            children: [
-                              f.jsx("span", {
-                                className: "eyebrow",
-                                children: "Видео проекта",
-                              }),
-                              f.jsx("h3", {
-                                children: "Посмотрите Valia в движении",
-                              }),
-                              f.jsx("p", {
-                                children:
-                                  "Архитектура, окружение и атмосфера нового адреса у Dubai Creek.",
-                              }),
-                              f.jsx("button", {
-                                type: "button",
-                                className: "text-button",
-                                onClick: El,
-                                children: "Получить материалы проекта",
-                              }),
-                            ],
-                          }),
-                        ],
+                                f.jsx("h3", {
+                                  children: "Посмотрите Valia в движении",
+                                }),
+                                f.jsx("p", {
+                                  children:
+                                    "Архитектура, окружение и атмосфера нового адреса у Dubai Creek.",
+                                }),
+                                f.jsx("button", {
+                                  type: "button",
+                                  className: "text-button",
+                                  onClick: El,
+                                  children: "Получить материалы проекта",
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
                       }),
                     ],
                   }),
@@ -947,64 +1011,67 @@ function v0() {
                     }),
                   ],
                 }),
-                f.jsx("div", {
-                  className: "table-scroll",
-                  children: f.jsxs("table", {
-                    className: "v-table",
-                    children: [
-                      f.jsx("caption", {
-                        children:
-                          "Площади по планам Emaar включают балконы. Цена конкретной квартиры зависит от этажа, типа и вида.",
-                      }),
-                      f.jsx("thead", {
-                        children: f.jsxs("tr", {
-                          children: [
-                            f.jsx("th", { children: "Формат" }),
-                            f.jsx("th", { children: "Площадь, м²" }),
-                            f.jsx("th", { children: "Балконы, м²" }),
-                            f.jsx("th", { children: "Кому подходит" }),
-                          ],
+                f.jsx(ResponsiveDetails, {
+                  title: "Сравнить площади всех квартир",
+                  children: f.jsx("div", {
+                    className: "table-scroll",
+                    children: f.jsxs("table", {
+                      className: "v-table",
+                      children: [
+                        f.jsx("caption", {
+                          children:
+                            "Площади по планам Emaar включают балконы. Цена конкретной квартиры зависит от этажа, типа и вида.",
                         }),
-                      }),
-                      f.jsx("tbody", {
-                        children: [
-                          [
-                            "1 спальня",
-                            "75,89–77,06",
-                            "9,88",
-                            "Для одного, пары или аренды",
-                          ],
-                          [
-                            "2 спальни",
-                            "115,37–116,43",
-                            "11,94–15,85",
-                            "Для пары с ребёнком",
-                          ],
-                          [
-                            "3 спальни",
-                            "153,49–157,42",
-                            "16,90–19,77",
-                            "Для семьи и работы из дома",
-                          ],
-                          [
-                            "4 спальни",
-                            "237,91–237,93",
-                            "26,78",
-                            "Для большой семьи",
-                          ],
-                        ].map((m) =>
-                          f.jsx(
-                            "tr",
-                            {
-                              children: m.map((j) =>
-                                f.jsx("td", { children: j }, j),
-                              ),
-                            },
-                            m[0],
+                        f.jsx("thead", {
+                          children: f.jsxs("tr", {
+                            children: [
+                              f.jsx("th", { children: "Формат" }),
+                              f.jsx("th", { children: "Площадь, м²" }),
+                              f.jsx("th", { children: "Балконы, м²" }),
+                              f.jsx("th", { children: "Кому подходит" }),
+                            ],
+                          }),
+                        }),
+                        f.jsx("tbody", {
+                          children: [
+                            [
+                              "1 спальня",
+                              "75,89–77,06",
+                              "9,88",
+                              "Для одного, пары или аренды",
+                            ],
+                            [
+                              "2 спальни",
+                              "115,37–116,43",
+                              "11,94–15,85",
+                              "Для пары с ребёнком",
+                            ],
+                            [
+                              "3 спальни",
+                              "153,49–157,42",
+                              "16,90–19,77",
+                              "Для семьи и работы из дома",
+                            ],
+                            [
+                              "4 спальни",
+                              "237,91–237,93",
+                              "26,78",
+                              "Для большой семьи",
+                            ],
+                          ].map((m) =>
+                            f.jsx(
+                              "tr",
+                              {
+                                children: m.map((j) =>
+                                  f.jsx("td", { children: j }, j),
+                                ),
+                              },
+                              m[0],
+                            ),
                           ),
-                        ),
-                      }),
-                    ],
+                        }),
+                      ],
+                    }),
                   }),
                 }),
                 f.jsx("div", {
@@ -1017,7 +1084,18 @@ function v0() {
                         type: "button",
                         "aria-pressed": sl === m,
                         onClick: () => At(m),
-                        children: [m, " ", m === 1 ? "спальня" : "спальни"],
+                        "aria-label": `${m} ${m === 1 ? "спальня" : "спальни"}`,
+                        children: [
+                          f.jsxs("span", {
+                            className: "bedroom-full",
+                            children: [m, " ", m === 1 ? "спальня" : "спальни"],
+                          }),
+                          f.jsxs("span", {
+                            className: "bedroom-short",
+                            "aria-hidden": true,
+                            children: [m, " сп."],
+                          }),
+                        ],
                       },
                       m,
                     ),
@@ -1037,120 +1115,122 @@ function v0() {
                           ),
                         "aria-label": "Увеличить планировку",
                         children: [
-                          f.jsx("img", {
-                            src: tt(`plan-${P.page}-focus.webp`),
+                          f.jsx(PlanDrawing, {
+                            src: `plan-${P.page}-focus.webp`,
                             alt: `План Emaar — ${P.bedrooms} ${P.bedrooms === 1 ? "спальня" : "спальни"}, тип ${P.type}`,
-                            loading: "lazy",
                           }),
                           f.jsx("span", { children: "Увеличить планировку" }),
                         ],
                       }),
                     }),
-                    f.jsxs("div", {
-                      className: "plan-details",
-                      children: [
-                        f.jsx("span", {
-                          className: "eyebrow",
-                          children: "Планы Emaar",
-                        }),
-                        f.jsxs("h3", {
-                          children: [
-                            P.bedrooms,
-                            " ",
-                            P.bedrooms === 1 ? "спальня" : "спальни",
-                            " · ",
-                            P.type,
-                          ],
-                        }),
-                        f.jsx("p", { children: P.details }),
-                        f.jsx("div", {
-                          className: "plan-variants",
-                          "aria-label": "Варианты планировки",
-                          children: rf
-                            .filter((m) => m.bedrooms === sl)
-                            .map((m) =>
-                              f.jsx(
-                                "button",
-                                {
-                                  type: "button",
-                                  "aria-pressed": m.page === P.page,
-                                  onClick: () => Dl(m),
-                                  children: m.type,
-                                },
-                                m.page,
+                    f.jsx(ResponsiveDetails, {
+                      title: "Площадь, этаж и варианты планировки",
+                      children: f.jsxs("div", {
+                        className: "plan-details",
+                        children: [
+                          f.jsx("span", {
+                            className: "eyebrow",
+                            children: "Планы Emaar",
+                          }),
+                          f.jsxs("h3", {
+                            children: [
+                              P.bedrooms,
+                              " ",
+                              P.bedrooms === 1 ? "спальня" : "спальни",
+                              " · ",
+                              P.type,
+                            ],
+                          }),
+                          f.jsx("p", { children: P.details }),
+                          f.jsx("div", {
+                            className: "plan-variants",
+                            "aria-label": "Варианты планировки",
+                            children: rf
+                              .filter((m) => m.bedrooms === sl)
+                              .map((m) =>
+                                f.jsx(
+                                  "button",
+                                  {
+                                    type: "button",
+                                    "aria-pressed": m.page === P.page,
+                                    onClick: () => Dl(m),
+                                    children: m.type,
+                                  },
+                                  m.page,
+                                ),
                               ),
-                            ),
-                        }),
-                        f.jsxs("ul", {
-                          className: "spec-list",
-                          children: [
-                            f.jsxs("li", {
-                              children: [
-                                f.jsx("span", {
-                                  className: "k",
-                                  children: "Общая площадь",
-                                }),
-                                f.jsxs("span", {
-                                  className: "v",
-                                  children: [P.area, " м²"],
-                                }),
-                              ],
-                            }),
-                            f.jsxs("li", {
-                              children: [
-                                f.jsx("span", {
-                                  className: "k",
-                                  children: "Включая балконы",
-                                }),
-                                f.jsxs("span", {
-                                  className: "v",
-                                  children: [P.balcony, " м²"],
-                                }),
-                              ],
-                            }),
-                            f.jsxs("li", {
-                              children: [
-                                f.jsx("span", {
-                                  className: "k",
-                                  children: "Площадь в ft²",
-                                }),
-                                f.jsx("span", {
-                                  className: "v",
-                                  children: P.feet,
-                                }),
-                              ],
-                            }),
-                            f.jsxs("li", {
-                              children: [
-                                f.jsx("span", {
-                                  className: "k",
-                                  children: "Этажи*",
-                                }),
-                                f.jsx("span", {
-                                  className: "v",
-                                  children: P.levels,
-                                }),
-                              ],
-                            }),
-                          ],
-                        }),
-                        f.jsx(_e, {
-                          onClick: El,
-                          children: "Получить презентацию и план",
-                        }),
-                        f.jsx("a", {
-                          className: "download-link",
-                          href: tt("floor-plans.pdf"),
-                          target: "_blank",
-                          rel: "noopener",
-                          children: "Все планы квартир — PDF",
-                        }),
-                        f.jsx("p", {
-                          className: "small-note",
-                          children:
-                            "*Диапазоны могут включать служебные этажи без квартир этого типа. Точное расположение и площадь — в плане выбранного лота. Схемы не в масштабе.",
-                        }),
-                      ],
+                          }),
+                          f.jsxs("ul", {
+                            className: "spec-list",
+                            children: [
+                              f.jsxs("li", {
+                                children: [
+                                  f.jsx("span", {
+                                    className: "k",
+                                    children: "Общая площадь",
+                                  }),
+                                  f.jsxs("span", {
+                                    className: "v",
+                                    children: [P.area, " м²"],
+                                  }),
+                                ],
+                              }),
+                              f.jsxs("li", {
+                                children: [
+                                  f.jsx("span", {
+                                    className: "k",
+                                    children: "Включая балконы",
+                                  }),
+                                  f.jsxs("span", {
+                                    className: "v",
+                                    children: [P.balcony, " м²"],
+                                  }),
+                                ],
+                              }),
+                              f.jsxs("li", {
+                                children: [
+                                  f.jsx("span", {
+                                    className: "k",
+                                    children: "Площадь в ft²",
+                                  }),
+                                  f.jsx("span", {
+                                    className: "v",
+                                    children: P.feet,
+                                  }),
+                                ],
+                              }),
+                              f.jsxs("li", {
+                                children: [
+                                  f.jsx("span", {
+                                    className: "k",
+                                    children: "Этажи*",
+                                  }),
+                                  f.jsx("span", {
+                                    className: "v",
+                                    children: P.levels,
+                                  }),
+                                ],
+                              }),
+                            ],
+                          }),
+                          f.jsx(_e, {
+                            onClick: El,
+                            children: "Получить презентацию и план",
+                          }),
+                          f.jsx("a", {
+                            className: "download-link",
+                            href: tt("floor-plans.pdf"),
+                            target: "_blank",
+                            rel: "noopener",
+                            children: "Все планы квартир — PDF",
+                          }),
+                          f.jsx("p", {
+                            className: "small-note",
+                            children:
+                              "*Диапазоны могут включать служебные этажи без квартир этого типа. Точное расположение и площадь — в плане выбранного лота. Схемы не в масштабе.",
+                          }),
+                        ],
+                      }),
                     }),
                   ],
                 }),
@@ -1202,10 +1282,13 @@ function v0() {
                           ),
                         ),
                       }),
-                      f.jsx("p", {
-                        className: "small-note",
-                        children:
-                          "Схема указана в публичных материалах проекта. Даты платежей, дополнительные сборы и условия бронирования подтверждаем по актуальному предложению Emaar. Ожидаемая сдача — 2030 год; точный срок — в договоре.",
+                      f.jsx(ResponsiveDetails, {
+                        title: "Сроки и дополнительные расходы",
+                        children: f.jsx("p", {
+                          className: "small-note",
+                          children:
+                            "Схема указана в публичных материалах проекта. Даты платежей, дополнительные сборы и условия бронирования подтверждаем по актуальному предложению Emaar. Ожидаемая сдача — 2030 год; точный срок — в договоре.",
+                        }),
                       }),
                       f.jsx("div", {
                         className: "btn-row",
@@ -1246,9 +1329,12 @@ function v0() {
                           children:
                             "Dubai Creek Harbour — современный район Дубая у залива. Для тех, кто хочет прогулок у воды, спокойной среды и доступа к городским возможностям.",
                         }),
-                        f.jsx("p", {
-                          children:
-                            "Valia расположен у зелёной зоны, рядом с будущим Dubai Square Mall. В генеральном плане также обозначена будущая станция метро Emaar Properties.",
+                        f.jsx(ResponsiveDetails, {
+                          title: "Развитие района",
+                          children: f.jsx("p", {
+                            children:
+                              "Valia расположен у зелёной зоны, рядом с будущим Dubai Square Mall. В генеральном плане также обозначена будущая станция метро Emaar Properties.",
+                          }),
                         }),
                         f.jsx("a", {
                           className: "text-button",
@@ -1282,80 +1368,88 @@ function v0() {
                     }),
                   ],
                 }),
-                f.jsx("div", {
-                  className: "location-times",
+                f.jsx(ResponsiveDetails, {
+                  title: "Время в пути",
                   children: [
-                    [
-                      "Dubai International Airport",
-                      "Международный аэропорт DXB",
-                      "10 минут",
-                    ],
-                    [
-                      "Downtown Dubai",
-                      "Центр города и Burj Khalifa",
-                      "15 минут",
-                    ],
-                    [
-                      "Dubai Marina",
-                      "Набережная и прогулочный район",
-                      "25 минут",
-                    ],
-                    [
-                      "Al Maktoum Airport",
-                      "Международный аэропорт DWC",
-                      "40 минут",
-                    ],
-                  ].map(([m, j, A]) =>
-                    f.jsxs(
-                      "div",
-                      {
-                        children: [
-                          f.jsx("h3", { children: m }),
-                          f.jsx("p", { children: j }),
-                          f.jsx("strong", { children: A }),
+                    f.jsx("div", {
+                      className: "location-times",
+                      children: [
+                        [
+                          "Dubai International Airport",
+                          "Международный аэропорт DXB",
+                          "10 минут",
                         ],
-                      },
-                      m,
-                    ),
-                  ),
+                        [
+                          "Downtown Dubai",
+                          "Центр города и Burj Khalifa",
+                          "15 минут",
+                        ],
+                        [
+                          "Dubai Marina",
+                          "Набережная и прогулочный район",
+                          "25 минут",
+                        ],
+                        [
+                          "Al Maktoum Airport",
+                          "Международный аэропорт DWC",
+                          "40 минут",
+                        ],
+                      ].map(([m, j, A]) =>
+                        f.jsxs(
+                          "div",
+                          {
+                            children: [
+                              f.jsx("h3", { children: m }),
+                              f.jsx("p", { children: j }),
+                              f.jsx("strong", { children: A }),
+                            ],
+                          },
+                          m,
+                        ),
+                      ),
+                    }),
+                  ],
                 }),
                 f.jsx("p", {
                   className: "small-note",
                   children:
                     "Время на автомобиле по брошюре Emaar, без учёта пробок. Dubai Square Mall и Blue Line Metro — будущая инфраструктура.",
                 }),
-                f.jsx("div", {
-                  className: "live-map",
-                  children: Ql
-                    ? f.jsx("iframe", {
-                        title: "Карта района Dubai Creek Harbour",
-                        src: "https://maps.google.com/maps?q=Dubai%20Creek%20Harbour%20Dubai&t=&z=13&ie=UTF8&iwloc=&output=embed",
-                        loading: "lazy",
-                        referrerPolicy: "no-referrer-when-downgrade",
-                        allowFullScreen: !0,
-                      })
-                    : f.jsxs("div", {
-                        children: [
-                          f.jsx("h3", {
-                            children: "Посмотрите окружение на Google Картах",
-                          }),
-                          f.jsx("p", {
-                            children:
-                              "Интерактивная карта показывает район Dubai Creek Harbour. Точная позиция Valia отмечена на плане Emaar выше.",
-                          }),
-                          f.jsx("button", {
-                            className: "btn btn-primary",
-                            type: "button",
-                            onClick: () => V(!0),
-                            children: "Показать интерактивную карту",
-                          }),
-                          f.jsx("p", {
-                            className: "small-note",
-                            children:
-                              "При загрузке карты Google получает технические данные вашего браузера.",
-                          }),
-                        ],
-                      }),
+                f.jsx(ResponsiveDetails, {
+                  title: "Посмотреть интерактивную карту",
+                  children: f.jsx("div", {
+                    className: "live-map",
+                    children: Ql
+                      ? f.jsx("iframe", {
+                          title: "Карта района Dubai Creek Harbour",
+                          src: "https://maps.google.com/maps?q=Dubai%20Creek%20Harbour%20Dubai&t=&z=13&ie=UTF8&iwloc=&output=embed",
+                          loading: "lazy",
+                          referrerPolicy: "no-referrer-when-downgrade",
+                          allowFullScreen: !0,
+                        })
+                      : f.jsxs("div", {
+                          children: [
+                            f.jsx("h3", {
+                              children: "Посмотрите окружение на Google Картах",
+                            }),
+                            f.jsx("p", {
+                              children:
+                                "Интерактивная карта показывает район Dubai Creek Harbour. Точная позиция Valia отмечена на плане Emaar выше.",
+                            }),
+                            f.jsx("button", {
+                              className: "btn btn-primary",
+                              type: "button",
+                              onClick: () => V(!0),
+                              children: "Показать интерактивную карту",
+                            }),
+                            f.jsx("p", {
+                              className: "small-note",
+                              children:
+                                "При загрузке карты Google получает технические данные вашего браузера.",
+                            }),
+                          ],
+                        }),
+                  }),
                 }),
               ],
             }),
@@ -1470,11 +1564,14 @@ function v0() {
                           f.jsx(
                             "li",
                             {
-                              children: f.jsxs("div", {
-                                children: [
-                                  f.jsx("h3", { children: m }),
-                                  f.jsx("p", { children: j }),
-                                ],
+                              children: f.jsx(ResponsiveDetails, {
+                                title: m,
+                                children: f.jsxs("div", {
+                                  children: [
+                                    f.jsx("h3", { children: m }),
+                                    f.jsx("p", { children: j }),
+                                  ],
+                                }),
                               }),
                             },
                             m,
@@ -1573,23 +1670,29 @@ function v0() {
                       f.jsx("h2", {
                         children: "Обсудите Valia с брокером Nika Estate",
                       }),
-                      f.jsx("p", {
-                        children:
-                          "Расскажите, какую квартиру ищете и какой бюджет планируете. Проверим предложения Emaar, сравним этажи и виды, посчитаем платежи и расходы — до вашего решения о покупке.",
-                      }),
-                      f.jsxs("ul", {
-                        className: "check-list tick-navy",
+                      f.jsx(ResponsiveDetails, {
+                        title: "Что вы получите на консультации",
                         children: [
-                          f.jsx("li", {
-                            children: "Актуальные цены и доступные квартиры",
-                          }),
-                          f.jsx("li", {
+                          f.jsx("p", {
                             children:
-                              "Подбор планировки под жизнь или инвестиции",
+                              "Расскажите, какую квартиру ищете и какой бюджет планируете. Проверим предложения Emaar, сравним этажи и виды, посчитаем платежи и расходы — до вашего решения о покупке.",
                           }),
-                          f.jsx("li", {
-                            children:
-                              "Расчёт платежей и индивидуального прогноза аренды",
+                          f.jsxs("ul", {
+                            className: "check-list tick-navy",
+                            children: [
+                              f.jsx("li", {
+                                children:
+                                  "Актуальные цены и доступные квартиры",
+                              }),
+                              f.jsx("li", {
+                                children:
+                                  "Подбор планировки под жизнь или инвестиции",
+                              }),
+                              f.jsx("li", {
+                                children:
+                                  "Расчёт платежей и индивидуального прогноза аренды",
+                              }),
+                            ],
                           }),
                         ],
                       }),
@@ -1833,7 +1936,9 @@ function v0() {
                 onClick: gl,
                 children: "Закрыть",
               }),
-              f.jsx("img", { src: tt(Al.src), alt: Al.alt }),
+              /plan-\d+-focus/.test(Al.src)
+                ? f.jsx(PlanDrawing, { src: Al.src, alt: Al.alt })
+                : f.jsx("img", { src: tt(Al.src), alt: Al.alt }),
               f.jsx("p", { children: Al.alt }),
             ],
           }),
