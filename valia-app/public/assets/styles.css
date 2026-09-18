@@ -3574,8 +3574,8 @@ a:focus-visible {
   background: #fff;
 }
 .image-dialog .plan-drawing {
-  height: calc(100dvh - 150px);
-  min-height: 260px;
+  height: auto;
+  max-height: calc(100dvh - 150px);
 }
 .responsive-details summary {
   min-height: 44px;
@@ -3947,7 +3947,8 @@ a:focus-visible {
     padding: 58px 8px 12px;
   }
   .image-dialog .plan-drawing {
-    height: calc(100dvh - 140px);
+    height: auto;
+    max-height: calc(100dvh - 140px);
   }
 }
 @media (max-width: 767px) and (max-height: 740px) {
