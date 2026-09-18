@@ -144,5 +144,5 @@ test("tracking waits for confirmed delivery and deduplicates lead IDs", () => {
     calls.filter((c) => c[0] === "fbq" && c[2] === "Lead").length,
     1,
   );
-  assert.ok(calls.some((c) => c[3] === "form_success"));
+  assert.ok(calls.some((c) => c[3] === "lead_sent"));
 });
