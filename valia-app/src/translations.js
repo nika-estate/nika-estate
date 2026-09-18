@@ -1,0 +1,505 @@
+export const pairs = [
+  ["Смотреть видео проекта", "Play project video"],
+  ["Планировки", "Floor plans"],
+  ["План платежей", "Payment plan"],
+  ["Локация", "Location"],
+  ["Преимущества", "Benefits"],
+  [
+    "Отдельная спальня, кухня-гостиная и широкий балкон.",
+    "A separate bedroom, open-plan kitchen and living room, and a generous balcony.",
+  ],
+  ["A1 · верхние этажи", "A1 · upper floors"],
+  [
+    "Спальня, гостиная и балкон на верхних этажах.",
+    "A bedroom, living room and balcony on the upper floors.",
+  ],
+  [
+    "Зеркальный вариант A1 с отдельной зоной спальни.",
+    "A mirrored A1 layout with a separate bedroom.",
+  ],
+  [
+    "Самый компактный формат с отдельной спальней.",
+    "The most compact layout with a separate bedroom.",
+  ],
+  [
+    "Две спальни, гардеробные и гостевой санузел.",
+    "Two bedrooms, dressing areas and a guest bathroom.",
+  ],
+  [
+    "Просторная кухня-гостиная и две отдельные спальни.",
+    "A spacious open-plan living area and two separate bedrooms.",
+  ],
+  ["B1 · подиум", "B1 · podium"],
+  [
+    "Квартира в подиуме с двумя балконами.",
+    "A podium apartment with two balconies.",
+  ],
+  ["B2 · подиум", "B2 · podium"],
+  [
+    "Две спальни, гостевой санузел и два балкона.",
+    "Two bedrooms, a guest bathroom and two balconies.",
+  ],
+  ["B2 · квартира 03", "B2 · apartment 03"],
+  [
+    "Вариант подиума с увеличенной площадью балконов.",
+    "A podium layout with more balcony space.",
+  ],
+  [
+    "Три спальни, два балкона и комната для персонала.",
+    "Three bedrooms, two balconies and a staff room.",
+  ],
+  [
+    "Семейная квартира на верхних этажах с тремя балконами.",
+    "An upper-floor family apartment with three balconies.",
+  ],
+  [
+    "Три спальни, гардеробная и комната для персонала.",
+    "Three bedrooms, a dressing room and a staff room.",
+  ],
+  [
+    "Зеркальный вариант C1 с просторной кухней-гостиной.",
+    "A mirrored C1 layout with a spacious living and kitchen area.",
+  ],
+  [
+    "Четыре спальни, отдельная кухня, столовая и три балкона.",
+    "Four bedrooms, a separate kitchen, dining room and three balconies.",
+  ],
+  [
+    "Большая семейная резиденция с гардеробной и комнатой для персонала.",
+    "A large family residence with a dressing room and a staff room.",
+  ],
+  ["Valia на фоне Dubai Creek", "Valia overlooking Dubai Creek"],
+  ["Архитектура", "Architecture"],
+  ["Гостиная с панорамными окнами", "Living room with panoramic windows"],
+  ["Интерьеры", "Interiors"],
+  ["Спальня с выходом на балкон", "Bedroom opening onto a balcony"],
+  ["Бассейн и кабаны у дома", "Pool and cabanas at home"],
+  ["Инфраструктура", "Amenities"],
+  [
+    "Зелёный двор и прогулочные дорожки",
+    "Landscaped courtyard and walking paths",
+  ],
+  ["Кухня, столовая и гостиная", "Kitchen, dining and living room"],
+  ["Лобби с высокими потолками", "Lobby with high ceilings"],
+  ["Открытая зона йоги", "Outdoor yoga area"],
+  ["Терраса для отдыха и встреч", "Terrace for relaxing and gathering"],
+  [
+    "Набережная и парк вместо городского шума",
+    "A waterfront and park, away from the city bustle",
+  ],
+  [
+    "Dubai Creek Harbour — район у залива с мариной, прогулочными маршрутами и Creek Beach. Valia расположен рядом с зелёной зоной.",
+    "Dubai Creek Harbour is a waterfront neighbourhood with a marina, walking routes and Creek Beach. Valia sits next to a green space.",
+  ],
+  ["Квартира, в которой есть место для жизни", "Space to live your way"],
+  [
+    "От одной до четырёх спален, отдельные балконы и большие окна. Можно выбрать компактный формат или просторную семейную резиденцию.",
+    "One to four bedrooms, private balconies and large windows. Choose a compact apartment or a spacious family residence.",
+  ],
+  ["Спорт и отдых прямо у дома", "Exercise and relaxation on your doorstep"],
+  [
+    "Взрослый и детский бассейны, падел-корт, йога, открытая фитнес-зона и места для барбекю — без поездок через весь город.",
+    "Adult and children’s pools, a padel court, yoga, outdoor fitness and barbecue areas — without a trip across the city.",
+  ],
+  ["Район с новой инфраструктурой", "A neighbourhood with more to come"],
+  [
+    "Рядом планируются Dubai Square Mall и станция Blue Line Metro. Это будущие объекты: сроки их открытия могут меняться.",
+    "Dubai Square Mall and a Blue Line Metro station are planned nearby. These are future facilities; opening dates may change.",
+  ],
+  ["Emaar и понятные условия покупки", "Emaar, with clear purchase terms"],
+  [
+    "Застройщик известных проектов Дубая. До бронирования проверим выбранную квартиру, график платежей и все расходы на сделку.",
+    "The developer behind well-known Dubai projects. Before booking, we check your selected apartment, payment schedule and transaction costs.",
+  ],
+  ["Что такое Valia?", "What is Valia?"],
+  [
+    "Новый жилой проект Emaar в Dubai Creek Harbour. В коллекции — квартиры с 1–4 спальнями, балконами, премиальной отделкой и видами на залив, парк или город в зависимости от выбранного лота.",
+    "A new Emaar residential project in Dubai Creek Harbour, offering 1–4 bedroom apartments with balconies, premium finishes and waterfront, park or city views depending on the unit.",
+  ],
+  ["Сколько стоит квартира?", "How much does an apartment cost?"],
+  [
+    "На официальном сайте Emaar стартовая цена — AED 1,96 млн, примерно $534 тыс. Цена зависит от планировки, этажа и вида. Актуальную стоимость и наличие конкретного лота подтверждаем перед бронированием.",
+    "Emaar’s official starting price is AED 1.96 million, approximately $534,000. Prices vary by layout, floor and view. Current price and availability are confirmed before booking.",
+  ],
+  ["Как устроен план платежей?", "How does the payment plan work?"],
+  [
+    "Публично заявлена схема 80/20: 10% при бронировании, 70% в ходе строительства и 20% при передаче. График и дополнительные сборы нужно сверить с актуальным предложением Emaar по выбранной квартире.",
+    "The published 80/20 plan is 10% on booking, 70% during construction and 20% on handover. The schedule and extra fees must be checked against Emaar’s current offer for your unit.",
+  ],
+  ["Когда ожидается передача ключей?", "When is handover expected?"],
+  [
+    "Публичные материалы указывают 2030 год, но расходятся в квартале сдачи. Точный срок проверим в актуальных документах Emaar и договоре по выбранному лоту.",
+    "Public materials indicate 2030 but differ on the quarter. We will check the exact date in Emaar’s current documents and your unit’s contract.",
+  ],
+  ["Подходит ли Valia для аренды?", "Is Valia suitable for renting out?"],
+  [
+    "Можно рассматривать проект для аренды после завершения строительства. На консультации рассчитаем индивидуальный прогноз с учётом цены, сервисных сборов, управления и простоя. Доход не гарантирован.",
+    "The project can be considered for rental after completion. We calculate an individual forecast allowing for purchase price, service charges, management and vacancy. Returns are not guaranteed.",
+  ],
+  ["Заявка Valia — ", "Valia enquiry — "],
+  [
+    "Valia — цены, планировки и консультация",
+    "Valia — prices, floor plans and consultation",
+  ],
+  ["Ваше имя", "Your name"],
+  ["Телефон для связи", "Your contact number"],
+  ["Укажите номер с кодом страны", "Include your country code"],
+  ["Какая квартира вам интересна?", "Which apartment are you interested in?"],
+  ["1 спальня", "1 bedroom"],
+  ["2 спальни", "2 bedrooms"],
+  ["3 спальни", "3 bedrooms"],
+  ["4 спальни", "4 bedrooms"],
+  ["Пока не знаю — помогите выбрать", "Not sure yet — help me choose"],
+  [
+    "Согласен на обработку данных для ответа на заявку. ",
+    "I consent to the processing of my data to respond to this enquiry. ",
+  ],
+  ["Подробнее", "Learn more"],
+  ["Получить цены и планировки", "Request prices and floor plans"],
+  ["Данные защищены", "Secure enquiry"],
+  ["Брокер Nika Estate", "Nika Estate broker"],
+  ["Без обязательств", "No obligation"],
+  ["Все", "All"],
+  ["Перейти к содержимому", "Skip to content"],
+  ["Закрыть", "Close"],
+  ["Меню", "Menu"],
+  ["Навигация", "Navigation"],
+  ["Ещё", "More"],
+  ["Галерея", "Gallery"],
+  ["Вопросы и ответы", "FAQs"],
+  ["Получить цены", "Request prices"],
+  [
+    "Valia by Emaar — визуализация здания у Dubai Creek",
+    "Valia by Emaar — building visualisation at Dubai Creek",
+  ],
+  [
+    "Новый проект · Emaar · Dubai Creek Harbour",
+    "New launch · Emaar · Dubai Creek Harbour",
+  ],
+  ["Emaar Valia в", "Emaar Valia in"],
+  ["Квартиры с ", "Apartments with "],
+  ["1–4 спальнями", "1–4 bedrooms"],
+  [
+    " у парка и набережной. Балконы, панорамные окна и инфраструктура для отдыха — в новом проекте Emaar. От ",
+    " beside the park and waterfront. Balconies, panoramic windows and leisure amenities in Emaar’s new project. From ",
+  ],
+  ["AED 1,96 млн", "AED 1.96 million"],
+  [" с поэтапной оплатой ", " with a phased "],
+  [
+    ". Подберём этаж, вид и планировку под вашу цель.",
+    " payment plan. We help you choose the floor, view and layout that suit your needs.",
+  ],
+  ["Стартовая цена", "Starting price"],
+  ["Спальни", "Bedrooms"],
+  ["Ожидаемая сдача*", "Expected handover*"],
+  ["Планировки и площади", "Floor plans and areas"],
+  ["Условия покупки", "Purchase terms"],
+  ["Получите цены и планировки", "Get prices and floor plans"],
+  [
+    "Брокер Nika Estate проверит доступные квартиры и подберёт варианты под ваш бюджет.",
+    "A Nika Estate broker will check available apartments and suggest options within your budget.",
+  ],
+  ["О проекте", "About the project"],
+  ["Жить у воды.", "Live by the water."],
+  ["Быть рядом с городом.", "Stay close to the city."],
+  [
+    " — высотный жилой проект в Dubai Creek Harbour. Здесь можно выбрать квартиру с видом на залив, парк или силуэт Дубая, не отказываясь от городской инфраструктуры.",
+    " is a high-rise residential project in Dubai Creek Harbour. Choose a waterfront, park or Dubai skyline view while enjoying city amenities.",
+  ],
+  [
+    "Рядом — прогулочная набережная, марина и зелёные пространства. Напротив предусмотрен торгово-развлекательный центр Dubai Square, а по другую сторону канала — будущая станция Blue Line Metro.",
+    "A waterfront promenade, marina and green spaces are nearby. Dubai Square is planned opposite, with a future Blue Line Metro station across the canal.",
+  ],
+  ["Застройщик", "Developer"],
+  ["Квартиры", "Apartments"],
+  ["1, 2, 3 и 4 спальни", "1, 2, 3 and 4 bedrooms"],
+  ["Площадь с балконами", "Area including balconies"],
+  ["75,89–237,93 м²", "75.89–237.93 m²"],
+  ["Отделка", "Finishes"],
+  ["Премиальные материалы", "Premium materials"],
+  ["Балкон", "Balcony"],
+  ["В каждой квартире", "In every apartment"],
+  ["Получить презентацию", "Request the presentation"],
+  ["Посмотреть расположение", "View the location"],
+  [
+    "Иллюстрация набережной Dubai Creek Harbour",
+    "Illustration of Dubai Creek Harbour waterfront",
+  ],
+  [
+    "Набережная и марина района. Иллюстрация из референса, не фотография готового проекта.",
+    "The neighbourhood waterfront and marina. A reference illustration, not a photograph of the completed project.",
+  ],
+  ["Видео проекта", "Project video"],
+  ["Посмотрите Valia в движении", "See Valia in motion"],
+  [
+    "Архитектура, окружение и атмосфера нового адреса у Dubai Creek.",
+    "Architecture, surroundings and atmosphere of a new address at Dubai Creek.",
+  ],
+  ["Получить материалы проекта", "Request project materials"],
+  ["Архитектура и интерьеры", "Architecture and interiors"],
+  [
+    "Виды, к которым хочется возвращаться",
+    "Views you will want to come home to",
+  ],
+  [
+    "Визуализации Emaar: светлые квартиры, зелёный двор и пространства для отдыха.",
+    "Emaar visualisations: bright apartments, a landscaped courtyard and leisure spaces.",
+  ],
+  ["Фильтр галереи", "Gallery filter"],
+  ["Увеличить: ", "Enlarge: "],
+  [
+    "Все изображения Emaar — визуализации. Фактические виды и отделка зависят от выбранной квартиры.",
+    "All Emaar images are visualisations. Actual views and finishes depend on the selected apartment.",
+  ],
+  ["Квартиры и цены", "Apartments and prices"],
+  ["Планировки для вашего образа жизни", "Layouts for your lifestyle"],
+  [
+    "От компактной квартиры до семейной резиденции. Стартовая цена Emaar — AED 1,96 млн, примерно $534 тыс.",
+    "From a compact apartment to a family residence. Emaar’s starting price is AED 1.96 million, approximately $534,000.",
+  ],
+  ["Запросить актуальный прайс", "Request current prices"],
+  [
+    "Площади по планам Emaar включают балконы. Цена конкретной квартиры зависит от этажа, типа и вида.",
+    "Areas in Emaar’s floor plans include balconies. Unit prices depend on floor, layout and view.",
+  ],
+  ["Формат", "Layout"],
+  ["Площадь, м²", "Area, m²"],
+  ["Балконы, м²", "Balconies, m²"],
+  ["Кому подходит", "Suitable for"],
+  ["Для одного, пары или аренды", "Singles, couples or rental"],
+  ["Для пары с ребёнком", "A couple with a child"],
+  ["Для семьи и работы из дома", "Family life and working from home"],
+  ["Для большой семьи", "A larger family"],
+  ["Число спален", "Number of bedrooms"],
+  ["спальня", "bedroom"],
+  ["спальни", "bedrooms"],
+  [", тип ", ", type "],
+  ["Увеличить планировку", "Enlarge floor plan"],
+  ["План Emaar — ", "Emaar floor plan — "],
+  ["Планы Emaar", "Emaar floor plans"],
+  ["Варианты планировки", "Layout options"],
+  ["Общая площадь", "Total area"],
+  [" м²", " m²"],
+  ["Включая балконы", "Including balconies"],
+  ["Площадь в ft²", "Area in ft²"],
+  ["Этажи*", "Floors*"],
+  ["Получить презентацию и план", "Request presentation and floor plan"],
+  ["Все планы квартир — PDF", "All floor plans — PDF"],
+  [
+    "*Диапазоны могут включать служебные этажи без квартир этого типа. Точное расположение и площадь — в плане выбранного лота. Схемы не в масштабе.",
+    "*Ranges may include service floors without this apartment type. Check the selected unit’s plan for exact location and area. Drawings are not to scale.",
+  ],
+  ["Оплата поэтапно.", "Pay in stages."],
+  ["Без всей суммы сразу.", "Not all at once."],
+  [
+    "Схема 80/20: основная часть — до завершения строительства, остаток — при передаче квартиры.",
+    "An 80/20 plan: most of the price is paid before completion, with the balance on handover.",
+  ],
+  ["При бронировании", "On booking"],
+  ["В ходе строительства", "During construction"],
+  ["При передаче ключей", "On handover"],
+  [
+    "Схема указана в публичных материалах проекта. Даты платежей, дополнительные сборы и условия бронирования подтверждаем по актуальному предложению Emaar. Ожидаемая сдача — 2030 год; точный срок — в договоре.",
+    "The plan is stated in public project materials. Payment dates, extra fees and booking terms are confirmed against Emaar’s current offer. Expected handover is 2030; the exact date is in the contract.",
+  ],
+  ["Рассчитать мой план платежей", "Calculate my payment plan"],
+  [
+    "Гостиная и столовая Valia — визуализация Emaar",
+    "Valia living and dining room — Emaar visualisation",
+  ],
+  ["Парк и набережная у вашего дома", "A park and waterfront at home"],
+  [
+    "Dubai Creek Harbour — современный район Дубая у залива. Для тех, кто хочет прогулок у воды, спокойной среды и доступа к городским возможностям.",
+    "Dubai Creek Harbour is a modern Dubai waterfront neighbourhood for those who want waterside walks, a quieter setting and access to city life.",
+  ],
+  [
+    "Valia расположен у зелёной зоны, рядом с будущим Dubai Square Mall. В генеральном плане также обозначена будущая станция метро Emaar Properties.",
+    "Valia is beside a green space, near the future Dubai Square Mall. The masterplan also marks the future Emaar Properties metro station.",
+  ],
+  ["Открыть район на карте", "View the neighbourhood map"],
+  [
+    "Расположение Valia на генеральном плане Emaar",
+    "Valia on Emaar’s masterplan",
+  ],
+  ["Увеличить карту с расположением Valia", "Enlarge the Valia location map"],
+  [
+    "Генеральный план Emaar: Valia, Creek Beach, Central Park, Dubai Square Mall и будущая станция метро",
+    "Emaar masterplan: Valia, Creek Beach, Central Park, Dubai Square Mall and future metro station",
+  ],
+  [
+    "Расположение Valia на карте Emaar — увеличить",
+    "Valia on Emaar’s map — enlarge",
+  ],
+  ["Международный аэропорт DXB", "DXB international airport"],
+  ["10 минут", "10 minutes"],
+  ["Центр города и Burj Khalifa", "Downtown and Burj Khalifa"],
+  ["15 минут", "15 minutes"],
+  ["Набережная и прогулочный район", "Waterfront and walking district"],
+  ["25 минут", "25 minutes"],
+  ["Международный аэропорт DWC", "DWC international airport"],
+  ["40 минут", "40 minutes"],
+  [
+    "Время на автомобиле по брошюре Emaar, без учёта пробок. Dubai Square Mall и Blue Line Metro — будущая инфраструктура.",
+    "Driving times from Emaar’s brochure, excluding traffic. Dubai Square Mall and Blue Line Metro are future facilities.",
+  ],
+  ["Карта района Dubai Creek Harbour", "Dubai Creek Harbour neighbourhood map"],
+  [
+    "Посмотрите окружение на Google Картах",
+    "Explore the surroundings on Google Maps",
+  ],
+  [
+    "Интерактивная карта показывает район Dubai Creek Harbour. Точная позиция Valia отмечена на плане Emaar выше.",
+    "The interactive map shows Dubai Creek Harbour. Valia’s exact position is marked on Emaar’s plan above.",
+  ],
+  ["Показать интерактивную карту", "Show interactive map"],
+  [
+    "При загрузке карты Google получает технические данные вашего браузера.",
+    "Loading the map shares technical browser data with Google.",
+  ],
+  [
+    "Художественная иллюстрация высотного проекта из референса",
+    "Artistic illustration of a high-rise project from the reference",
+  ],
+  [
+    "Художественная иллюстрация из референса. Официальные визуализации Emaar — в галерее выше.",
+    "Artistic reference illustration. Official Emaar visualisations are in the gallery above.",
+  ],
+  ["1–4 спальни", "1–4 bedrooms"],
+  ["Балкон в каждой квартире", "A balcony in every apartment"],
+  ["Отделка премиального уровня", "Premium finishes"],
+  ["Отдыхать, двигаться, встречаться", "Relax, move and connect"],
+  [
+    "Пространства для взрослых и детей, которые делают обычный день приятнее.",
+    "Spaces for adults and children that make every day more enjoyable.",
+  ],
+  [
+    "Взрослый бассейн Valia — визуализация Emaar",
+    "Valia adult pool — Emaar visualisation",
+  ],
+  [
+    "Лужайка и йога-зона Valia — визуализация Emaar",
+    "Valia lawn and yoga area — Emaar visualisation",
+  ],
+  ["Взрослый бассейн", "Adult pool"],
+  ["С контролем температуры воды", "Temperature-controlled water"],
+  ["Детский бассейн", "Children’s pool"],
+  ["Отдельная зона для детей", "A separate area for children"],
+  ["Падел-корт", "Padel court"],
+  ["Для активного отдыха", "For active recreation"],
+  ["Йога-дек", "Yoga deck"],
+  ["Занятия на открытом воздухе", "Outdoor sessions"],
+  ["Фитнес-зона", "Fitness area"],
+  ["Тренировки во дворе", "Outdoor workouts"],
+  ["Барбекю", "Barbecue"],
+  ["Встречи с семьёй и друзьями", "Gather with family and friends"],
+  ["Приватные кабаны", "Private cabanas"],
+  ["Отдых в тени у бассейна", "Relax in the shade by the pool"],
+  ["Водная игровая зона", "Splash play area"],
+  ["Детские площадки", "Children’s play areas"],
+  ["Игры на свежем воздухе", "Outdoor play"],
+  ["Зелёная лужайка", "Green lawn"],
+  ["Пространство для отдыха", "Space to unwind"],
+  ["Почему Valia", "Why Valia"],
+  ["Пять причин присмотреться", "Five reasons to take a closer look"],
+  ["Нас часто спрашивают", "Frequently asked"],
+  ["Вопросы о Valia", "Questions about Valia"],
+  ["Следующий шаг", "Next step"],
+  [
+    "Обсудите Valia с брокером Nika Estate",
+    "Discuss Valia with a Nika Estate broker",
+  ],
+  [
+    "Расскажите, какую квартиру ищете и какой бюджет планируете. Проверим предложения Emaar, сравним этажи и виды, посчитаем платежи и расходы — до вашего решения о покупке.",
+    "Tell us what apartment you want and your planned budget. We check Emaar offers, compare floors and views, and calculate payments and costs before you decide to buy.",
+  ],
+  [
+    "Актуальные цены и доступные квартиры",
+    "Current prices and available apartments",
+  ],
+  [
+    "Подбор планировки под жизнь или инвестиции",
+    "Layouts selected for living or investment",
+  ],
+  [
+    "Расчёт платежей и индивидуального прогноза аренды",
+    "Payment calculations and an individual rental forecast",
+  ],
+  [
+    "Художественная иллюстрация зоны бассейна из референса",
+    "Artistic reference illustration of a pool area",
+  ],
+  [
+    "Иллюстрация зоны отдыха из референса.",
+    "Reference illustration of a leisure area.",
+  ],
+  ["Получите подборку квартир Valia", "Get your Valia apartment selection"],
+  [
+    "Оставьте заявку — брокер поможет разобраться в вариантах и условиях.",
+    "Send an enquiry — a broker will explain your options and purchase terms.",
+  ],
+  [
+    "Квартиры Emaar с 1–4 спальнями у парка и залива. Подбор и сопровождение — Nika Estate.",
+    "Emaar 1–4 bedroom apartments by the park and waterfront. Selection and support by Nika Estate.",
+  ],
+  ["Проект", "Project"],
+  ["Покупка", "Purchase"],
+  ["Консультация", "Consultation"],
+  ["Район", "Neighbourhood"],
+  ["Расположение", "Location"],
+  [
+    "Это страница Nika Estate, а не официальный сайт Emaar.",
+    "This is a Nika Estate page, not Emaar’s official website.",
+  ],
+  [
+    " Наименования и визуализации проекта принадлежат правообладателям. Материалы носят информационный характер и не являются офертой. Цены, наличие, сроки и характеристики подтверждаются по актуальным документам застройщика. Будущая инфраструктура и доходность не гарантированы.",
+    " Project names and visualisations belong to their respective rights holders. This information is not a binding offer. Prices, availability, dates and specifications are confirmed against current developer documents. Future facilities and returns are not guaranteed.",
+  ],
+  ["Обработка заявки", "Enquiry data"],
+  [
+    "Данные из формы передаются Nika Estate для ответа на вашу заявку и сохраняются в рабочей Google-таблице агентства. Не вводите паспортные или платёжные данные. Отозвать согласие можно, сообщив об этом брокеру при первом контакте.",
+    "Form data is sent to Nika Estate to respond to your enquiry and stored in the agency’s working Google Sheet. Do not enter passport or payment details. You may withdraw consent by telling the broker at your first contact.",
+  ],
+  ["Valia · от AED 1,96 млн", "Valia · from AED 1.96 million"],
+  [
+    "1–4 спальни · план 80/20 · Dubai Creek Harbour",
+    "1–4 bedrooms · 80/20 plan · Dubai Creek Harbour",
+  ],
+  ["Скрыть панель заявки", "Hide enquiry bar"],
+  ["Скрыть", "Hide"],
+  ["Оставить заявку", "Send enquiry"],
+  [
+    "Цены, планировки и подходящие квартиры",
+    "Prices, floor plans and suitable apartments",
+  ],
+  [
+    "Проверим варианты под ваш бюджет и объясним все условия.",
+    "We check options within your budget and explain every term.",
+  ],
+  ["Получите материалы Valia", "Get Valia project materials"],
+  [
+    "Оставьте заявку брокеру Nika Estate.",
+    "Send an enquiry to a Nika Estate broker.",
+  ],
+  ["Valia — визуализация Emaar", "Valia — Emaar visualisation"],
+  ["Бассейн Valia — визуализация Emaar", "Valia pool — Emaar visualisation"],
+];
+const dict = new Map(pairs);
+export function translate(value) {
+  if (document.documentElement.lang !== "en" || typeof value !== "string")
+    return value;
+  if (dict.has(value)) return dict.get(value);
+  let out = value;
+  for (const [ru, en] of [...pairs].sort((a, b) => b[0].length - a[0].length))
+    if (out.includes(ru)) out = out.split(ru).join(en);
+  return out;
+}
+export function localProps(props) {
+  if (!props) return props;
+  const next = { ...props };
+  for (const key of ["children", "alt", "title", "placeholder", "aria-label"]) {
+    if (Array.isArray(next[key]))
+      next[key] = next[key].map((v) => translate(v));
+    else next[key] = translate(next[key]);
+  }
+  return next;
+}
