@@ -25,16 +25,31 @@ jobs:
       - name: Build both languages
         working-directory: valia-app
         run: npx vite build
+      - name: Install project landing dependencies
+        working-directory: projects-app
+        run: npm ci --no-audit --no-fund
+      - name: Verify project landings and confirmed lead delivery
+        working-directory: projects-app
+        run: npm test
+      - name: Build Russian project landings
+        working-directory: projects-app
+        run: npm run build
       - uses: actions/configure-pages@v5
-      - name: Preserve existing landings and add Valia
+      - name: Preserve existing landings and add Valia plus project pages
         run: |
           mkdir -p "$RUNNER_TEMP/pages/valia"
-          rsync -a --exclude=.git --exclude=.github --exclude=valia-app --exclude=tests ./ "$RUNNER_TEMP/pages/"
+          rsync -a --exclude=.git --exclude=.github --exclude=valia-app --exclude=projects-app --exclude=tests ./ "$RUNNER_TEMP/pages/"
           cp -a valia-app/dist/client/. "$RUNNER_TEMP/pages/valia/"
+          cp -a projects-app/dist/client/. "$RUNNER_TEMP/pages/"
           test -f "$RUNNER_TEMP/pages/index.html"
           test -f "$RUNNER_TEMP/pages/the-archive/index.html"
           test -f "$RUNNER_TEMP/pages/cyprus/investment-memo/index.html"
           test -f "$RUNNER_TEMP/pages/valia/en/index.html"
+          test -f "$RUNNER_TEMP/pages/central-park/index.html"
+          test -f "$RUNNER_TEMP/pages/thyme/index.html"
+          test -f "$RUNNER_TEMP/pages/jadeel/index.html"
+          test -f "$RUNNER_TEMP/pages/havencia/index.html"
+          test -f "$RUNNER_TEMP/pages/project-assets/lead-capture.js"
       - uses: actions/upload-pages-artifact@v4
         with:
           path: ${{ runner.temp }}/pages
