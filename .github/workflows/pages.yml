@@ -49,6 +49,10 @@ jobs:
           test -f "$RUNNER_TEMP/pages/thyme/index.html"
           test -f "$RUNNER_TEMP/pages/jadeel/index.html"
           test -f "$RUNNER_TEMP/pages/havencia/index.html"
+          test -f "$RUNNER_TEMP/pages/quiz/central-park/index.html"
+          test -f "$RUNNER_TEMP/pages/quiz/thyme/index.html"
+          test -f "$RUNNER_TEMP/pages/quiz/jadeel/index.html"
+          test -f "$RUNNER_TEMP/pages/quiz/havencia/index.html"
           test -f "$RUNNER_TEMP/pages/project-assets/lead-capture.js"
       - uses: actions/upload-pages-artifact@v4
         with:
