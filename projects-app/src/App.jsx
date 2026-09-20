@@ -5,9 +5,9 @@ const ENDPOINT = "https://script.google.com/macros/s/AKfycbwioz7fVEzsnDXOz5EOG5f
 const asset = (name) => `${document.documentElement.dataset.assetBase || "../project-assets/"}${name}`;
 const nav = [["Планировки", "#plans"], ["Условия покупки", "#payment"], ["Локация", "#location"], ["Преимущества", "#why"]];
 
-function LeadForm({ id, bare = false, onPrivacy }) {
+function LeadForm({ id, bare = false, onPrivacy, submitLabel = "Получить цены и планировки", offerName = `${project.name} — цены, планировки и консультация` }) {
   return <div className={`lead-form-wrap ${bare ? "is-bare" : ""}`}>
-    <form id={id} className="valia-form" aria-label={`Заявка по ${project.name}`} data-offer-name={`${project.name} — цены, планировки и консультация`}>
+    <form id={id} className="valia-form" aria-label={`Заявка по ${project.name}`} data-offer-name={offerName}>
       <label htmlFor={`${id}-name`}>Ваше имя<input id={`${id}-name`} name="name" type="text" autoComplete="given-name" minLength="2" maxLength="80" required /></label>
       <label htmlFor={`${id}-phone`}>Телефон для связи<input id={`${id}-phone`} name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Укажите номер с кодом страны" minLength="7" maxLength="25" pattern="[0-9\s\+\-\(\)]{7,25}" required /></label>
       <label htmlFor={`${id}-rooms`}>Какая квартира вам интересна?
@@ -17,7 +17,7 @@ function LeadForm({ id, bare = false, onPrivacy }) {
         </select>
       </label>
       <label className="consent"><input name="privacy_consent" type="checkbox" value="yes" required />Согласен на обработку данных для ответа на заявку. <a href="#privacy" onClick={onPrivacy}>Подробнее</a></label>
-      <button type="submit">Получить цены и планировки</button>
+      <button type="submit">{submitLabel}</button>
       <p data-form-status="" role="status" aria-live="polite" className="form-status" />
     </form>
     <div className="form-trust">
@@ -29,7 +29,7 @@ function LeadForm({ id, bare = false, onPrivacy }) {
 }
 
 function Details({ title, children }) {
-  return <details className="responsive-details"><summary>{title}</summary>{children}</details>;
+  return <details className="responsive-details"><summary>{title}</summary><h3 className="details-desktop-title">{title}</h3>{children}</details>;
 }
 
 function App() {
@@ -56,6 +56,10 @@ function App() {
 
   useEffect(() => {
     const onScroll = () => { setStuck(window.scrollY > 60); setSticky(window.scrollY > 500); };
+    const desktopDetails = window.matchMedia("(min-width: 768px)");
+    const syncDetails = () => document.querySelectorAll("details.responsive-details").forEach((item) => {
+      item.open = desktopDetails.matches;
+    });
     const smooth = (event) => {
       const link = event.target.closest('a[href^="#"]');
       if (!link || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
@@ -63,8 +67,10 @@ function App() {
       if (target) { event.preventDefault(); history.pushState(null, "", link.getAttribute("href")); target.scrollIntoView({behavior: "smooth", block: "start"}); }
     };
     window.addEventListener("scroll", onScroll, {passive: true});
+    desktopDetails.addEventListener("change", syncDetails);
     document.addEventListener("click", smooth);
     onScroll();
+    syncDetails();
     const script = document.createElement("script");
     script.src = asset("lead-capture.js");
     script.dataset.endpoint = ENDPOINT;
@@ -72,7 +78,7 @@ function App() {
     script.dataset.offerName = `${project.name} — цены, планировки и консультация`;
     script.onload = () => window.NikaLeadCapture?.init(document);
     document.body.appendChild(script);
-    return () => { window.removeEventListener("scroll", onScroll); document.removeEventListener("click", smooth); script.remove(); };
+    return () => { window.removeEventListener("scroll", onScroll); desktopDetails.removeEventListener("change", syncDetails); document.removeEventListener("click", smooth); script.remove(); };
   }, []);
 
   useEffect(() => {
@@ -134,14 +140,17 @@ function App() {
 
       <section id="why" className="section"><div className="wrap"><div className="grid-2"><div><span className="eyebrow">Почему {project.name}</span><h2>Пять причин присмотреться</h2><ul className="reason-list">{project.reasons.map(([title,text]) => <li key={title}><Details title={title}><p>{text}</p></Details></li>)}</ul></div><div id="faq"><span className="eyebrow">Нас часто спрашивают</span><h2>Вопросы о {project.name}</h2><div className="faq-list">{project.faq.map(([q,a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}</div></div></div></div></section>
 
-      <section id="contact" className="section section-alt"><div className="wrap"><div className="split-52"><div><span className="eyebrow">Следующий шаг</span><h2>Обсудите {project.name} с брокером Nika Estate</h2><p className="lede">Проверим доступные квартиры, сравним варианты и рассчитаем бюджет входа без скрытых допущений.</p><figure className="media-frame"><img className="img-wide" src={project.gallery[0][0]} alt={project.gallery[0][1]} loading="lazy" /></figure></div><LeadForm id={`${project.slug}-contact`} onPrivacy={(e) => {e.preventDefault(); setPrivacy(true);}} /></div><p className="small-note">{project.source}</p></div></section>
+      <section id="contact" className="section section-alt consultation-offer"><div className="wrap"><div className="split-52"><div><span className="eyebrow">Что вы получите</span><h2>Консультация по инвестициям в {project.name}</h2><p className="lede">Разберём объект применительно к вашим возможностям и цели — без общих обещаний и давления.</p><div className="offer-benefit-grid">
+        <article><span>01</span><h3>Инвестиционная консультация</h3><p>Обсудим стратегию: аренда, рост стоимости или покупка для жизни.</p></article>
+        <article><span>02</span><h3>План платежей</h3><p>Покажем первый взнос, следующие платежи и полный бюджет покупки.</p></article>
+        <article><span>03</span><h3>Презентация объекта</h3><p>Отправим планировки, площади, визуалы и актуальные свободные лоты.</p></article>
+        <article><span>04</span><h3>Видеоконсультация с экспертом</h3><p>Опытный брокер ответит на вопросы и сравнит проект с альтернативами.</p></article>
+      </div></div><div className="consultation-form"><span className="eyebrow">Оставить заявку</span><h3>Получите материалы и консультацию</h3><p className="form-sub">Укажите контакт — брокер Nika Estate свяжется удобным для вас способом.</p><LeadForm id={`${project.slug}-contact`} bare submitLabel="Получить консультацию и материалы" offerName={`${project.name} — консультация, план платежей, презентация и видеовстреча`} onPrivacy={(e) => {e.preventDefault(); setPrivacy(true);}} /></div></div><p className="small-note">{project.source}</p></div></section>
     </main>
 
-    <footer className="site-footer"><div className="wrap"><div><a className="brand" href="#main">Nika Estate<span>Недвижимость в ОАЭ</span></a><p>Подбираем объекты под жизнь, аренду и инвестиции. Контакт — только через форму заявки.</p></div><div><a href="#plans">Планировки</a><a href="#payment">Условия покупки</a><a href="#location">Локация</a></div><p id="privacy">© 2026 Nika Estate</p></div></footer>
+    <footer className="site-footer project-footer"><div className="wrap"><div className="project-footer-main"><div className="footer-brand"><a className="brand" href="#main">Nika Estate<span>Недвижимость в ОАЭ</span></a><p>Подбираем недвижимость под жизнь, аренду и инвестиции. Проверяем лот, условия сделки и полный бюджет до бронирования.</p></div><nav className="project-footer-nav" aria-label="Разделы страницы"><h3>{project.name}</h3><a href="#plans">Планировки и цены</a><a href="#payment">Условия покупки</a><a href="#location">Локация</a><a href="#why">Преимущества</a></nav><div className="project-footer-action"><h3>Нужен персональный расчёт?</h3><p>Получите презентацию, план платежей и консультацию брокера.</p><button className="btn btn-light" type="button" onClick={openModal}>Получить консультацию</button></div></div><div className="project-footer-bottom"><span>© 2026 Nika Estate</span><span id="privacy">Связь — только через форму заявки</span></div></div></footer>
 
     {sticky && !stickyHidden && <div className="sticky-cta"><div className="sticky-cta-inner"><div className="sticky-cta-copy"><strong>{project.name}</strong><span>{project.facts[0][0]} · {project.location}</span></div><button className="btn btn-primary" type="button" onClick={openModal}>Получить цены</button><button className="dismiss-text" type="button" onClick={() => setStickyHidden(true)}>Скрыть</button></div></div>}
-    <button className="floating-enquiry" type="button" onClick={openModal}><img src={asset("email.svg")} alt="" />Отправить заявку</button>
-
     {(modal || privacy || image) && <div className="modal-backdrop" role="presentation" onMouseDown={(e) => {if (e.target === e.currentTarget) closeModal();}}><div className={`modal-card ${image ? "image-dialog" : ""}`} role="dialog" aria-modal="true" aria-label={image ? image.alt : privacy ? "Обработка заявки" : `Материалы ${project.name}`} ref={modalRef}><button className="modal-close" type="button" onClick={closeModal} aria-label="Закрыть">×</button>{image ? <><img src={image.src} alt={image.alt} /><p>{image.alt}</p></> : privacy ? <><h3>Обработка заявки</h3><p>Мы используем указанные вами данные только для связи по запросу и подбора недвижимости. Данные передаются Nika Estate через защищённую форму.</p></> : <><div className="modal-intro"><img src={project.hero} alt="" /><div><span className="eyebrow">{project.developer} · {project.location}</span><h2>Получите материалы {project.name}</h2><p>Оставьте заявку брокеру Nika Estate.</p></div></div><LeadForm id={`${project.slug}-modal`} bare onPrivacy={(e) => {e.preventDefault(); setModal(false); setPrivacy(true);}} /></>}</div></div>}
   </>;
 }

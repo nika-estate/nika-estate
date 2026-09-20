@@ -5,7 +5,7 @@ const projectOffers = {
     developer: "Meraas",
     hero: "https://nika-estate.github.io/nika-estate/assets/images/central-park-terrace.jpg",
     heroAlt: "Central Park Plaza — резиденции вокруг большого парка в City Walk",
-    fact: "от AED 2,73 млн · 1–4 спальни · план 70/30",
+    fact: "от AED 2,73 млн · ≈ $743 тыс. · 1–4 спальни · план 70/30",
     default: {
       badge: "Новая очередь Meraas в City Walk",
       title: "Получите цены и планировки Central Park Plaza",
@@ -28,7 +28,7 @@ const projectOffers = {
     developer: "Meraas",
     hero: "https://meraas.com/sites/default/files/2024-03/CP%20-%20THYME%20PHASE%20HEADER%20%E2%80%93%201.jpg",
     heroAlt: "Thyme at Central Park — готовые резиденции у парка в City Walk",
-    fact: "готовый дом · 1–4 спальни · City Walk",
+    fact: "ориентир от AED 2,1 млн · ≈ $572 тыс. · готовый дом",
     default: {
       badge: "Готовые квартиры Meraas",
       title: "Получите актуальные предложения в Thyme",
@@ -51,7 +51,7 @@ const projectOffers = {
     developer: "Meraas",
     hero: "https://nika-estate.github.io/nika-estate/assets/images/portfolio/jadeel-view.jpg",
     heroAlt: "Jadeel — вид на Burj Al Arab из готовой квартиры",
-    fact: "готовые 1–2BR · от AED 2,3 млн · вид на Burj Al Arab",
+    fact: "готовые 1–2BR · от AED 2,3 млн · ≈ $626 тыс.",
     default: {
       badge: "Готовые квартиры в MJL",
       title: "Получите предложения Jadeel с видом на Burj Al Arab",
@@ -74,14 +74,14 @@ const projectOffers = {
     developer: "ALA Developments",
     hero: "https://aladevelopments.com/wp-content/uploads/2026/02/10.webp",
     heroAlt: "Havencia by ALA — жилой проект в Dubai Land Residence Complex",
-    fact: "от AED 649 тыс. · первый платёж 20% · сдача в 2028",
+    fact: "от AED 649 тыс. · ≈ $177 тыс. · первый платёж 20%",
     default: {
       badge: "Доступный вход в недвижимость Дубая",
       title: "Получите цены и планировки Havencia",
       text: "Покажем свободные студии и квартиры, бюджет входа и график платежей.",
     },
     invest: {
-      badge: "Студии в Дубае от AED 649 тыс.",
+      badge: "Студии от AED 649 тыс. · ≈ $177 тыс.",
       title: "Рассчитайте инвестицию в Havencia под ваш бюджет",
       text: "Сравним лоты, реальный первый взнос и сценарий аренды после сдачи.",
     },
