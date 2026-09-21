@@ -11,3 +11,4 @@
   let active=0,last=performance.now();const hit=new Set();
   setInterval(function(){const now=performance.now();if(!document.hidden)active+=Math.min(now-last,1500);last=now;[[30,'time_30s'],[60,'time_60s'],[120,'time_120s'],[180,'time_180s']].forEach(([seconds,id])=>{if(active>=seconds*1000&&!hit.has(id)){hit.add(id);ym(counter,'reachGoal',id)}})},1000);
 })();
+(function(w,d){if(!w.location||!d.head||typeof d.createElement!=='function'||(d.querySelector&&d.querySelector('script[data-nika-value-gallery]')))return;const m='/nika-estate/',p=w.location.pathname,i=p.indexOf(m),r=i>=0?p.slice(0,i)+m:'/';const s=d.createElement('script');s.src=r+'assets/scripts/value-gallery.js?v=20260921-1';s.defer=true;s.dataset.nikaValueGallery='true';d.head.appendChild(s)})(window,document);

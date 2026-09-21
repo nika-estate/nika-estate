@@ -85,3 +85,17 @@
 
   window.NikaAnalytics = { counterId, metaPixelId, reachGoal };
 }(window, document));
+
+(function loadValueGallery(window, document) {
+  if (!window.location || !document.head || typeof document.createElement !== 'function') return;
+  if (document.querySelector && document.querySelector('script[data-nika-value-gallery]')) return;
+  const marker = '/nika-estate/';
+  const pathname = window.location.pathname;
+  const markerIndex = pathname.indexOf(marker);
+  const root = markerIndex >= 0 ? pathname.slice(0, markerIndex) + marker : '/';
+  const script = document.createElement('script');
+  script.src = root + 'assets/scripts/value-gallery.js?v=20260921-1';
+  script.defer = true;
+  script.dataset.nikaValueGallery = 'true';
+  document.head.appendChild(script);
+}(window, document));

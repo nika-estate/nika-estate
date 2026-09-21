@@ -3,7 +3,7 @@
 - Repository: https://github.com/nika-estate/nika-estate
 - Live base URL: https://nika-estate.github.io/nika-estate/
 - Deployment: GitHub Pages from `main`; Cloudflare Pages project `nika-estate` retained as backup
-- Build: static HTML, CSS and JavaScript; no package installation
+- Build: static HTML/CSS/JavaScript plus the Vite-based Valia and project/quiz bundles; GitHub Actions installs their pinned npm dependencies and publishes the combined site
 
 ## Routes
 
@@ -14,7 +14,7 @@
 - `https://nika-estate.github.io/nika-estate/invest-meeting/` — online investment consultation
 - `https://nika-estate.github.io/nika-estate/real-estate/` — conversion landing for property selection in the UAE and Saudi Arabia, with current projects and 2026 market yield benchmarks
 - `https://nika-estate.github.io/nika-estate/the-archive/` — The Archive by Imtiaz project landing
-- `/cyprus/eligibility/`, `/cyprus/city-match/`, `/cyprus/investment-memo/` — unpublished local prototypes for three South Cyprus lead-generation funnels. They are not campaign-ready until a Cyprus lawyer approves legal wording and the broker supplies current objects, prices and rights-cleared media.
+- `/cyprus/eligibility/`, `/cyprus/city-match/`, `/cyprus/investment-memo/` — published South Cyprus lead-generation prototypes. Legal wording, current objects, exact prices and rights-cleared media still require broker/lawyer approval before paid campaign traffic.
 
 ## Lead routing
 
@@ -48,6 +48,12 @@ Run the dependency-free regression checks with `node --test tests/tracking.test.
 The consultation hero on `invest-meeting` fills at least the visible screen below the header: `100svh - 78px` on desktop/tablet, `100svh - 67px` on phones, with a `100vh` fallback. It has no fixed height, so content remains visible on unusually small screens. Supporting text declarations below 18 px were enlarged by 2–3 px across all three stylesheet families and the consultation page's inline styles, including mobile overrides and form captions. Body copy is now 18 px. Mobile cards retain compact two-column layouts; grid tracks, contact buttons and tablet navigation wrap instead of overflowing.
 
 Run all checks with `node --test tests/*.test.cjs`. Browser QA covers the seven routes at widths 320, 375, 390, 768, 1280 and 1440 px.
+
+## Shared financial guide and gallery
+
+All full landings load `assets/scripts/value-gallery.js` through their existing analytics bundle. The component adds a page-specific block before the footer with three visible benchmarks (price, first payment and projected gross yield), three practical benefits, a one-row four-image gallery and a CTA back to the page form. Mobile galleries scroll horizontally without creating page-level overflow. The four one-screen project quizzes keep the same benchmarks in one compact line and do not add a second long section.
+
+The block distinguishes confirmed project figures from area benchmarks and scenarios. Yield is always labelled gross before service charges, vacancy and management, and never presented as a guarantee. Saudi figures remain non-numeric until a fresh OSUS price list and payment plan are verified. Shared regression coverage is in `tests/value-gallery.test.cjs`; the Pages workflow runs all root checks before building the React landings.
 
 ## Content safeguards
 

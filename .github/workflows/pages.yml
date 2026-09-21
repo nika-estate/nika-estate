@@ -16,6 +16,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify shared landing content and tracking
+        run: node --test tests/*.test.cjs
       - name: Install Valia dependencies
         working-directory: valia-app
         run: npm ci --no-audit --no-fund

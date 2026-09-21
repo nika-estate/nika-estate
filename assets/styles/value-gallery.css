@@ -1,0 +1,325 @@
+.nika-value-section,
+.nika-value-section * {
+  box-sizing: border-box;
+}
+
+.nika-value-section {
+  --nika-ink: #171714;
+  --nika-muted: #6f6b63;
+  --nika-line: rgba(23, 23, 20, 0.15);
+  --nika-accent: #b48a4c;
+  background: #f3f0e9;
+  color: var(--nika-ink);
+  font-family: Arial, Helvetica, sans-serif;
+  padding: clamp(64px, 8vw, 116px) 24px;
+  position: relative;
+  width: 100%;
+}
+
+.nika-value-shell {
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.nika-value-kicker {
+  color: #8a642f;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin: 0 0 18px;
+  text-transform: uppercase;
+}
+
+.nika-value-heading {
+  font-size: clamp(38px, 5.4vw, 76px);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  margin: 0;
+  max-width: 920px;
+}
+
+.nika-value-intro {
+  color: var(--nika-muted);
+  font-size: clamp(18px, 1.7vw, 24px);
+  line-height: 1.48;
+  margin: 24px 0 0;
+  max-width: 860px;
+}
+
+.nika-value-metrics {
+  border-bottom: 1px solid var(--nika-line);
+  border-top: 1px solid var(--nika-line);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(38px, 5vw, 64px);
+}
+
+.nika-value-metric {
+  min-height: 190px;
+  padding: clamp(28px, 3vw, 44px);
+}
+
+.nika-value-metric + .nika-value-metric {
+  border-left: 1px solid var(--nika-line);
+}
+
+.nika-value-metric-label {
+  color: var(--nika-muted);
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.nika-value-metric strong {
+  display: block;
+  font-size: clamp(25px, 2.8vw, 42px);
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.nika-value-metric small {
+  color: var(--nika-muted);
+  display: block;
+  font-size: 16px;
+  line-height: 1.42;
+  margin-top: 12px;
+}
+
+.nika-value-benefits {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 18px;
+}
+
+.nika-value-benefit {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(23, 23, 20, 0.1);
+  border-radius: 18px;
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.36;
+  min-height: 104px;
+  padding: 24px;
+}
+
+.nika-value-benefit::before {
+  color: #1d9a67;
+  content: "✓";
+  display: inline-block;
+  font-weight: 800;
+  margin-right: 10px;
+}
+
+.nika-value-gallery-head {
+  align-items: end;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  margin: clamp(50px, 7vw, 82px) 0 22px;
+}
+
+.nika-value-gallery-head h3 {
+  font-size: clamp(30px, 3.3vw, 48px);
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  margin: 0;
+}
+
+.nika-value-gallery-head p {
+  color: var(--nika-muted);
+  font-size: 17px;
+  line-height: 1.4;
+  margin: 0;
+  max-width: 470px;
+  text-align: right;
+}
+
+.nika-value-gallery {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+}
+
+.nika-value-photo {
+  aspect-ratio: 4 / 3;
+  background: #dedad1;
+  border-radius: 14px;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.nika-value-photo img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 450ms ease;
+  width: 100%;
+}
+
+.nika-value-photo:hover img {
+  transform: scale(1.035);
+}
+
+.nika-value-photo figcaption {
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.72));
+  bottom: 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 650;
+  left: 0;
+  line-height: 1.25;
+  padding: 40px 16px 14px;
+  position: absolute;
+  right: 0;
+}
+
+.nika-value-footer {
+  align-items: center;
+  border-top: 1px solid var(--nika-line);
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 24px;
+}
+
+.nika-value-note {
+  color: var(--nika-muted);
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 0;
+  max-width: 790px;
+}
+
+.nika-value-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.nika-value-cta {
+  background: var(--nika-ink);
+  border: 1px solid var(--nika-ink);
+  border-radius: 999px;
+  color: #fff;
+  flex: 0 0 auto;
+  font-size: 16px;
+  font-weight: 750;
+  padding: 18px 28px;
+  text-decoration: none;
+}
+
+.nika-value-cta:hover {
+  background: #fff;
+  color: var(--nika-ink);
+}
+
+.nika-quiz-signals {
+  display: inline;
+}
+
+@media (max-width: 760px) {
+  .nika-value-section {
+    padding: 58px 18px 68px;
+  }
+
+  .nika-value-kicker {
+    font-size: 13px;
+  }
+
+  .nika-value-heading {
+    font-size: clamp(36px, 11vw, 52px);
+  }
+
+  .nika-value-intro {
+    font-size: 18px;
+  }
+
+  .nika-value-metrics,
+  .nika-value-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .nika-value-metric {
+    min-height: auto;
+    padding: 26px 4px;
+  }
+
+  .nika-value-metric + .nika-value-metric {
+    border-left: 0;
+    border-top: 1px solid var(--nika-line);
+  }
+
+  .nika-value-metric strong {
+    font-size: 30px;
+  }
+
+  .nika-value-metric small,
+  .nika-value-note,
+  .nika-value-photo figcaption {
+    font-size: 16px;
+  }
+
+  .nika-value-benefit {
+    font-size: 17px;
+    min-height: auto;
+    padding: 20px;
+  }
+
+  .nika-value-gallery-head {
+    align-items: start;
+    display: block;
+  }
+
+  .nika-value-gallery-head p {
+    font-size: 16px;
+    margin-top: 12px;
+    text-align: left;
+  }
+
+  .nika-value-gallery {
+    display: flex;
+    margin-left: -18px;
+    margin-right: -18px;
+    overflow-x: auto;
+    padding: 0 18px 12px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .nika-value-gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nika-value-photo {
+    flex: 0 0 min(78vw, 330px);
+    scroll-snap-align: start;
+  }
+
+  .nika-value-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .nika-value-cta {
+    font-size: 17px;
+    padding: 18px 20px;
+    text-align: center;
+    width: 100%;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nika-value-photo img {
+    transition: none;
+  }
+}
