@@ -11,7 +11,8 @@ const pixelId = '1758103622093263';
 const pages = ['index.html', 'dubai/index.html', 'uae/index.html',
   'real-estate/index.html', 'invest-meeting/index.html',
   'saudi-arabia/index.html', 'the-archive/index.html',
-  'uae-webinar/index.html'];
+  'uae-webinar/index.html', 'meeting-dubai/index.html',
+  'meeting-cyprus/index.html'];
 
 class Form {
   constructor(quiz = false) {
@@ -55,6 +56,16 @@ test('every landing exposes only lead forms, without agency phones or direct con
   }
   for (const file of ['script.js', 'assets/scripts/site.js', 'assets/scripts/lead-capture.js']) {
     assert.doesNotMatch(fs.readFileSync(path.join(root, file), 'utf8'), /window\.open|wa\.me|WHATSAPP_NUMBER|971508698020/, file);
+  }
+});
+
+test('meeting pages have no published schedule and keep editable speaker slots', () => {
+  for (const page of ['meeting-dubai/index.html', 'meeting-cyprus/index.html']) {
+    const html = fs.readFileSync(path.join(root, page), 'utf8');
+    assert.doesNotMatch(html, /\b(?:[0-2]?\d:[0-5]\d|январ[ья]|феврал[ья]|март[ае]?|апрел[ья]|ма[йя]|июн[ья]|июл[ья]|август[ае]?|сентябр[ья]|октябр[ья]|ноябр[ья]|декабр[ья])\b/i, page);
+    assert.equal((html.match(/Скоро объявим/g) || []).length, 3, page);
+    assert.match(html, /id="register"/);
+    assert.match(html, /data-endpoint="https:\/\/script\.google\.com\/macros\/s\//);
   }
 });
 

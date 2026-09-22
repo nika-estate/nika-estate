@@ -46,6 +46,8 @@ jobs:
           test -f "$RUNNER_TEMP/pages/index.html"
           test -f "$RUNNER_TEMP/pages/the-archive/index.html"
           test -f "$RUNNER_TEMP/pages/uae-webinar/index.html"
+          test -f "$RUNNER_TEMP/pages/meeting-dubai/index.html"
+          test -f "$RUNNER_TEMP/pages/meeting-cyprus/index.html"
           test -f "$RUNNER_TEMP/pages/cyprus/investment-memo/index.html"
           test -f "$RUNNER_TEMP/pages/valia/en/index.html"
           test -f "$RUNNER_TEMP/pages/central-park/index.html"
