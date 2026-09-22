@@ -12,7 +12,8 @@ const pages = ['index.html', 'dubai/index.html', 'uae/index.html',
   'real-estate/index.html', 'invest-meeting/index.html',
   'saudi-arabia/index.html', 'the-archive/index.html',
   'uae-webinar/index.html', 'meeting-dubai/index.html',
-  'meeting-cyprus/index.html'];
+  'meeting-cyprus/index.html', 'webinar/uae/index.html',
+  'webinar/cyprus/index.html', 'webinar/greece/index.html'];
 
 class Form {
   constructor(quiz = false) {
@@ -66,6 +67,22 @@ test('meeting pages have no published schedule and keep editable speaker slots',
     assert.equal((html.match(/Скоро объявим/g) || []).length, 3, page);
     assert.match(html, /id="register"/);
     assert.match(html, /data-endpoint="https:\/\/script\.google\.com\/macros\/s\//);
+  }
+});
+
+test('three webinar funnels promise a concrete lead magnet and use official residency sources', () => {
+  const expected = {
+    'webinar/uae/index.html': /icp\.gov\.ae\/en\/services\/uae-golden-residency/,
+    'webinar/cyprus/index.html': /mip\.gov\.cy\/dmmip\/md\.nsf\/all\/8690459673E7A011C2258782003A8AB4/,
+    'webinar/greece/index.html': /enterprisegreece\.gov\.gr\/newsletter-articles\/greece-adjusts-golden-visa-program/
+  };
+  for (const [page, sourcePattern] of Object.entries(expected)) {
+    const html = fs.readFileSync(path.join(root, page), 'utf8');
+    assert.match(html, /5 (?:подходящих объектов|новых проектов|объектов)/, page);
+    assert.match(html, /памятк/i, page);
+    assert.match(html, sourcePattern, page);
+    assert.match(html, /Покупка сама по себе не гарантирует|не гарантирует разрешение|Разрешение выдаётся государственными органами/, page);
+    assert.doesNotMatch(html, /гарантированн(?:ая|ый|ое) доходност/i, page);
   }
 });
 

@@ -99,3 +99,46 @@
 - P3: replace district benchmarks with exact net-yield models after Nika Estate confirms an active unit, current rent comparables and annual service charges.
 
 final result: passed
+
+---
+
+# Design QA — webinar lead-magnet funnels
+
+## Visual source of truth
+
+- Reference URL: `https://www.astons.com/webinar-registration/`
+- Reference desktop viewport inspected: 1440 × 1000 px.
+- Reference mobile viewport inspected: 390 × 844 px.
+- Reused interaction pattern: fixed header, visual first screen, compact registration form, stacked editorial cards, and a persistent mobile CTA.
+- Brand, copy, imagery, form destination, tracking, and residency information are original to Nika Estate; no reference-site assets were reused.
+
+## Implemented pages
+
+- `/webinar/uae/`
+- `/webinar/cyprus/`
+- `/webinar/greece/`
+
+## Comparison and responsive checks
+
+- Desktop, 1440 × 1000 px: verified two-column composition, sticky form, hero readability, input sizing, CTA contrast, and no horizontal overflow on all three pages.
+- Mobile, 390 × 844 px: verified image-first hero, readable title, two-column benefit chips, form immediately after the first screen, single-column editorial cards, persistent CTA, and no horizontal overflow on all three pages.
+- Full-page/bottom-region check: verified Greece residency source, lower trust section, footer alignment, and lazy-loaded imagery.
+- Source-focused comparison: the desktop split and mobile content order match the reference conversion flow while retaining Nika Estate visual language.
+
+## Interaction and technical checks
+
+- Header CTA scrolls to the registration form and focuses the name field.
+- One registration form is present on every page.
+- Required name, phone, and consent fields are present.
+- Form submission was not sent during visual QA, so no test lead was written to the production Google Sheet.
+- Confirmed Yandex Metrika, Meta Pixel, and shared lead-capture scripts are present through automated tests.
+- Confirmed no broken loaded images and no browser console errors on the tested pages.
+
+## Findings and fixes
+
+- Moved the mobile registration form directly below the hero instead of after all editorial content.
+- Removed a theme-background specificity conflict that made mobile hero headings hard to read.
+- Replaced a decorative text-arrow glyph with a readable `PDF` badge.
+- Confirmed official-source links and conditional wording for UAE, Cyprus, and Greece residency routes.
+
+final result: passed
