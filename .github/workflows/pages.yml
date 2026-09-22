@@ -45,6 +45,7 @@ jobs:
           cp -a projects-app/dist/client/. "$RUNNER_TEMP/pages/"
           test -f "$RUNNER_TEMP/pages/index.html"
           test -f "$RUNNER_TEMP/pages/the-archive/index.html"
+          test -f "$RUNNER_TEMP/pages/uae-webinar/index.html"
           test -f "$RUNNER_TEMP/pages/cyprus/investment-memo/index.html"
           test -f "$RUNNER_TEMP/pages/valia/en/index.html"
           test -f "$RUNNER_TEMP/pages/central-park/index.html"

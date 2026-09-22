@@ -10,7 +10,8 @@ const capture = fs.readFileSync(path.join(root, 'assets/scripts/lead-capture.js'
 const pixelId = '1758103622093263';
 const pages = ['index.html', 'dubai/index.html', 'uae/index.html',
   'real-estate/index.html', 'invest-meeting/index.html',
-  'saudi-arabia/index.html', 'the-archive/index.html'];
+  'saudi-arabia/index.html', 'the-archive/index.html',
+  'uae-webinar/index.html'];
 
 class Form {
   constructor(quiz = false) {
@@ -141,7 +142,7 @@ function harness(forms = []) {
   return { context, document, calls, listeners, respond: fn => { responder = fn; } };
 }
 
-test('all seven pages start the same async pixel in head, with valid body fallback', () => {
+test('all static pages start the same async pixel in head, with valid body fallback', () => {
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     const head = html.match(/<head>([\s\S]*?)<\/head>/)[1];
