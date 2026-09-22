@@ -86,6 +86,26 @@ test('three webinar funnels promise a concrete lead magnet and use official resi
   }
 });
 
+test('three webinar funnels show location and lifestyle imagery beyond the hero', () => {
+  const minimumPhotos = {
+    'webinar/uae/index.html': 3,
+    'webinar/cyprus/index.html': 2,
+    'webinar/greece/index.html': 3
+  };
+  for (const [page, minimum] of Object.entries(minimumPhotos)) {
+    const html = fs.readFileSync(path.join(root, page), 'utf8');
+    assert.match(html, /class="card place-card"/, page);
+    assert.match(html, /Жизнь (?:в ОАЭ|на Кипре|в Греции)/, page);
+    const localImages = [...html.matchAll(/<img[^>]+src="(\.\.\/\.\.\/assets\/images\/[^"]+)"[^>]*>/g)]
+      .map(match => match[1].replace('../../', ''));
+    const storyImages = [...html.matchAll(/class="place-photo[^"]*"[^>]*><img[^>]+src="(\.\.\/\.\.\/assets\/images\/[^"]+)"/g)]
+      .map(match => match[1].replace('../../', ''));
+    assert.ok(storyImages.length >= minimum, page);
+    for (const image of localImages) assert.equal(fs.existsSync(path.join(root, image)), true, image);
+    assert.match(html, /webinar-assets\/styles\.css\?v=20260922-2/, page);
+  }
+});
+
 for (const quiz of [false, true]) {
   test('submit ' + (quiz ? 'quiz' : 'mini form') + ' stays on page and shows success only after acknowledgement', async () => {
     const form = new Form(quiz);
