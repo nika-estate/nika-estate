@@ -182,6 +182,9 @@ function harness(forms = []) {
     CustomEvent: class CustomEvent { constructor(type, options) { this.type = type; this.detail = options.detail; } },
     ym: (...args) => calls.metrika.push(args),
     fbq: (...args) => calls.meta.push(args),
+    performance: { now: () => 0 },
+    setInterval: () => 1,
+    clearInterval: () => {},
     fetch: (url, options) => { calls.fetch.push({ url, options }); return responder(url, options); }
   });
   context.window = context;
@@ -200,7 +203,7 @@ test('all static pages start the same async pixel in head, with valid body fallb
     assert.match(head, /fbq\('set', 'autoConfig', false, '1758103622093263'\)/);
     assert.doesNotMatch(head, /<noscript>.*<img/);
     assert.match(html, /<body[^>]*>\s*<noscript><img[^>]*tr\?id=1758103622093263&amp;ev=PageView&amp;noscript=1/);
-    assert.equal((html.match(/assets\/scripts\/analytics\.js\?v=20260916-1/g) || []).length, 1);
+    assert.equal((html.match(/assets\/scripts\/analytics\.js\?v=20260923-time-goals/g) || []).length, 1);
     assert.equal((html.match(/assets\/scripts\/lead-capture\.js\?v=20260917-forms-only/g) || []).length, 1);
     new vm.Script(head.match(/<script>([\s\S]*?)<\/script>/)[1]);
   }

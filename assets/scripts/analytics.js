@@ -34,6 +34,31 @@
     window.ym(counterId, 'reachGoal', goal, params || {});
   }
 
+  const timeGoals = [[30, 'time_30s'], [60, 'time_60s'], [120, 'time_120s'], [180, 'time_180s']];
+  let activeMs = 0;
+  let lastTick = performance.now();
+  let visible = !document.hidden;
+  const reachedTimeGoals = new Set();
+
+  function updateActiveTime() {
+    const now = performance.now();
+    if (visible) activeMs += Math.max(0, now - lastTick);
+    lastTick = now;
+    for (const [seconds, goal] of timeGoals) {
+      if (activeMs >= seconds * 1000 && !reachedTimeGoals.has(goal)) {
+        reachedTimeGoals.add(goal);
+        reachGoal(goal);
+      }
+    }
+    if (reachedTimeGoals.size === timeGoals.length) clearInterval(timeTimer);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    updateActiveTime();
+    visible = !document.hidden;
+  });
+  const timeTimer = setInterval(updateActiveTime, 1000);
+
   document.addEventListener('nika:lead-sent', (event) => {
     const detail = event.detail || {};
     // Only the lead endpoint's matching success acknowledgement can convert.
