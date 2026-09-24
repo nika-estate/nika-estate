@@ -80,10 +80,16 @@ test('three webinar funnels promise a concrete lead magnet and use official resi
   };
   for (const [page, sourcePattern] of Object.entries(expected)) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
-    assert.match(html, /5 (?:подходящих объектов|новых проектов|объектов)/, page);
-    assert.match(html, /памятк/i, page);
+    if (page.includes('/uae/')) {
+      assert.match(html, /Гайд для участников/, page);
+      assert.match(html, /Прогноз аренды/, page);
+      assert.doesNotMatch(html, /class="gift-strip"/, page);
+    } else {
+      assert.match(html, /5 (?:подходящих объектов|новых проектов|объектов)/, page);
+      assert.match(html, /памятк/i, page);
+    }
     assert.match(html, sourcePattern, page);
-    assert.match(html, /Покупка сама по себе не гарантирует|не гарантирует разрешение|Разрешение выдаётся государственными органами/, page);
+    assert.match(html, /Решение о визе принимает государственный орган|не гарантирует разрешение|Разрешение выдаётся государственными органами/, page);
     assert.doesNotMatch(html, /гарантированн(?:ая|ый|ое) доходност/i, page);
   }
 });
@@ -104,7 +110,8 @@ test('three webinar funnels show location and lifestyle imagery beyond the hero'
       .map(match => match[1].replace('../../', ''));
     assert.ok(storyImages.length >= minimum, page);
     for (const image of localImages) assert.equal(fs.existsSync(path.join(root, image)), true, image);
-    assert.match(html, /webinar-assets\/styles\.css\?v=20260924-date-goal/, page);
+    assert.match(html, /webinar-assets\/styles\.css\?v=20260924-offer-photo/, page);
+    assert.match(html, /assets\/images\/portfolio\/nika-team\.jpg/, page);
   }
 });
 
