@@ -5,6 +5,10 @@
 - Deployment: GitHub Pages from `main`; Cloudflare Pages project `nika-estate` retained as backup
 - Build: static HTML/CSS/JavaScript plus the Vite-based Valia and project/quiz bundles; GitHub Actions installs their pinned npm dependencies and publishes the combined site
 
+## Compact passive-income webinar variant (2026-09-24)
+
+The separate mobile-first A/B page is live at `https://nika-estate.github.io/nika-estate/webinar/passive-income/`. It leads with financial literacy and passive income **from real estate**, without naming a country, and uses two short sections: the offer/program, then registration. The original UAE webinar page remains available for UAE-specific campaigns. Date: 1 October 2026 at 15:00 Dubai time. Registration requires name, phone, goal and privacy consent and uses the existing acknowledged lead/analytics flow. The page does not promise a guide, automatic delivery or guaranteed yield; these are not ready or substantiated. Commit `f897879`; Pages run `36054853440` succeeded. Public HTML, CSS, team image and lead script returned HTTP 200; 42 root tests passed, and local phone/desktop checks found no horizontal overflow or console errors. No live test lead was submitted.
+
 ## Routes
 
 - `https://nika-estate.github.io/nika-estate/` — City Walk + Central Park
