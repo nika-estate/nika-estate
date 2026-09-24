@@ -104,7 +104,7 @@ test('three webinar funnels show location and lifestyle imagery beyond the hero'
       .map(match => match[1].replace('../../', ''));
     assert.ok(storyImages.length >= minimum, page);
     for (const image of localImages) assert.equal(fs.existsSync(path.join(root, image)), true, image);
-    assert.match(html, /webinar-assets\/styles\.css\?v=20260922-2/, page);
+    assert.match(html, /webinar-assets\/styles\.css\?v=20260924-date-goal/, page);
   }
 });
 
@@ -314,6 +314,16 @@ test('a blocked Meta pixel does not prevent acknowledged lead delivery or Metrik
   delete h.context.fbq;
   assert.equal(await h.context.NikaLeadCapture.send(new Form()), true);
   assert.equal(h.calls.metrika.filter(args => args[1] === 'reachGoal').length, 2);
+});
+
+test('webinar goal is included in the existing form-name column and answers', () => {
+  const form = new Form();
+  form.fields.goal = 'Инвестиции и аренда';
+  form.dataset.formName = 'Регистрация на вебинар: ОАЭ — цель: Инвестиции и аренда';
+  const h = harness();
+  const payload = h.context.NikaLeadCapture.buildPayload(form);
+  assert.equal(payload.form_name, form.dataset.formName);
+  assert.equal(payload.answers.find(answer => answer.field === 'goal').answer, 'Инвестиции и аренда');
 });
 
 test('investment meeting rejects automatic submissions before the endpoint and analytics', async () => {
