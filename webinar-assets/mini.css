@@ -1,0 +1,22 @@
+@font-face{font-family:Inter;src:url('../assets/fonts/inter-regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:Inter;src:url('../assets/fonts/inter-semibold.ttf') format('truetype');font-weight:600 800;font-display:swap}
+:root{font-family:Inter,Arial,sans-serif;color:#242321;background:#f5f1eb;font-synthesis:none}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-size:16px;line-height:1.42}
+button,input,select{font:inherit}
+a{color:inherit}
+img{display:block;max-width:100%}
+.skip-link{position:absolute;left:12px;top:-60px;z-index:10;padding:10px;background:#fff}.skip-link:focus{top:12px}
+.mini-header{display:flex;align-items:center;justify-content:center;height:62px;background:#fff;border-bottom:1px solid #eee9e1}.mini-header img{width:165px;height:auto;aspect-ratio:500/133;object-fit:contain}.mini-header a{display:block}
+.mini-layout{max-width:1080px;margin:auto}.intro,.register{padding:24px 20px 30px}.intro{background:#f5f1eb}.register{background:#fff;scroll-margin-top:12px}
+.eyebrow{margin:0 0 10px;color:#8d693b;font-size:11px;line-height:1.35;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+h1,h2,p,figure,ol{margin-top:0}.intro h1{max-width:720px;margin-bottom:12px;font-size:clamp(34px,9vw,48px);line-height:1.06;letter-spacing:-.045em}.intro-lead{margin-bottom:16px;font-size:17px;line-height:1.4;color:#55514c}
+.date-chip{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;background:#fff;border:1px solid #e6ddcd;border-radius:12px}.date-icon{display:grid;place-items:center;flex:none;width:42px;height:42px;background:#ac8750;color:#fff;border-radius:9px;font-size:17px;font-weight:700}.date-chip strong,.date-chip div>span{display:block}.date-chip strong{font-size:16px}.date-chip div>span{margin-top:2px;color:#6c675f;font-size:12px}
+.team-photo{margin:16px 0 18px;border-radius:14px;overflow:hidden;background:#e8e4dd}.team-photo img{width:100%;height:auto;aspect-ratio:1800/741;object-fit:cover}
+.topics h2{margin-bottom:8px;font-size:21px;line-height:1.17;letter-spacing:-.025em}.topics ol{list-style:none;padding:0;margin:0 0 18px}.topics li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:9px 0;border-top:1px solid #ded7ce}.topics li:last-child{border-bottom:1px solid #ded7ce}.topics li>span{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#312d27;color:#fff;font-size:10px;font-weight:700}.topics li p{margin:0;font-size:14px;line-height:1.35;color:#494641}.topics li strong{color:#242321}
+.primary-link,.lead-form button{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;border:0;border-radius:10px;background:#1e1d1b;color:#fff;text-align:center;text-decoration:none;font-size:16px;font-weight:700;cursor:pointer}.primary-link:hover,.lead-form button:hover{background:#35312a}
+.register h2{margin-bottom:8px;font-size:34px;line-height:1.08;letter-spacing:-.04em}.register-lead{margin-bottom:18px;color:#615d58;font-size:16px}.lead-form label:not(.consent){display:grid;gap:5px;margin-bottom:11px;font-size:13px;font-weight:600;color:#4b4741}.lead-form input:not([type=checkbox]),.lead-form select{width:100%;min-height:50px;padding:0 13px;border:1px solid #d8d3cc;border-radius:9px;background:#fff;color:#242321;outline:none}.lead-form input:focus,.lead-form select:focus{border-color:#ac8750;box-shadow:0 0 0 3px #ac875026}.lead-form .consent{display:flex;gap:9px;align-items:flex-start;margin:14px 0;font-size:12px;line-height:1.35;color:#66615b}.consent input{flex:none;width:17px;height:17px;margin:0}.lead-form button{background:#ac8750}.lead-form button:hover{background:#977342}.lead-form button:disabled{opacity:.65;cursor:wait}.form-status{min-height:20px;margin:9px 0 0;font-size:13px}.privacy-note{margin:6px 0 0;text-align:center;color:#77716a;font-size:12px}
+.mini-footer{padding:18px 20px 24px;background:#242321;color:#d1cbc2;text-align:center;font-size:11px}
+@media(min-width:800px){body{background:#eae5dd}.mini-header{height:76px}.mini-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(330px,.9fr);gap:22px;align-items:start;padding:30px 20px 40px}.intro,.register{border-radius:20px;padding:32px}.register{position:sticky;top:30px;box-shadow:0 16px 40px #302a2010}.intro h1{font-size:44px}.intro-lead{font-size:18px}.topics h2{font-size:24px}.topics li p{font-size:15px}.team-photo{margin:20px 0 24px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
