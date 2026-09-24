@@ -10,6 +10,7 @@
     offerName: sourceScript.dataset.offerName || ''
   };
   const pendingForms = new WeakMap();
+  const botChecks = new WeakMap();
 
   function text(value) {
     return value == null ? '' : String(value).trim();
@@ -57,7 +58,7 @@
       'name', 'first_name', 'firstname', 'last_name', 'phone', 'contact',
       'tel', 'telephone', 'email', 'e_mail', 'telegram', 'tg', 'whatsapp',
       'messenger', 'preferred_contact', 'contact_method', 'privacy_consent',
-      'consent', 'project', 'offer_name'
+      'consent', 'project', 'offer_name', 'website', 'human_check'
     ]);
 
     return Object.keys(fields)
@@ -85,6 +86,32 @@
       return window.crypto.randomUUID();
     }
     return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
+
+  function initBotCheck(form) {
+    if (form.dataset.botProtection !== 'true') return;
+    const question = form.querySelector('[data-human-question]');
+    if (!question || !form.elements.namedItem('human_check')) return;
+    const left = 2 + Math.floor(Math.random() * 6);
+    const right = 2 + Math.floor(Math.random() * 6);
+    question.textContent = `${left} + ${right} = ?`;
+    botChecks.set(form, { answer: left + right, startedAt: performance.now() });
+  }
+
+  function botCheckError(form) {
+    if (form.dataset.botProtection !== 'true') return '';
+    const check = botChecks.get(form);
+    if (!check) return 'Проверка формы не загрузилась. Обновите страницу и попробуйте снова.';
+    const trap = form.elements.namedItem('website');
+    if (trap && text(trap.value)) return 'Не удалось проверить заявку. Обновите страницу и попробуйте снова.';
+    const answer = form.elements.namedItem('human_check');
+    if (!answer || text(answer.value) !== String(check.answer)) {
+      return 'Проверьте ответ на вопрос под формой.';
+    }
+    if (performance.now() - check.startedAt < 3000) {
+      return 'Подождите несколько секунд и отправьте заявку ещё раз.';
+    }
+    return '';
   }
 
   function buildPayload(form) {
@@ -140,7 +167,7 @@
   }
 
   function send(form) {
-    if (!pageConfig.endpoint || !form.checkValidity()) return Promise.resolve(false);
+    if (!pageConfig.endpoint || !form.checkValidity() || botCheckError(form)) return Promise.resolve(false);
     if (pendingForms.has(form)) return pendingForms.get(form);
 
     const payload = buildPayload(form);
@@ -175,12 +202,19 @@
     (root || document).querySelectorAll('form').forEach((form) => {
       if (form.dataset.nikaLeadBound === 'true') return;
       if (!form.querySelector('[name="phone"], [name="contact"], [name="email"]')) return;
+      initBotCheck(form);
       form.dataset.nikaLeadBound = 'true';
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
         if (!form.checkValidity()) {
           form.reportValidity();
+          return;
+        }
+        const botError = botCheckError(form);
+        if (botError) {
+          const status = form.querySelector('[data-form-status], .form-success');
+          if (status) status.textContent = botError;
           return;
         }
         if (form.dataset.nikaSubmitting === 'true') return;

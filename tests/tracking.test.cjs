@@ -52,7 +52,9 @@ test('every landing exposes only lead forms, without agency phones or direct con
     assert.doesNotMatch(html, /href=["'](?:tel:|mailto:|https?:\/\/(?:wa\.me|t\.me|api\.whatsapp\.com|web\.whatsapp\.com))/i, page);
     assert.doesNotMatch(html, /97145574496|971508698020|\+971 4 557 4496|Удобнее связаться|class="[^"]*\b(?:direct-contact|request-direct|request-contacts)\b/, page);
     assert.match(html, /name="phone"/, 'client contact stays on ' + page);
-    assert.match(html, /lead-capture\.js\?v=20260917-forms-only/, page);
+    assert.match(html, page === 'invest-meeting/index.html'
+      ? /lead-capture\.js\?v=20260924-bot-check/
+      : /lead-capture\.js\?v=20260917-forms-only/, page);
     assert.doesNotMatch(html, /(?:Откроется|откроется)[^<]*WhatsApp/, page);
   }
   for (const file of ['script.js', 'assets/scripts/site.js', 'assets/scripts/lead-capture.js']) {
@@ -155,6 +157,7 @@ function harness(forms = []) {
   const listeners = new Map();
   const calls = { meta: [], metrika: [], fetch: [], events: [] };
   let nextId = 0;
+  let clock = 0;
   let responder = (url, options) => {
     const payload = JSON.parse(options.body);
     return Promise.resolve({ ok: true, type: 'cors', json: async () => ({ ok: true, lead_id: payload.lead_id }) });
@@ -182,7 +185,7 @@ function harness(forms = []) {
     CustomEvent: class CustomEvent { constructor(type, options) { this.type = type; this.detail = options.detail; } },
     ym: (...args) => calls.metrika.push(args),
     fbq: (...args) => calls.meta.push(args),
-    performance: { now: () => 0 },
+    performance: { now: () => clock },
     setInterval: () => 1,
     clearInterval: () => {},
     fetch: (url, options) => { calls.fetch.push({ url, options }); return responder(url, options); }
@@ -190,7 +193,7 @@ function harness(forms = []) {
   context.window = context;
   vm.runInContext(analytics, context);
   vm.runInContext(capture, context);
-  return { context, document, calls, listeners, respond: fn => { responder = fn; } };
+  return { context, document, calls, listeners, respond: fn => { responder = fn; }, advance: ms => { clock += ms; } };
 }
 
 test('all static pages start the same async pixel in head, with valid body fallback', () => {
@@ -204,7 +207,8 @@ test('all static pages start the same async pixel in head, with valid body fallb
     assert.doesNotMatch(head, /<noscript>.*<img/);
     assert.match(html, /<body[^>]*>\s*<noscript><img[^>]*tr\?id=1758103622093263&amp;ev=PageView&amp;noscript=1/);
     assert.equal((html.match(/assets\/scripts\/analytics\.js\?v=20260923-time-goals/g) || []).length, 1);
-    assert.equal((html.match(/assets\/scripts\/lead-capture\.js\?v=20260917-forms-only/g) || []).length, 1);
+    const captureVersion = page === 'invest-meeting/index.html' ? '20260924-bot-check' : '20260917-forms-only';
+    assert.equal((html.match(new RegExp(`assets/scripts/lead-capture\\.js\\?v=${captureVersion}`, 'g')) || []).length, 1);
     new vm.Script(head.match(/<script>([\s\S]*?)<\/script>/)[1]);
   }
 });
@@ -310,4 +314,31 @@ test('a blocked Meta pixel does not prevent acknowledged lead delivery or Metrik
   delete h.context.fbq;
   assert.equal(await h.context.NikaLeadCapture.send(new Form()), true);
   assert.equal(h.calls.metrika.filter(args => args[1] === 'reachGoal').length, 2);
+});
+
+test('investment meeting rejects automatic submissions before the endpoint and analytics', async () => {
+  const form = new Form();
+  form.dataset.botProtection = 'true';
+  form.fields.website = '';
+  form.fields.human_check = '';
+  const question = { textContent: '' };
+  const originalQuery = form.querySelector.bind(form);
+  form.querySelector = selector => selector === '[data-human-question]' ? question : originalQuery(selector);
+  const h = harness([form]);
+  const answer = question.textContent.match(/(\d+) \+ (\d+)/);
+  assert.ok(answer);
+  assert.equal(await h.context.NikaLeadCapture.send(form), false);
+  form.fields.human_check = String(Number(answer[1]) + Number(answer[2]));
+  assert.equal(await h.context.NikaLeadCapture.send(form), false);
+  h.advance(3000);
+  form.fields.website = 'spam.example';
+  assert.equal(await h.context.NikaLeadCapture.send(form), false);
+  assert.equal(h.calls.fetch.length, 0);
+  assert.equal(h.calls.meta.length, 0);
+  form.fields.website = '';
+  assert.equal(await h.context.NikaLeadCapture.send(form), true);
+  assert.equal(h.calls.fetch.length, 1);
+  assert.equal(h.calls.meta.length, 2);
+  assert.equal(h.calls.fetch[0].options.body.includes('human_check'), false);
+  assert.equal(h.calls.fetch[0].options.body.includes('website'), false);
 });

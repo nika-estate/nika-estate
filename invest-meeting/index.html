@@ -120,6 +120,9 @@
     .invest-request .direct-contact p{font-family:var(--sans);font-size:22px;font-weight:600}
     .invest-request .direct-contact>span{color:#c8c2b9}
     .invest-request .direct-contact .button.outline{color:#fff;border-color:rgba(255,255,255,.55)}
+    .bot-trap{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+    .human-check{display:block;margin:18px 0 16px;font-size:16px;line-height:1.35}
+    .human-check input{display:block;max-width:120px;margin-top:8px}
 
     @media(max-width:900px){
       .meeting-hero h1{font-size:47px}
@@ -270,13 +273,15 @@
 
     <section class="section invest-request" id="request"><div class="shell form-grid">
       <div><p class="eyebrow">Инвестиционная встреча онлайн</p><h2 class="display">Запишитесь <em>на персональный разбор</em></h2><p class="lead">Оставьте контакты. Брокер уточнит вашу цель и предложит удобное время встречи.</p></div>
-      <form class="lead-form" data-page="инвестиционная онлайн-встреча по недвижимости Дубая и Абу-Даби" data-offer-name="Онлайн-консультация по инвестициям в недвижимость ОАЭ">
+      <form class="lead-form" data-bot-protection="true" data-page="инвестиционная онлайн-встреча по недвижимости Дубая и Абу-Даби" data-offer-name="Онлайн-консультация по инвестициям в недвижимость ОАЭ">
         <p class="selected-project" data-selected-project hidden>Интересует объект: <strong></strong></p><input type="hidden" name="project" value="">
         <label>Имя<input name="name" required autocomplete="name" placeholder="Как к вам обращаться"></label>
         <label>Номер телефона<input type="tel" name="phone" required autocomplete="tel" data-phone placeholder="+7 999 000-00-00"></label>
+        <div class="bot-trap" aria-hidden="true"><label>Сайт<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
         <div class="messenger-field"><span class="field-label">Где с вами связаться?</span><div class="messenger-options"><label><input type="radio" name="messenger" value="WhatsApp" checked><span>WhatsApp</span></label><label><input type="radio" name="messenger" value="Telegram"><span>Telegram</span></label><label><input type="radio" name="messenger" value="Телефон"><span>Позвонить</span></label><label><input type="radio" name="messenger" value="MAX"><span>MAX</span></label></div></div>
         <label class="telegram-field" data-telegram-field hidden>Ник в Telegram<input type="text" name="telegram" placeholder="@username"></label>
-        <label>Что хотите разобрать?<select name="goal"><option>Квартиру для сдачи в аренду</option><option>Покупку для роста капитала</option><option>Готовую квартиру</option><option>Новый проект с рассрочкой</option><option>Пока хочу сравнить варианты</option></select></label>
+        <label>Что хотите разобрать?<select name="goal" required><option value="" disabled selected>Выберите интересующий вариант</option><option>Квартиру для сдачи в аренду</option><option>Покупку для роста капитала</option><option>Готовую квартиру</option><option>Новый проект с рассрочкой</option><option>Пока хочу сравнить варианты</option></select></label>
+        <label class="human-check">Проверка от автоматических заявок: <span data-human-question></span><input type="text" name="human_check" inputmode="numeric" pattern="[0-9]{1,2}" autocomplete="off" required aria-label="Ответ на проверочный вопрос"></label>
         <button class="button gold" type="submit">Отправить разбор</button><p class="form-status" data-form-status aria-live="polite"></p><p class="form-note">Заявка попадёт брокеру Nika Estate. Он свяжется выбранным способом.</p>
       </form>
     </div>
@@ -288,6 +293,6 @@
   <div class="mobile-cta is-hidden"><a class="button gold" href="#request">Записаться на встречу</a></div>
   <script src="../assets/scripts/site.js?v=20260917-forms-only"></script>
   <script src="../assets/scripts/analytics.js?v=20260923-time-goals"></script>
-  <script src="../assets/scripts/lead-capture.js?v=20260917-forms-only" data-endpoint="https://script.google.com/macros/s/AKfycbwioz7fVEzsnDXOz5EOG5f7Db1detqxZYDZF1T8OqyU2DAeUW-_P5envHK6vwCtcNKAbg/exec" data-landing-name="Инвестиционная встреча онлайн" data-offer-name="Онлайн-консультация по инвестициям в недвижимость ОАЭ"></script>
+  <script src="../assets/scripts/lead-capture.js?v=20260924-bot-check" data-endpoint="https://script.google.com/macros/s/AKfycbwioz7fVEzsnDXOz5EOG5f7Db1detqxZYDZF1T8OqyU2DAeUW-_P5envHK6vwCtcNKAbg/exec" data-landing-name="Инвестиционная встреча онлайн" data-offer-name="Онлайн-консультация по инвестициям в недвижимость ОАЭ"></script>
 </body>
 </html>
