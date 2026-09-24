@@ -75,19 +75,14 @@ test('meeting pages have no published schedule and keep editable speaker slots',
 test('three webinar funnels promise a concrete lead magnet and use official residency sources', () => {
   const expected = {
     'webinar/uae/index.html': /icp\.gov\.ae\/en\/services\/uae-golden-residency/,
-    'webinar/cyprus/index.html': /mip\.gov\.cy\/dmmip\/md\.nsf\/all\/8690459673E7A011C2258782003A8AB4/,
+    'webinar/cyprus/index.html': /mip\.gov\.cy\/dmmip\/md\.nsf\/immigrationpfi_en/,
     'webinar/greece/index.html': /enterprisegreece\.gov\.gr\/newsletter-articles\/greece-adjusts-golden-visa-program/
   };
   for (const [page, sourcePattern] of Object.entries(expected)) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
-    if (page.includes('/uae/')) {
-      assert.match(html, /Гайд для участников/, page);
-      assert.match(html, /Прогноз аренды/, page);
-      assert.doesNotMatch(html, /class="gift-strip"/, page);
-    } else {
-      assert.match(html, /5 (?:подходящих объектов|новых проектов|объектов)/, page);
-      assert.match(html, /памятк/i, page);
-    }
+    assert.match(html, /Гайд для участников/, page);
+    assert.match(html, /аренд/i, page);
+    assert.doesNotMatch(html, /class="gift-strip"/, page);
     assert.match(html, sourcePattern, page);
     assert.match(html, /Решение о визе принимает государственный орган|не гарантирует разрешение|Разрешение выдаётся государственными органами/, page);
     assert.doesNotMatch(html, /гарантированн(?:ая|ый|ое) доходност/i, page);
@@ -110,8 +105,9 @@ test('three webinar funnels show location and lifestyle imagery beyond the hero'
       .map(match => match[1].replace('../../', ''));
     assert.ok(storyImages.length >= minimum, page);
     for (const image of localImages) assert.equal(fs.existsSync(path.join(root, image)), true, image);
-    assert.match(html, /webinar-assets\/styles\.css\?v=20260924-offer-photo/, page);
+    assert.match(html, /webinar-assets\/styles\.css\?v=20260924-immigration-offer/, page);
     assert.match(html, /assets\/images\/portfolio\/nika-team\.jpg/, page);
+    assert.doesNotMatch(html, /<figcaption>/, page);
   }
 });
 
