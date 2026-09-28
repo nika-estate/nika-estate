@@ -45,7 +45,11 @@
   form.querySelectorAll('input[type="radio"]').forEach((input) => {
     input.addEventListener('change', () => {
       const group = input.closest('fieldset[data-step]');
-      if (group) group.querySelector('[data-next]').disabled = false;
+      if (group) {
+        const next = group.querySelector('[data-next]');
+        next.disabled = false;
+        show(next.dataset.next);
+      }
       const telegram = document.querySelector('[data-telegram-handle]');
       if (input.name === 'messenger') telegram.hidden = input.value !== 'Telegram';
     });
