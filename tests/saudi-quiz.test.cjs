@@ -22,7 +22,7 @@ test('Saudi quiz asks both reference questions before a required phone and messe
 test('guide is shown only after a confirmed lead event and includes primary-source checks', () => {
   assert.match(quiz, /event\.detail\?\.confirmed && event\.detail\?\.formId === form\.id/);
   assert.match(page, /data-step="success" hidden/);
-  assert.match(page, /href="\.\/guide\.html"/);
+  assert.match(page, /data-guide-popup data-guide-popup-form="saudi-quiz-form"/);
   assert.match(guide, /rega\.gov\.sa\/en\/rega-services\/platforms\/non-saudi-real-estate-ownership/);
   assert.doesNotMatch(page, /citizenship|guaranteed return|\$1m/i);
 });

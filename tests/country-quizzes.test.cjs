@@ -22,7 +22,8 @@ test('three English property quizzes use the shared confirmed-lead flow and real
     assert.match(html, /name="messenger" value="WhatsApp"/);
     assert.match(html, /name="privacy_consent"[^>]*required/);
     assert.match(html, /data-step="success" hidden/);
-    assert.match(html, /href="\.\/guide\.html"/);
+    assert.match(html, /data-guide-popup data-guide-popup-form=/);
+    assert.match(html, /assets\/scripts\/quiz-guide-popup\.js/);
     assert.match(html, /1758103622093263/);
     assert.match(html, /assets\/scripts\/analytics\.js/);
     assert.match(html, /assets\/scripts\/lead-capture\.js/);
