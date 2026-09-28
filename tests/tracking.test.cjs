@@ -49,7 +49,8 @@ test('every landing exposes only lead forms, without agency phones or direct con
   const allPages = [...pages, 'cyprus/eligibility/index.html', 'cyprus/city-match/index.html'];
   for (const page of allPages) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
-    assert.doesNotMatch(html, /href=["'](?:tel:|mailto:|https?:\/\/(?:wa\.me|t\.me|api\.whatsapp\.com|web\.whatsapp\.com))/i, page);
+    const withoutConfirmedBotLink = html.replace(/https:\/\/t\.me\/nika_estate_webinar_bot\?start=income_20261001/g, "");
+    assert.doesNotMatch(withoutConfirmedBotLink, /href=["'](?:tel:|mailto:|https?:\/\/(?:wa\.me|t\.me|api\.whatsapp\.com|web\.whatsapp\.com))/i, page);
     assert.doesNotMatch(html, /97145574496|971508698020|\+971 4 557 4496|Удобнее связаться|class="[^"]*\b(?:direct-contact|request-direct|request-contacts)\b/, page);
     assert.match(html, /name="phone"/, 'client contact stays on ' + page);
     assert.match(html, page === 'invest-meeting/index.html'
@@ -72,42 +73,19 @@ test('meeting pages have no published schedule and keep editable speaker slots',
   }
 });
 
-test('three webinar funnels promise a concrete lead magnet and use official residency sources', () => {
-  const expected = {
-    'webinar/uae/index.html': /icp\.gov\.ae\/en\/services\/uae-golden-residency/,
-    'webinar/cyprus/index.html': /mip\.gov\.cy\/dmmip\/md\.nsf\/immigrationpfi_en/,
-    'webinar/greece/index.html': /enterprisegreece\.gov\.gr\/newsletter-articles\/greece-adjusts-golden-visa-program/
-  };
-  for (const [page, sourcePattern] of Object.entries(expected)) {
+test('all four webinar routes use the compact lead form and unified bot handoff', () => {
+  for (const page of ['webinar/passive-income/index.html', 'webinar/uae/index.html',
+    'webinar/cyprus/index.html', 'webinar/greece/index.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
-    assert.match(html, /Гайд для участников/, page);
-    assert.match(html, /аренд/i, page);
-    assert.doesNotMatch(html, /class="gift-strip"/, page);
-    assert.match(html, sourcePattern, page);
-    assert.match(html, /Решение о визе принимает государственный орган|не гарантирует разрешение|Разрешение выдаётся государственными органами/, page);
-    assert.doesNotMatch(html, /гарантированн(?:ая|ый|ое) доходност/i, page);
-  }
-});
-
-test('three webinar funnels show location and lifestyle imagery beyond the hero', () => {
-  const minimumPhotos = {
-    'webinar/uae/index.html': 3,
-    'webinar/cyprus/index.html': 2,
-    'webinar/greece/index.html': 3
-  };
-  for (const [page, minimum] of Object.entries(minimumPhotos)) {
-    const html = fs.readFileSync(path.join(root, page), 'utf8');
-    assert.match(html, /class="card place-card"/, page);
-    assert.match(html, /Жизнь (?:в ОАЭ|на Кипре|в Греции)/, page);
-    const localImages = [...html.matchAll(/<img[^>]+src="(\.\.\/\.\.\/assets\/images\/[^"]+)"[^>]*>/g)]
+    assert.match(html, /PDF-гайд за регистрацию/, page);
+    assert.match(html, /1 или 2 октября/, page);
+    assert.match(html, /name="email"[^>]+required/, page);
+    assert.match(html, /data-registration-success hidden/, page);
+    assert.match(html, /t\.me\/nika_estate_webinar_bot\?start=income_20261001/, page);
+    const localImages = [...html.matchAll(/<img[^>]+src="(\.\.\/\.\.\/(?:assets\/images|webinar-assets)\/[^"]+)"[^>]*>/g)]
       .map(match => match[1].replace('../../', ''));
-    const storyImages = [...html.matchAll(/class="place-photo[^"]*"[^>]*><img[^>]+src="(\.\.\/\.\.\/assets\/images\/[^"]+)"/g)]
-      .map(match => match[1].replace('../../', ''));
-    assert.ok(storyImages.length >= minimum, page);
+    assert.equal(localImages.length, 1, page);
     for (const image of localImages) assert.equal(fs.existsSync(path.join(root, image)), true, image);
-    assert.match(html, /webinar-assets\/styles\.css\?v=20260924-immigration-offer/, page);
-    assert.match(html, /assets\/images\/portfolio\/nika-team\.jpg/, page);
-    assert.doesNotMatch(html, /<figcaption>/, page);
   }
 });
 

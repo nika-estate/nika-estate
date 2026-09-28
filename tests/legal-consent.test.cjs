@@ -27,7 +27,7 @@ const pages = [
   'invest-meeting/index.html'
 ];
 
-test('every landing form requires consent and links to its language-specific policy', () => {
+test('every landing form links to the matching bilingual policy and consent', () => {
   let formsChecked = 0;
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
@@ -35,11 +35,24 @@ test('every landing form requires consent and links to its language-specific pol
     const forms = [...html.matchAll(/<form\b[^>]*>[\s\S]*?<\/form>/g)].map(([form]) => form);
     assert.ok(forms.length, `${page}: no forms found`);
     for (const form of forms) {
-      assert.match(form, /<input\b[^>]*name="privacy_consent"[^>]*required/, `${page}: required consent missing`);
-      assert.match(form, new RegExp(`https://nikaestate\\.${english ? 'com' : 'ru'}/privacy`), `${page}: privacy link missing`);
-      if (!english) assert.match(form, /https:\/\/nikaestate\.ru\/personal-data-consent/, `${page}: processing consent link missing`);
+      assert.match(form, /<input\b[^>]*name="privacy_consent"[^>]*required[^>]*value="yes"|<input\b[^>]*name="privacy_consent"[^>]*value="yes"[^>]*required/, `${page}: consent must be active and explicit`);
+      const prefix = english ? 'en/' : '';
+      for (const doc of ['privacy', 'consent']) {
+        const links = [...form.matchAll(/<a\b[^>]*href="([^"]+)"/g)].map(match => match[1]);
+        const link = links.find(href => href.endsWith(`${prefix}${doc}/`));
+        assert.ok(link, `${page}: missing ${prefix}${doc}`);
+        assert.equal(fs.existsSync(path.resolve(root, path.dirname(page), link, 'index.html')), true, `${page}: broken ${link}`);
+      }
       formsChecked += 1;
     }
   }
   assert.equal(formsChecked, 26);
+});
+
+test('both languages describe enquiry, webinar and guide forms rather than the digest subscription', () => {
+  for (const file of ['privacy/index.html', 'consent/index.html', 'en/privacy/index.html', 'en/consent/index.html']) {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.match(html, /вебинар|guide|consultation|заявк/i, file);
+    assert.doesNotMatch(html, /распространяется только.*видео-дайджест|applies only.*weekly digest/i, file);
+  }
 });

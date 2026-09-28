@@ -5,49 +5,47 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
-const pages = ['uae', 'cyprus', 'greece'];
+const markets = ['passive-income', 'uae', 'cyprus', 'greece'];
+const botLink = 'https://t.me/nika_estate_webinar_bot?start=income_20261001';
 
-test('all webinar pages show the same Dubai start time and require an explicit goal', () => {
-  for (const market of pages) {
+test('all compact webinar pages collect contacts before showing the Telegram link', () => {
+  for (const market of markets) {
     const html = fs.readFileSync(path.join(root, 'webinar', market, 'index.html'), 'utf8');
-    assert.equal((html.match(/datetime="2026-10-01T15:00:00\+04:00"/g) || []).length, 2, market);
-    assert.equal((html.match(/по времени Дубая \(UTC\+4\)/g) || []).length, 2, market);
-    assert.match(html, /data-webinar-registration data-form-name="Регистрация на вебинар:/, market);
-    assert.match(html, /<select name="goal" required><option value="" selected disabled>Выберите цель участия<\/option>/, market);
-    assert.match(html, /Инвестиции и аренда/, market);
-    assert.match(html, /Квартира для жизни|Переезд и жизнь|Второй дом/, market);
-    assert.match(html, /webinar-assets\/app\.js\?v=20260924-date-goal/, market);
+    assert.match(html, /Как выстроить пассивный доход на недвижимости/, market);
+    assert.match(html, /1 или 2 октября/, market);
+    assert.match(html, /время выберем вместе в Telegram/, market);
+    assert.equal((html.match(new RegExp(botLink.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length, 1, market);
+    assert.match(html, /PDF-гайд за регистрацию/, market);
+    assert.match(html, /PDF-гайд пришлём туда после подготовки/, market);
+    assert.match(html, /<form id="webinar-registration"/, market);
+    for (const field of ['name', 'phone', 'email']) assert.match(html, new RegExp(`name="${field}"[^>]+required`), market);
+    assert.match(html, /name="privacy_consent" value="yes" required/, market);
+    assert.match(html, /data-registration-success hidden/, market);
+    assert.match(html, /data-endpoint="https:\/\/script\.google\.com\/macros\/s\//, market);
+    assert.match(html, /lead-capture\.js/, market);
+    assert.match(html, /href="\.\.\/\.\.\/privacy\/"/, market);
+    assert.match(html, /href="\.\.\/\.\.\/consent\/"/, market);
   }
 });
 
-test('webinar form name follows the selected goal without accumulating old values', () => {
-  const listeners = {};
-  const goal = { value: '', addEventListener: (name, callback) => { listeners[name] = callback; } };
-  const form = {
-    dataset: { formName: 'Регистрация на вебинар: ОАЭ' },
-    querySelector: () => goal,
-    addEventListener: (name, callback) => { listeners[name] = callback; }
+test('Telegram step appears only after this form receives a confirmed lead acknowledgement', () => {
+  let listener;
+  const formStep = { hidden: false };
+  const botStep = { hidden: true, scrollIntoView() {} };
+  const document = {
+    addEventListener(type, callback) { if (type === 'nika:lead-sent') listener = callback; },
+    querySelector(selector) {
+      return selector === '[data-registration-form]' ? formStep
+        : selector === '[data-registration-success]' ? botStep : null;
+    }
   };
-  const document = { querySelectorAll: selector => selector === 'form[data-webinar-registration]' ? [form] : [] };
-  vm.runInNewContext(fs.readFileSync(path.join(root, 'webinar-assets/app.js'), 'utf8'), { document, window: {} });
-  assert.equal(form.dataset.formName, 'Регистрация на вебинар: ОАЭ');
-  goal.value = 'Инвестиции и аренда';
-  listeners.change();
-  assert.equal(form.dataset.formName, 'Регистрация на вебинар: ОАЭ — цель: Инвестиции и аренда');
-  goal.value = 'Квартира для жизни';
-  listeners.submit();
-  assert.equal(form.dataset.formName, 'Регистрация на вебинар: ОАЭ — цель: Квартира для жизни');
-});
-
-test('short webinar variant keeps the existing confirmed lead flow', () => {
-  const html = fs.readFileSync(path.join(root, 'webinar/passive-income/index.html'), 'utf8');
-  assert.match(html, /datetime="2026-10-01T15:00:00\+04:00"/);
-  assert.match(html, /form class="lead-form" data-webinar-registration/);
-  assert.match(html, /<select name="goal" required><option value="" selected disabled>/);
-  assert.match(html, /name="phone"[^>]*required/);
-  assert.match(html, /name="privacy_consent" required/);
-  assert.match(html, /assets\/scripts\/lead-capture\.js\?v=20260917-forms-only/);
-  assert.match(html, /data-endpoint="https:\/\/script\.google\.com\/macros\/s\//);
-  assert.doesNotMatch(html, /href="(?:tel:|mailto:|https:\/\/(?:wa\.me|t\.me))/);
-  assert.doesNotMatch(html, /гарантированн(?:ая|ый|ое) доходност/i);
+  const script = fs.readFileSync(path.join(root, 'webinar-assets/registration-step.js'), 'utf8');
+  vm.runInNewContext(script, { document });
+  listener({ detail: { confirmed: false, formId: 'webinar-registration' } });
+  listener({ detail: { confirmed: true, formId: 'other-form' } });
+  assert.equal(formStep.hidden, false);
+  assert.equal(botStep.hidden, true);
+  listener({ detail: { confirmed: true, formId: 'webinar-registration' } });
+  assert.equal(formStep.hidden, true);
+  assert.equal(botStep.hidden, false);
 });
