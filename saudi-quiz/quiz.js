@@ -14,6 +14,7 @@
   };
 
   function show(name) {
+    document.body.dataset.quizStep = name;
     steps.forEach((step) => { step.hidden = step.dataset.step !== name; });
     const [label, percent, count] = progress[name];
     progressLabel.textContent = label;
@@ -30,6 +31,7 @@
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
+  document.body.dataset.quizStep = 'intro';
   document.querySelector('[data-start]').addEventListener('click', () => show('purpose'));
   document.querySelectorAll('[data-next]').forEach((button) => {
     button.addEventListener('click', () => {
