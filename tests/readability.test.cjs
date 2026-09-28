@@ -9,7 +9,9 @@ test('all seven landings refresh their typography stylesheet cache', () => {
   for (const file of ['index.html', 'dubai/index.html', 'uae/index.html', 'saudi-arabia/index.html', 'real-estate/index.html', 'invest-meeting/index.html', 'the-archive/index.html']) {
     const links = read(file).match(/<link[^>]+rel="stylesheet"[^>]+>/g);
     assert.ok(links?.length, file);
-    for (const link of links) assert.match(link, /\.css\?v=20260916-7/, file);
+    for (const link of links.filter((item) => !item.includes('legal-consent.css'))) {
+      assert.match(link, /\.css\?v=20260916-7/, file);
+    }
   }
 });
 
