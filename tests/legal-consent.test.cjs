@@ -15,6 +15,9 @@ const pages = [
   'webinar/greece/index.html',
   'the-archive/index.html',
   'saudi-quiz/index.html',
+  'uae-quiz/index.html',
+  'cyprus-quiz/index.html',
+  'greece-quiz/index.html',
   'real-estate/index.html',
   'uae-webinar/index.html',
   'meeting-dubai/index.html',
@@ -38,5 +41,5 @@ test('every landing form requires consent and links to its language-specific pol
       formsChecked += 1;
     }
   }
-  assert.equal(formsChecked, 23);
+  assert.equal(formsChecked, 26);
 });
