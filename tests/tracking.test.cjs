@@ -117,6 +117,34 @@ for (const quiz of [false, true]) {
   });
 }
 
+test('quiz submissions put both selected answers in the sheet-bound form name', async () => {
+  for (const [secondField, secondValue, label] of [
+    ['preferred_market', 'Abu Dhabi', 'City'],
+    ['purchase_approach', 'Prefer an on-site visit', 'Purchase format']
+  ]) {
+    const form = new Form(true);
+    form.dataset.includeQuizAnswers = 'true';
+    form.fields.purchase_goal = 'Investment / rental income';
+    form.fields[secondField] = secondValue;
+    const h = harness([form]);
+    const submit = form.listeners.find(listener => listener.type === 'submit').callback;
+    await submit({ preventDefault() {}, stopImmediatePropagation() {} });
+    const payload = JSON.parse(h.calls.fetch[0].options.body);
+    assert.match(payload.form_name, /Goal: Investment \/ rental income/);
+    assert.ok(payload.form_name.includes(`${label}: ${secondValue}`));
+    assert.equal(payload.answers.length, 2);
+  }
+});
+
+test('all published English quizzes enable answer capture and the new script version', () => {
+  for (const page of ['uae-quiz/index.html', 'saudi-quiz/index.html',
+    'cyprus-quiz/index.html', 'greece-quiz/index.html']) {
+    const html = fs.readFileSync(path.join(root, page), 'utf8');
+    assert.match(html, /data-include-quiz-answers="true"/, page);
+    assert.match(html, /lead-capture\.js\?v=20260929-quiz-answers/, page);
+  }
+});
+
 test('failed form submission allows retry and invalid contact never sends', async () => {
   const form = new Form();
   const h = harness([form]);

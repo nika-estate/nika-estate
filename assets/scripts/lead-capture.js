@@ -70,6 +70,20 @@
       }));
   }
 
+  function quizFormName(form, baseName, answers) {
+    if (form.dataset.includeQuizAnswers !== 'true') return baseName;
+    const byField = new Map(answers.map(item => [item.field, item.answer]));
+    const clean = value => text(value).replace(/[|\r\n]+/g, ' ').slice(0, 120);
+    const goal = clean(byField.get('purchase_goal'));
+    const market = clean(byField.get('preferred_market'));
+    const approach = clean(byField.get('purchase_approach'));
+    const parts = [baseName];
+    if (goal) parts.push(`Goal: ${goal}`);
+    if (market) parts.push(`City: ${market}`);
+    if (approach) parts.push(`Purchase format: ${approach}`);
+    return parts.join(' | ');
+  }
+
   function getUtm() {
     const params = new URLSearchParams(window.location.search);
     return {
@@ -116,6 +130,7 @@
 
   function buildPayload(form) {
     const fields = formDataObject(form);
+    const answers = answerList(form, fields);
     const fullName = byNames(form, ['name', 'first_name', 'firstname']);
     const nameParts = fullName.split(/\s+/).filter(Boolean);
     const isQuiz = form.matches('[data-quiz-form], .quiz-form')
@@ -141,7 +156,7 @@
       referrer: document.referrer || '',
       channel: utm.utm_source || 'direct',
       form_id: form.id || form.dataset.formId || '',
-      form_name: text(form.getAttribute('aria-label') || form.dataset.formName || form.className),
+      form_name: quizFormName(form, text(form.getAttribute('aria-label') || form.dataset.formName || form.className), answers),
       first_name: nameParts.shift() || '',
       last_name: nameParts.join(' '),
       phone,
@@ -153,7 +168,7 @@
       privacy_consent: form.querySelector('[name="privacy_consent"], [name="consent"]')
         ? byNames(form, ['privacy_consent', 'consent'])
         : 'Да',
-      answers: answerList(form, fields),
+      answers,
       tags: [
         text(form.dataset.landingName || pageConfig.landingName),
         offerName,
