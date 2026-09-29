@@ -141,9 +141,7 @@ test('all published English quizzes enable answer capture and the new script ver
     'cyprus-quiz/index.html', 'greece-quiz/index.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     assert.match(html, /data-include-quiz-answers="true"/, page);
-    assert.match(html, page.startsWith('greece-quiz')
-      ? /lead-capture\.js\?v=20260929-greece-budget/
-      : /lead-capture\.js\?v=20260929-quiz-answers/, page);
+    assert.match(html, /lead-capture\.js\?v=20260930-spam/, page);
   }
 });
 

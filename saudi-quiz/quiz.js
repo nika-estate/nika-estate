@@ -9,12 +9,14 @@
     intro: ['Your guide starts here', 0, 'About 30 seconds'],
     purpose: ['Question 1 of 2', 32, 'Step 1 of 2'],
     purchase: ['Question 2 of 2', 65, 'Step 2 of 2'],
+    human: ['One quick check', 90, 'Human check'],
     contact: ['Almost done', 95, 'Contact details'],
     success: ['Complete', 100, 'Thank you']
   };
 
   function show(name) {
     document.body.dataset.quizStep = name;
+    form.dataset.quizFinished = name === 'contact' || name === 'success' ? 'true' : 'false';
     steps.forEach((step) => { step.hidden = step.dataset.step !== name; });
     const [label, percent, count] = progress[name];
     progressLabel.textContent = label;
@@ -32,10 +34,18 @@
   }
 
   document.body.dataset.quizStep = 'intro';
-  document.querySelector('[data-start]').addEventListener('click', () => show('purpose'));
+  document.querySelector('[data-start]').addEventListener('click', () => {
+    window.NikaLeadCapture?.markQuizStarted(form);
+    show('purpose');
+  });
   document.querySelectorAll('[data-next]').forEach((button) => {
     button.addEventListener('click', () => {
       const fieldset = button.closest('fieldset');
+      if (fieldset.dataset.step === 'human') {
+        const answer = fieldset.querySelector('[name="human_check"]');
+        if (answer.reportValidity()) show(button.dataset.next);
+        return;
+      }
       if (fieldset.querySelector('input[type="radio"]:checked')) show(button.dataset.next);
     });
   });

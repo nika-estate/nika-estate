@@ -107,27 +107,75 @@
   function initBotCheck(form) {
     if (form.dataset.botProtection !== 'true') return;
     const question = form.querySelector('[data-human-question]');
-    if (!question || !form.elements.namedItem('human_check')) return;
+    const answer = form.elements.namedItem('human_check');
+    if (!question || !answer) return;
     const left = 2 + Math.floor(Math.random() * 6);
     const right = 2 + Math.floor(Math.random() * 6);
     question.textContent = `${left} + ${right} = ?`;
     botChecks.set(form, { answer: left + right, startedAt: performance.now() });
+    const wrongAnswer = form.dataset.language === 'tr'
+      ? 'İşlemin sonucunu kontrol edin.'
+      : form.dataset.language === 'en'
+        ? 'Please check the answer to the sum.'
+        : 'Проверьте ответ на пример.';
+    if (typeof answer.addEventListener === 'function' && typeof answer.setCustomValidity === 'function') {
+      answer.addEventListener('input', () => {
+        answer.setCustomValidity(text(answer.value) && text(answer.value) !== String(left + right)
+          ? wrongAnswer : '');
+      });
+    }
   }
 
   function botCheckError(form) {
     if (form.dataset.botProtection !== 'true') return '';
+    const language = form.dataset.language;
+    const messages = language === 'tr'
+      ? {
+          unavailable: 'Kontrol yüklenemedi. Sayfayı yenileyip tekrar deneyin.',
+          failed: 'Başvuru doğrulanamadı. Sayfayı yenileyip tekrar deneyin.',
+          answer: 'İşlemin sonucunu kontrol edin.',
+          questions: 'Lütfen tüm soruları yanıtlayın.',
+          wait: 'Birkaç saniye bekleyip tekrar deneyin.'
+        }
+      : language === 'en'
+        ? {
+            unavailable: 'The check did not load. Refresh the page and try again.',
+            failed: 'We could not verify the request. Refresh and try again.',
+            answer: 'Please check the answer to the sum.',
+            questions: 'Please answer every quiz question.',
+            wait: 'Wait a few seconds and try again.'
+          }
+        : {
+            unavailable: 'Проверка формы не загрузилась. Обновите страницу и попробуйте снова.',
+            failed: 'Не удалось проверить заявку. Обновите страницу и попробуйте снова.',
+            answer: 'Проверьте ответ на вопрос под формой.',
+            questions: 'Ответьте на все вопросы.',
+            wait: 'Подождите несколько секунд и отправьте заявку ещё раз.'
+          };
     const check = botChecks.get(form);
-    if (!check) return 'Проверка формы не загрузилась. Обновите страницу и попробуйте снова.';
+    if (!check) return messages.unavailable;
     const trap = form.elements.namedItem('website');
-    if (trap && text(trap.value)) return 'Не удалось проверить заявку. Обновите страницу и попробуйте снова.';
+    if (trap && text(trap.value)) return messages.failed;
     const answer = form.elements.namedItem('human_check');
     if (!answer || text(answer.value) !== String(check.answer)) {
-      return 'Проверьте ответ на вопрос под формой.';
+      return messages.answer;
     }
-    if (performance.now() - check.startedAt < 3000) {
-      return 'Подождите несколько секунд и отправьте заявку ещё раз.';
+    if (form.matches('[data-quiz-form]')) {
+      const allAnswered = [...form.querySelectorAll('fieldset[data-step]')]
+        .filter((step) => step.dataset.step !== 'human')
+        .every((step) => Boolean(step.querySelector('input[type="radio"]:checked')));
+      if (!allAnswered || form.dataset.quizFinished !== 'true') return messages.questions;
+    }
+    const minimumTime = form.matches('[data-quiz-form]') ? 7000 : 3000;
+    if (performance.now() - check.startedAt < minimumTime) {
+      return messages.wait;
     }
     return '';
+  }
+
+  function markQuizStarted(form) {
+    const check = botChecks.get(form);
+    if (check) check.startedAt = performance.now();
   }
 
   function buildPayload(form) {
@@ -278,7 +326,7 @@
     });
   }
 
-  window.NikaLeadCapture = { init, send, buildPayload };
+  window.NikaLeadCapture = { init, send, buildPayload, markQuizStarted };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => init(document));

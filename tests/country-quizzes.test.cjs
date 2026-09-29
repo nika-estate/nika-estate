@@ -15,7 +15,7 @@ test('three English property quizzes use the shared confirmed-lead flow and real
     const html = read(`${route}/index.html`);
     const guide = read(`${route}/guide.html`);
     assert.match(html, /<html lang="en">/);
-    assert.match(html, /data-property-quiz data-quiz-form data-language="en"/);
+    assert.match(html, /data-property-quiz data-quiz-form data-bot-protection="true" data-language="en"/);
     assert.match(html, /name="purchase_goal"/);
     assert.match(html, /name="phone"[^>]*required/);
     assert.match(html, /name="messenger" value="Telegram" required/);

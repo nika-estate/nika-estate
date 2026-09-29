@@ -12,6 +12,7 @@
     purpose: [hasBudgetStep ? 'Question 1 of 3' : 'Question 1 of 2', 30, hasBudgetStep ? 'Step 1 of 3' : 'Step 1 of 2'],
     purchase: [hasBudgetStep ? 'Question 2 of 3' : 'Question 2 of 2', 60, hasBudgetStep ? 'Step 2 of 3' : 'Step 2 of 2'],
     budget: ['Question 3 of 3', 80, 'Step 3 of 3'],
+    human: ['One quick check', 90, 'Human check'],
     contact: ['Almost done', 95, 'Contact details'],
     success: ['Complete', 100, 'Thank you']
   };
@@ -21,6 +22,7 @@
       purpose: ['3 sorudan 1.si', 30, '1 / 3'],
       purchase: ['3 sorudan 2.si', 60, '2 / 3'],
       budget: ['3 sorudan 3.sü', 80, '3 / 3'],
+      human: ['Kısa bir kontrol', 90, 'Doğrulama'],
       contact: ['Neredeyse tamam', 95, 'İletişim bilgileri'],
       success: ['Tamamlandı', 100, 'Teşekkürler']
     });
@@ -28,6 +30,7 @@
 
   function show(name) {
     document.body.dataset.quizStep = name;
+    form.dataset.quizFinished = name === 'contact' || name === 'success' ? 'true' : 'false';
     steps.forEach((step) => { step.hidden = step.dataset.step !== name; });
     const [label, percent, count] = progress[name];
     progressLabel.textContent = label;
@@ -45,10 +48,18 @@
   }
 
   document.body.dataset.quizStep = 'intro';
-  document.querySelector('[data-start]').addEventListener('click', () => show('purpose'));
+  document.querySelector('[data-start]').addEventListener('click', () => {
+    window.NikaLeadCapture?.markQuizStarted(form);
+    show('purpose');
+  });
   document.querySelectorAll('[data-next]').forEach((button) => {
     button.addEventListener('click', () => {
       const fieldset = button.closest('fieldset');
+      if (fieldset.dataset.step === 'human') {
+        const answer = fieldset.querySelector('[name="human_check"]');
+        if (answer.reportValidity()) show(button.dataset.next);
+        return;
+      }
       if (fieldset.querySelector('input[type="radio"]:checked')) show(button.dataset.next);
     });
   });
