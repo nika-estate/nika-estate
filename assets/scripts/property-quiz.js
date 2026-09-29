@@ -1,6 +1,7 @@
 (() => {
   const form = document.querySelector('[data-property-quiz]');
   const hasBudgetStep = Boolean(form.querySelector('[data-step="budget"]'));
+  const turkish = form.dataset.language === 'tr';
   const steps = [...document.querySelectorAll('[data-step]')];
   const progressLabel = document.getElementById('progress-label');
   const progressNumber = document.getElementById('progress-number');
@@ -14,6 +15,16 @@
     contact: ['Almost done', 95, 'Contact details'],
     success: ['Complete', 100, 'Thank you']
   };
+  if (turkish) {
+    Object.assign(progress, {
+      intro: ['Rehberiniz burada başlıyor', 0, 'Yaklaşık 45 saniye'],
+      purpose: ['3 sorudan 1.si', 30, '1 / 3'],
+      purchase: ['3 sorudan 2.si', 60, '2 / 3'],
+      budget: ['3 sorudan 3.sü', 80, '3 / 3'],
+      contact: ['Neredeyse tamam', 95, 'İletişim bilgileri'],
+      success: ['Tamamlandı', 100, 'Teşekkürler']
+    });
+  }
 
   function show(name) {
     document.body.dataset.quizStep = name;

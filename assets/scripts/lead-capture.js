@@ -236,23 +236,41 @@
         }
         if (form.dataset.nikaSubmitting === 'true') return;
         const status = form.querySelector('[data-form-status], .form-success');
-        const english = form.dataset.language === 'en';
+        const language = form.dataset.language;
+        const messages = language === 'tr'
+          ? {
+              unavailable: 'Başvurunuz gönderilemedi. Lütfen daha sonra tekrar deneyin.',
+              sending: 'Başvurunuz gönderiliyor…',
+              confirmed: 'Başvurunuz alındı. Nika Estate danışmanı seçtiğiniz kanaldan sizinle iletişime geçecek.',
+              failed: 'Başvurunuz doğrulanamadı. Lütfen tekrar deneyin.'
+            }
+          : language === 'en'
+            ? {
+                unavailable: 'We could not send your request. Please try later.',
+                sending: 'Sending your request…',
+                confirmed: 'Request received. A Nika Estate advisor will contact you via your chosen channel.',
+                failed: 'We could not confirm your request. Please try again.'
+              }
+            : {
+                unavailable: 'Не удалось отправить заявку. Попробуйте позже.',
+                sending: 'Отправляем заявку…',
+                confirmed: 'Заявка отправлена. Брокер Nika Estate свяжется с вами выбранным способом.',
+                failed: 'Не удалось подтвердить отправку заявки. Попробуйте ещё раз.'
+              };
         if (!pageConfig.endpoint) {
-          if (status) status.textContent = english ? 'We could not send your request. Please try later.' : 'Не удалось отправить заявку. Попробуйте позже.';
+          if (status) status.textContent = messages.unavailable;
           return;
         }
         form.dataset.nikaSubmitting = 'true';
         const buttons = [...form.querySelectorAll('button[type="submit"], input[type="submit"]')];
         const disabledBefore = buttons.map((button) => button.disabled);
-        if (status) status.textContent = english ? 'Sending your request…' : 'Отправляем заявку…';
+        if (status) status.textContent = messages.sending;
         // Build the payload before disabling controls. No messenger redirect or fallback.
         const request = send(form);
         buttons.forEach((button) => { button.disabled = true; });
         form.setAttribute('aria-busy', 'true');
         const confirmed = await request;
-        if (status) status.textContent = confirmed
-          ? (english ? 'Request received. A Nika Estate advisor will contact you via your chosen channel.' : 'Заявка отправлена. Брокер Nika Estate свяжется с вами выбранным способом.')
-          : (english ? 'We could not confirm your request. Please try again.' : 'Не удалось подтвердить отправку заявки. Попробуйте ещё раз.');
+        if (status) status.textContent = confirmed ? messages.confirmed : messages.failed;
         buttons.forEach((button, index) => { button.disabled = disabledBefore[index]; });
         form.setAttribute('aria-busy', 'false');
         form.dataset.nikaSubmitting = 'false';

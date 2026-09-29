@@ -168,6 +168,31 @@ test('Greek quiz includes a required budget and sends it with the other answers'
   assert.equal(payload.answers.length, 3);
 });
 
+test('Turkish Greek quiz keeps the same lead fields and confirms in Turkish', async () => {
+  const html = fs.readFileSync(path.join(root, 'greece-quiz/tr/index.html'), 'utf8');
+  assert.match(html, /<html lang="tr">/);
+  assert.match(html, /data-language="tr"/);
+  assert.match(html, /name="investment_budget" value="€250,000–€399,999" required/);
+  assert.match(html, /data-guide-popup-form="greece-quiz-tr-form"/);
+  assert.match(html, /İngilizce PDF rehberi aç/);
+  assert.match(html, /\.\.\/\.\.\/en\/privacy\//);
+  assert.match(html, /\.\.\/\.\.\/en\/consent\//);
+  const form = new Form(true);
+  form.dataset.language = 'tr';
+  form.dataset.includeQuizAnswers = 'true';
+  Object.assign(form.fields, {
+    purchase_goal: 'Explore investor residence permit',
+    purchase_approach: 'Open to remote purchase',
+    investment_budget: '€250,000–€399,999'
+  });
+  const h = harness([form]);
+  const submit = form.listeners.find(listener => listener.type === 'submit').callback;
+  await submit({ preventDefault() {}, stopImmediatePropagation() {} });
+  const payload = JSON.parse(h.calls.fetch[0].options.body);
+  assert.match(payload.form_name, /Budget: €250,000–€399,999/);
+  assert.match(form.status.textContent, /^Başvurunuz alındı/);
+});
+
 test('failed form submission allows retry and invalid contact never sends', async () => {
   const form = new Form();
   const h = harness([form]);
