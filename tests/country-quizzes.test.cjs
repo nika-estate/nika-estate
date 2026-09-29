@@ -34,5 +34,7 @@ test('three English property quizzes use the shared confirmed-lead flow and real
   assert.match(read('uae-quiz/index.html'), /Dubai and Abu Dhabi/);
   assert.match(read('cyprus-quiz/guide.html'), /gov\.cy\/moi\/en\/purchasing-property/);
   assert.match(read('greece-quiz/guide.html'), /migration\.gov\.gr\/en\/golden-visa/);
+  assert.match(read('greece-quiz/index.html'), /Explore EU residency through property investment in Greece/);
+  assert.match(read('greece-quiz/index.html'), /data-step="budget"/);
   assert.match(read('assets/styles/country-quiz.css'), /max-height: 600px/);
 });

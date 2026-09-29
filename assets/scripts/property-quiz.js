@@ -1,14 +1,16 @@
 (() => {
   const form = document.querySelector('[data-property-quiz]');
+  const hasBudgetStep = Boolean(form.querySelector('[data-step="budget"]'));
   const steps = [...document.querySelectorAll('[data-step]')];
   const progressLabel = document.getElementById('progress-label');
   const progressNumber = document.getElementById('progress-number');
   const progressBar = document.getElementById('progress-bar');
   const stepCount = document.getElementById('step-count');
   const progress = {
-    intro: ['Your guide starts here', 0, 'About 30 seconds'],
-    purpose: ['Question 1 of 2', 32, 'Step 1 of 2'],
-    purchase: ['Question 2 of 2', 65, 'Step 2 of 2'],
+    intro: ['Your guide starts here', 0, hasBudgetStep ? 'About 45 seconds' : 'About 30 seconds'],
+    purpose: [hasBudgetStep ? 'Question 1 of 3' : 'Question 1 of 2', 30, hasBudgetStep ? 'Step 1 of 3' : 'Step 1 of 2'],
+    purchase: [hasBudgetStep ? 'Question 2 of 3' : 'Question 2 of 2', 60, hasBudgetStep ? 'Step 2 of 3' : 'Step 2 of 2'],
+    budget: ['Question 3 of 3', 80, 'Step 3 of 3'],
     contact: ['Almost done', 95, 'Contact details'],
     success: ['Complete', 100, 'Thank you']
   };

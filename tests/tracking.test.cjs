@@ -141,8 +141,31 @@ test('all published English quizzes enable answer capture and the new script ver
     'cyprus-quiz/index.html', 'greece-quiz/index.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     assert.match(html, /data-include-quiz-answers="true"/, page);
-    assert.match(html, /lead-capture\.js\?v=20260929-quiz-answers/, page);
+    assert.match(html, page.startsWith('greece-quiz')
+      ? /lead-capture\.js\?v=20260929-greece-budget/
+      : /lead-capture\.js\?v=20260929-quiz-answers/, page);
   }
+});
+
+test('Greek quiz includes a required budget and sends it with the other answers', async () => {
+  const html = fs.readFileSync(path.join(root, 'greece-quiz/index.html'), 'utf8');
+  assert.match(html, /data-step="budget"/);
+  assert.match(html, /name="investment_budget" value="€250,000–€399,999" required/);
+  assert.match(html, /data-next="budget" disabled/);
+  assert.match(html, /data-back="budget">Back/);
+  const form = new Form(true);
+  form.dataset.includeQuizAnswers = 'true';
+  Object.assign(form.fields, {
+    purchase_goal: 'Explore investor residence permit',
+    purchase_approach: 'Open to remote purchase',
+    investment_budget: '€250,000–€399,999'
+  });
+  const h = harness([form]);
+  const submit = form.listeners.find(listener => listener.type === 'submit').callback;
+  await submit({ preventDefault() {}, stopImmediatePropagation() {} });
+  const payload = JSON.parse(h.calls.fetch[0].options.body);
+  assert.match(payload.form_name, /Budget: €250,000–€399,999/);
+  assert.equal(payload.answers.length, 3);
 });
 
 test('failed form submission allows retry and invalid contact never sends', async () => {
