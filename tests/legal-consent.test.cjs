@@ -56,3 +56,21 @@ test('both languages describe enquiry, webinar and guide forms rather than the d
     assert.doesNotMatch(html, /распространяется только.*видео-дайджест|applies only.*weekly digest/i, file);
   }
 });
+
+test('legal documents retain the full section structure and disclose the actual lead route', () => {
+  const expectations = [
+    ['privacy/index.html', 19, 20000],
+    ['consent/index.html', 10, 9000],
+    ['en/privacy/index.html', 19, 16000],
+    ['en/consent/index.html', 10, 8000]
+  ];
+  for (const [file, sections, minimumLength] of expectations) {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.equal((html.match(/<h2>/g) || []).length, sections, `${file}: section count`);
+    assert.ok(html.replace(/<[^>]+>/g, '').length >= minimumLength, `${file}: unusually short`);
+    assert.match(html, /Google Apps Script/i, file);
+    assert.match(html, /Google Sheets|Google Sheet/i, file);
+    assert.match(html, /Telegram/i, file);
+    assert.match(html, /amoCRM/i, file);
+  }
+});
