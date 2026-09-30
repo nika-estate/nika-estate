@@ -61,10 +61,34 @@
 .human-answer strong { color: #1d3555; font-size: 22px; }
 .human-answer input { width: 94px; height: 52px; padding: 0 14px; border: 1px solid #d7d9dd; border-radius: 11px; background: #fff; color: #1b1e24; font: 18px Inter, Arial, sans-serif; }
 .human-answer input:focus { outline: 2px solid #ad8752; outline-offset: 1px; }
+.greece-quiz .visual-caption { top: auto; bottom: 30px; gap: 8px; }
+.greece-quiz .visual-caption strong { font-size: clamp(22px, 2.2vw, 32px); line-height: 1.12; }
 @media (max-width: 800px) {
   .header-tools { gap: 8px; }
   .header-tools span { max-width: 95px; line-height: 1.2; }
   .lang-switch { font-size: 11px; padding: 6px 8px; }
   body[data-quiz-step="human"] .visual { display: none; }
   body[data-quiz-step="human"] .panel { min-height: calc(100svh - 60px); }
+}
+
+/* Keep the location visible in the mobile banner instead of cropping to sky. */
+@media (max-width: 800px) {
+  .visual img { object-position: center 55%; }
+  .visual::after { inset: 50% 0 0; background: linear-gradient(transparent, rgba(8, 18, 33, .46)); }
+  .greece-quiz .visual img { object-position: center 54%; filter: brightness(1.12); }
+  .greece-quiz .visual-caption { right: 18px; gap: 3px; }
+  .greece-quiz .visual-caption strong { font-family: Inter, Arial, sans-serif; font-size: 11px; font-weight: 600; line-height: 1.25; max-width: 390px; text-shadow: 0 1px 4px rgba(0, 0, 0, .7); }
+}
+@media (max-width: 800px) and (max-height: 740px) {
+  .visual { height: 112px; min-height: 112px; }
+  .panel { min-height: calc(100svh - 164px); }
+}
+@media (max-width: 340px) and (max-height: 600px) {
+  .visual { height: 94px; min-height: 94px; }
+  .panel { min-height: calc(100svh - 142px); }
+  .greece-quiz .visual-caption strong { font-size: 10px; line-height: 1.2; }
+  .greece-quiz .step[data-step="intro"] h1 { font-size: 23px; line-height: 1.04; }
+  .greece-quiz .step[data-step="intro"] .lead { font-size: 11px; line-height: 1.22; margin: 5px 0; }
+  .greece-quiz .step[data-step="intro"] .guide-card { margin: 5px 0; padding: 6px 8px; }
+  .greece-quiz .step[data-step="intro"] .guide-card small { line-height: 1.15; }
 }

@@ -154,8 +154,8 @@ test('Greek quiz includes a required budget and sends it with the other answers'
   const form = new Form(true);
   form.dataset.includeQuizAnswers = 'true';
   Object.assign(form.fields, {
-    purchase_goal: 'Explore investor residence permit',
-    purchase_approach: 'Open to remote purchase',
+    purchase_goal: 'Needs Golden Visa guidance',
+    purchase_approach: 'Plans to reside in Greece permanently',
     investment_budget: '€250,000–€399,999'
   });
   const h = harness([form]);
@@ -163,6 +163,8 @@ test('Greek quiz includes a required budget and sends it with the other answers'
   await submit({ preventDefault() {}, stopImmediatePropagation() {} });
   const payload = JSON.parse(h.calls.fetch[0].options.body);
   assert.match(payload.form_name, /Budget: €250,000–€399,999/);
+  assert.match(payload.form_name, /Goal: Needs Golden Visa guidance/);
+  assert.match(payload.form_name, /Purchase format: Plans to reside in Greece permanently/);
   assert.equal(payload.answers.length, 3);
 });
 
@@ -181,8 +183,8 @@ test('Turkish Greek quiz keeps the same lead fields and confirms in Turkish', as
   form.dataset.language = 'tr';
   form.dataset.includeQuizAnswers = 'true';
   Object.assign(form.fields, {
-    purchase_goal: 'Explore investor residence permit',
-    purchase_approach: 'Open to remote purchase',
+    purchase_goal: 'Needs Golden Visa guidance',
+    purchase_approach: 'Plans to reside in Greece permanently',
     investment_budget: '€250,000–€399,999'
   });
   const h = harness([form]);

@@ -34,7 +34,25 @@ test('three English property quizzes use the shared confirmed-lead flow and real
   assert.match(read('uae-quiz/index.html'), /Dubai and Abu Dhabi/);
   assert.match(read('cyprus-quiz/guide.html'), /gov\.cy\/moi\/en\/purchasing-property/);
   assert.match(read('greece-quiz/guide.html'), /migration\.gov\.gr\/en\/golden-visa/);
-  assert.match(read('greece-quiz/index.html'), /Explore EU residency through property investment in Greece/);
+  assert.match(read('greece-quiz/index.html'), /EU residency through property investment in Greece/);
   assert.match(read('greece-quiz/index.html'), /data-step="budget"/);
   assert.match(read('assets/styles/country-quiz.css'), /max-height: 600px/);
+});
+
+test('Greek quizzes ask about Golden Visa knowledge and residence plans in both languages', () => {
+  const english = read('greece-quiz/index.html');
+  const turkish = read('greece-quiz/tr/index.html');
+  assert.match(english, /TOP PROPERTIES SELECTION \+ CONSULTATION/);
+  assert.match(turkish, /ÖZENLE SEÇİLMİŞ GAYRİMENKULLER \+ DANIŞMANLIK/);
+  assert.match(english, /Do you already know the Golden Visa program requirements\?/);
+  assert.match(turkish, /Golden Visa programının koşullarını biliyor musunuz\?/);
+  assert.match(english, /Do you plan to reside permanently in Greece\?/);
+  assert.match(turkish, /Yunanistan’da kalıcı olarak yaşamayı planlıyor musunuz\?/);
+  for (const page of [english, turkish]) {
+    assert.match(page, /name="purchase_goal" value="Knows Golden Visa requirements" required/);
+    assert.match(page, /name="purchase_approach" value="Plans to reside in Greece permanently" required/);
+    assert.match(page, /Golden Visa/);
+    assert.doesNotMatch(page, /FREE STARTER GUIDE \+ CONSULTATION|ÜCRETSİZ REHBER \+ DANIŞMANLIK/);
+  }
+  assert.match(read('assets/styles/quiz-offers.css'), /\.greece-quiz \.visual img \{ object-position: center 54%/);
 });
