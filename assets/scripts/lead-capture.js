@@ -11,6 +11,9 @@
   };
   const pendingForms = new WeakMap();
   const botChecks = new WeakMap();
+  const recentQuizLeads = new Map();
+  const duplicateWindowMs = 30 * 60 * 1000;
+  let storageSalt = Math.random().toString(36).slice(2);
 
   function text(value) {
     return value == null ? '' : String(value).trim();
@@ -102,6 +105,43 @@
       return window.crypto.randomUUID();
     }
     return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
+
+  function quizLeadToken(payload) {
+    if (payload.form_type !== 'Квиз' || !payload.dedupe_key) return '';
+    try {
+      const storage = window.localStorage;
+      if (storage) {
+        storageSalt = storage.getItem('nika_lead_salt_v1') || storageSalt;
+        storage.setItem('nika_lead_salt_v1', storageSalt);
+      }
+    } catch (_) { /* In-memory protection still works when storage is unavailable. */ }
+    const value = `${storageSalt}|${payload.dedupe_key.toLowerCase()}`;
+    let first = 2166136261;
+    let second = 2246822519;
+    for (let i = 0; i < value.length; i += 1) {
+      first = Math.imul(first ^ value.charCodeAt(i), 16777619);
+      second = Math.imul(second ^ value.charCodeAt(i), 3266489917);
+    }
+    return `${(first >>> 0).toString(16)}${(second >>> 0).toString(16)}`;
+  }
+
+  function recentQuizSubmission(token) {
+    if (!token) return false;
+    let sentAt = recentQuizLeads.get(token) || 0;
+    try {
+      const stored = Number(window.localStorage?.getItem(`nika_quiz_sent_${token}`));
+      if (Number.isFinite(stored)) sentAt = Math.max(sentAt, stored);
+    } catch (_) { /* Storage can be disabled by the browser. */ }
+    return sentAt > 0 && Date.now() - sentAt < duplicateWindowMs;
+  }
+
+  function rememberQuizSubmission(token) {
+    if (!token) return;
+    const sentAt = Date.now();
+    recentQuizLeads.set(token, sentAt);
+    try { window.localStorage?.setItem(`nika_quiz_sent_${token}`, String(sentAt)); }
+    catch (_) { /* Keep the in-memory guard. */ }
   }
 
   function initBotCheck(form) {
@@ -224,7 +264,7 @@
         offerName,
         isQuiz ? 'Квиз' : 'Мини-форма'
       ].filter(Boolean),
-      dedupe_key: [phone || telegram || byNames(form, ['email']), window.location.pathname, offerName]
+      dedupe_key: [(phone || telegram || byNames(form, ['email'])).replace(/[^\dA-Za-z@.]/g, '').toLowerCase(), window.location.pathname, offerName]
         .filter(Boolean)
         .join('|'),
       ...utm
@@ -236,6 +276,15 @@
     if (pendingForms.has(form)) return pendingForms.get(form);
 
     const payload = buildPayload(form);
+    const token = quizLeadToken(payload);
+    if (recentQuizSubmission(token)) {
+      form.dataset.nikaDuplicate = 'true';
+      document.dispatchEvent(new CustomEvent('nika:lead-duplicate', {
+        detail: { formId: payload.form_id }
+      }));
+      return Promise.resolve(false);
+    }
+    form.dataset.nikaDuplicate = 'false';
     const request = fetch(pageConfig.endpoint, {
       method: 'POST',
       mode: 'cors',
@@ -246,6 +295,8 @@
       if (!response.ok || response.type === 'opaque') return false;
       const result = await response.json();
       if (result.ok !== true || result.lead_id !== payload.lead_id) return false;
+
+      rememberQuizSubmission(token);
 
       document.dispatchEvent(new CustomEvent('nika:lead-sent', {
         detail: {
@@ -290,6 +341,7 @@
               unavailable: 'Başvurunuz gönderilemedi. Lütfen daha sonra tekrar deneyin.',
               sending: 'Başvurunuz gönderiliyor…',
               confirmed: 'Başvurunuz alındı. Nika Estate danışmanı seçtiğiniz kanaldan sizinle iletişime geçecek.',
+              duplicate: 'Başvurunuz zaten alındı. Rehberi tekrar açabilirsiniz.',
               failed: 'Başvurunuz doğrulanamadı. Lütfen tekrar deneyin.'
             }
           : language === 'en'
@@ -297,12 +349,14 @@
                 unavailable: 'We could not send your request. Please try later.',
                 sending: 'Sending your request…',
                 confirmed: 'Request received. A Nika Estate advisor will contact you via your chosen channel.',
+                duplicate: 'We already received your request. You can open the guide again.',
                 failed: 'We could not confirm your request. Please try again.'
               }
             : {
                 unavailable: 'Не удалось отправить заявку. Попробуйте позже.',
                 sending: 'Отправляем заявку…',
                 confirmed: 'Заявка отправлена. Брокер Nika Estate свяжется с вами выбранным способом.',
+                duplicate: 'Мы уже получили вашу заявку. Гайд можно открыть повторно.',
                 failed: 'Не удалось подтвердить отправку заявки. Попробуйте ещё раз.'
               };
         if (!pageConfig.endpoint) {
@@ -318,7 +372,8 @@
         buttons.forEach((button) => { button.disabled = true; });
         form.setAttribute('aria-busy', 'true');
         const confirmed = await request;
-        if (status) status.textContent = confirmed ? messages.confirmed : messages.failed;
+        if (status) status.textContent = confirmed ? messages.confirmed
+          : form.dataset.nikaDuplicate === 'true' ? messages.duplicate : messages.failed;
         buttons.forEach((button, index) => { button.disabled = disabledBefore[index]; });
         form.setAttribute('aria-busy', 'false');
         form.dataset.nikaSubmitting = 'false';

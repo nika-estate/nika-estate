@@ -16,4 +16,8 @@
     if (event.detail?.confirmed !== true || event.detail?.formId !== formId) return;
     if (typeof dialog.showModal === 'function' && !dialog.open) dialog.showModal();
   });
+  document.addEventListener('nika:lead-duplicate', (event) => {
+    if (event.detail?.formId !== formId) return;
+    if (typeof dialog.showModal === 'function' && !dialog.open) dialog.showModal();
+  });
 })();

@@ -9,7 +9,7 @@ const guideIds = {
   'uae-quiz': '1h3xfdqiPjRZ2qm_s6lffNInzGjT0oUa-',
   'saudi-quiz': '1JSx1zBQZDRsTCxqAwjv4VLouF22BOpKK',
   'cyprus-quiz': '1x1Cz9FoF0CQeX3CQhU0lDhdqpoucWtyb',
-  'greece-quiz': '1sOMl9WU_09RGZeR4eQ_ZNCdIQZ_FYi1g'
+  'greece-quiz': '1b3IguBGXnz7bEchn9UgtE4E8ZBtripPA'
 };
 
 test('each quiz offers its matching PDF in the success state and popup', () => {
@@ -49,4 +49,9 @@ test('popup opens only for a confirmed lead from its own form', () => {
   assert.equal(opens, 1);
   listeners['nika:lead-sent']({ detail: { confirmed: true, formId: 'uae-quiz-form' } });
   assert.equal(opens, 1);
+  dialog.open = false;
+  listeners['nika:lead-duplicate']({ detail: { formId: 'greece-quiz-form' } });
+  assert.equal(opens, 1);
+  listeners['nika:lead-duplicate']({ detail: { formId: 'uae-quiz-form' } });
+  assert.equal(opens, 2);
 });

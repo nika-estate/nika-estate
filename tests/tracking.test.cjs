@@ -141,7 +141,7 @@ test('all published English quizzes enable answer capture and the new script ver
     'cyprus-quiz/index.html', 'greece-quiz/index.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     assert.match(html, /data-include-quiz-answers="true"/, page);
-    assert.match(html, /lead-capture\.js\?v=20260930-spam/, page);
+    assert.match(html, /lead-capture\.js\?v=20261001-dedupe/, page);
   }
 });
 
@@ -174,9 +174,8 @@ test('Turkish Greek quiz keeps the same lead fields and confirms in Turkish', as
   assert.match(html, /data-language="tr"/);
   assert.match(html, /name="investment_budget" value="€250,000–€399,999" required/);
   assert.match(html, /data-guide-popup-form="greece-quiz-tr-form"/);
-  assert.match(html, /Türkçe PDF rehberi aç/);
-  assert.match(html, /\.\.\/\.\.\/assets\/guides\/greece-property-guide-tr\.pdf/);
-  assert.ok(fs.statSync(path.join(root, 'assets/guides/greece-property-guide-tr.pdf')).size > 100_000);
+  assert.match(html, /İngilizce yatırım rehberini aç/);
+  assert.match(html, /drive\.google\.com\/file\/d\/1b3IguBGXnz7bEchn9UgtE4E8ZBtripPA\/view/);
   assert.match(html, /\.\.\/\.\.\/en\/privacy\//);
   assert.match(html, /\.\.\/\.\.\/en\/consent\//);
   const form = new Form(true);
@@ -212,7 +211,7 @@ test('failed form submission allows retry and invalid contact never sends', asyn
   assert.equal(h.calls.fetch.length, 1);
 });
 
-function harness(forms = []) {
+function harness(forms = [], storage) {
   const listeners = new Map();
   const calls = { meta: [], metrika: [], fetch: [], events: [] };
   let nextId = 0;
@@ -245,6 +244,7 @@ function harness(forms = []) {
     ym: (...args) => calls.metrika.push(args),
     fbq: (...args) => calls.meta.push(args),
     performance: { now: () => clock },
+    localStorage: storage,
     setInterval: () => 1,
     clearInterval: () => {},
     fetch: (url, options) => { calls.fetch.push({ url, options }); return responder(url, options); }
@@ -353,6 +353,32 @@ test('double click shares one pending request; conversion waits for acknowledgem
   assert.equal(h.calls.meta.length, 2);
   h.document.dispatchEvent(h.calls.events[0]);
   assert.equal(h.calls.meta.length, 2);
+});
+
+test('confirmed quiz lead cannot be submitted again from the page or a reopened ad', async () => {
+  const values = new Map();
+  const storage = {
+    getItem: key => values.get(key) ?? null,
+    setItem: (key, value) => values.set(key, value)
+  };
+  const first = harness([new Form(true)], storage);
+  assert.equal(await first.context.NikaLeadCapture.send(first.context.document.querySelectorAll()[0]), true);
+  assert.equal(await first.context.NikaLeadCapture.send(first.context.document.querySelectorAll()[0]), false);
+  assert.equal(first.calls.fetch.length, 1);
+  assert.equal(first.calls.meta.length, 2);
+  assert.equal(first.calls.events.at(-1).type, 'nika:lead-duplicate');
+
+  const reopenedForm = new Form(true);
+  reopenedForm.fields.phone = '+971 000 000 000';
+  const reopened = harness([reopenedForm], storage);
+  assert.equal(await reopened.context.NikaLeadCapture.send(reopenedForm), false);
+  assert.equal(reopened.calls.fetch.length, 0);
+  assert.equal(reopened.calls.meta.length, 0);
+  assert.equal(reopened.calls.events[0].type, 'nika:lead-duplicate');
+
+  reopenedForm.fields.phone = '+971000000001';
+  assert.equal(await reopened.context.NikaLeadCapture.send(reopenedForm), true);
+  assert.equal(reopened.calls.fetch.length, 1);
 });
 
 test('unconfirmed success events and repeated module initialization cannot duplicate tracking', () => {

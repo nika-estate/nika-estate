@@ -67,4 +67,7 @@
   document.addEventListener('nika:lead-sent', (event) => {
     if (event.detail?.confirmed && event.detail?.formId === form.id) show('success');
   });
+  document.addEventListener('nika:lead-duplicate', (event) => {
+    if (event.detail?.formId === form.id) show('success');
+  });
 })();
