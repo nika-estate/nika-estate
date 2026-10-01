@@ -24,6 +24,7 @@ const pages = [
   'uae/index.html',
   'dubai/index.html',
   'meeting-cyprus/index.html',
+  'meeting-cyprus/en/index.html',
   'invest-meeting/index.html'
 ];
 

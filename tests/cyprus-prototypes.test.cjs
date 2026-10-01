@@ -5,7 +5,7 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const routes = [
-  ['property consultation', 'cyprus/eligibility/index.html', 'Подберём 3–5 новостроек'],
+  ['property consultation', 'cyprus/eligibility/index.html', 'Недвижимость на Кипре'],
   ['new-build selection', 'cyprus/city-match/index.html', 'Получите подборку новостроек']
 ];
 
@@ -20,7 +20,7 @@ test('two Cyprus prototypes keep independent offers and shared lead routing', ()
     assert.match(html, /data-landing-name="cyprus-/);
     assert.match(html, /data-offer-name=/);
     const sections = (html.match(/<section\b/g) || []).length;
-    assert.ok(sections >= 5 && sections <= 6, `${name} should explain the offer in 5–6 blocks`);
+    assert.ok(sections >= 5 && sections <= 7, `${name} should explain the offer in 5–7 blocks`);
   }
 });
 
@@ -37,10 +37,14 @@ test('offers show a concrete product and decision criteria above the form', () =
   const residency = fs.readFileSync(path.join(root, 'cyprus/eligibility/index.html'), 'utf8');
   const selection = fs.readFileSync(path.join(root, 'cyprus/city-match/index.html'), 'utf8');
   const legacyRoute = fs.readFileSync(path.join(root, 'cyprus/investment-memo/index.html'), 'utf8');
-  assert.match(residency, /Подберём 3–5 новостроек/);
+  assert.match(residency, /Подберём несколько вилл и резиденций/);
   assert.match(residency, /€300 000 \+ VAT/);
   assert.match(residency, /Инвестиция/);
-  assert.match(residency, /Marelia Valley/);
+  assert.match(residency, /Amore Homes/);
+  assert.match(residency, /Morea/);
+  assert.match(residency, /YOO Limassol/);
+  assert.match(residency, /€3 млн и выше/);
+  assert.doesNotMatch(residency, /от €220 000|Южн(?:ый|ого) Кипр/);
   assert.match(selection, /Получите подборку новостроек/);
   assert.match(selection, /от €220 000/);
   assert.match(selection, /Cypress Park/);

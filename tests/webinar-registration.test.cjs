@@ -11,12 +11,18 @@ const botLink = 'https://t.me/nika_estate_webinar_bot?start=income_20261001';
 test('all compact webinar pages collect contacts before showing the Telegram link', () => {
   for (const market of markets) {
     const html = fs.readFileSync(path.join(root, 'webinar', market, 'index.html'), 'utf8');
-    assert.match(html, /Как выстроить пассивный доход на недвижимости/, market);
-    assert.match(html, /1 или 2 октября/, market);
-    assert.match(html, /время выберем вместе в Telegram/, market);
+    if (market === 'cyprus') {
+      assert.match(html, /Как выбрать недвижимость на Кипре/);
+      assert.match(html, /Дату и время ближайшего эфира подтвердим/);
+      for (const field of ['budget', 'goal']) assert.match(html, new RegExp(`name="${field}" required`), market);
+    } else {
+      assert.match(html, /Как выстроить пассивный доход на недвижимости/, market);
+      assert.match(html, /1 или 2 октября/, market);
+      assert.match(html, /время выберем вместе в Telegram/, market);
+      assert.match(html, /PDF-гайд за регистрацию/, market);
+      assert.match(html, /PDF-гайд пришлём туда после подготовки/, market);
+    }
     assert.equal((html.match(new RegExp(botLink.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length, 1, market);
-    assert.match(html, /PDF-гайд за регистрацию/, market);
-    assert.match(html, /PDF-гайд пришлём туда после подготовки/, market);
     assert.match(html, /<form id="webinar-registration"/, market);
     for (const field of ['name', 'phone', 'email']) assert.match(html, new RegExp(`name="${field}"[^>]+required`), market);
     assert.match(html, /name="privacy_consent" value="yes" required/, market);

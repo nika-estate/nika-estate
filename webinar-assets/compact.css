@@ -41,3 +41,8 @@ h1,h2,p,ol{margin-top:0}
 .guide-book__title{font-family:Georgia,serif;font-size:17px;font-weight:700;line-height:1.07;text-shadow:0 1px 6px rgba(0,0,0,.3)}
 .guide-book__footer{margin-top:12px;padding-top:6px;border-top:1px solid rgba(230,203,157,.7);font-size:7px;letter-spacing:.05em}
 @media(max-width:600px){.gift--book{grid-template-columns:minmax(0,1fr) 125px;gap:5px;min-height:185px;padding:12px 8px 12px 14px}.gift-copy h2{font-size:17px}.gift-copy p:last-child{font-size:11px}.guide-visual{height:165px}.guide-visual:after{width:112px;bottom:1px}.guide-book{width:112px;height:157px}.guide-book__cover{padding:10px 7px 9px 12px}.guide-book__brand{gap:3px;font-size:5px}.guide-book__brand i{height:7px}.guide-book__title{font-size:13px}.guide-book__footer{margin-top:9px;padding-top:5px;font-size:5.5px}}
+/* Cyprus webinar qualification fields */
+.form-fields select{width:100%;min-height:43px;padding:9px 11px;border:1px solid #c8bdc0;border-radius:5px;background:#fff;color:#251f20;font:inherit;font-size:14px}
+.form-fields select:focus{outline:2px solid #742b3d;outline-offset:1px}
+.form-fields label:last-child{grid-column:auto}
+@media(max-width:600px){.form-fields select{min-height:40px}}

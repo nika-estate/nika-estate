@@ -13,7 +13,8 @@ const pages = ['index.html', 'dubai/index.html', 'uae/index.html',
   'saudi-arabia/index.html', 'the-archive/index.html',
   'uae-webinar/index.html', 'meeting-dubai/index.html',
   'meeting-cyprus/index.html', 'webinar/uae/index.html',
-  'webinar/cyprus/index.html', 'webinar/greece/index.html'];
+  'webinar/cyprus/index.html', 'webinar/greece/index.html',
+  'meeting-cyprus/en/index.html'];
 
 class Form {
   constructor(quiz = false) {
@@ -63,11 +64,14 @@ test('every landing exposes only lead forms, without agency phones or direct con
   }
 });
 
-test('meeting pages have no published schedule and keep editable speaker slots', () => {
-  for (const page of ['meeting-dubai/index.html', 'meeting-cyprus/index.html']) {
+test('meeting pages have no unconfirmed published schedule', () => {
+  for (const page of ['meeting-dubai/index.html', 'meeting-cyprus/index.html', 'meeting-cyprus/en/index.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     assert.doesNotMatch(html, /\b(?:[0-2]?\d:[0-5]\d|январ[ья]|феврал[ья]|март[ае]?|апрел[ья]|ма[йя]|июн[ья]|июл[ья]|август[ае]?|сентябр[ья]|октябр[ья]|ноябр[ья]|декабр[ья])\b/i, page);
-    assert.equal((html.match(/Скоро объявим/g) || []).length, 3, page);
+    if (page.startsWith('meeting-cyprus')) {
+      assert.match(html, /name="budget" required/, page);
+      assert.match(html, /name="goal" required/, page);
+    } else assert.equal((html.match(/Скоро объявим/g) || []).length, 3, page);
     assert.match(html, /id="register"/);
     assert.match(html, /data-endpoint="https:\/\/script\.google\.com\/macros\/s\//);
   }
@@ -77,8 +81,13 @@ test('all four webinar routes use the compact lead form and unified bot handoff'
   for (const page of ['webinar/passive-income/index.html', 'webinar/uae/index.html',
     'webinar/cyprus/index.html', 'webinar/greece/index.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
-    assert.match(html, /PDF-гайд за регистрацию/, page);
-    assert.match(html, /1 или 2 октября/, page);
+    if (page === 'webinar/cyprus/index.html') {
+      assert.match(html, /Материалы вебинара/, page);
+      assert.match(html, /Дату и время ближайшего эфира подтвердим/, page);
+    } else {
+      assert.match(html, /PDF-гайд за регистрацию/, page);
+      assert.match(html, /1 или 2 октября/, page);
+    }
     assert.match(html, /name="email"[^>]+required/, page);
     assert.match(html, /data-registration-success hidden/, page);
     assert.match(html, /t\.me\/nika_estate_webinar_bot\?start=income_20261001/, page);
