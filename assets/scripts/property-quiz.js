@@ -1,6 +1,7 @@
 (() => {
   const form = document.querySelector('[data-property-quiz]');
   const hasBudgetStep = Boolean(form.querySelector('[data-step="budget"]'));
+  const hasWorkVisaStep = Boolean(form.querySelector('[data-step="work-visa"]'));
   const turkish = form.dataset.language === 'tr';
   const steps = [...document.querySelectorAll('[data-step]')];
   const progressLabel = document.getElementById('progress-label');
@@ -8,22 +9,26 @@
   const progressBar = document.getElementById('progress-bar');
   const stepCount = document.getElementById('step-count');
   const progress = {
-    intro: ['Your guide starts here', 0, hasBudgetStep ? 'About 45 seconds' : 'About 30 seconds'],
-    purpose: [hasBudgetStep ? 'Question 1 of 3' : 'Question 1 of 2', 30, hasBudgetStep ? 'Step 1 of 3' : 'Step 1 of 2'],
-    purchase: [hasBudgetStep ? 'Question 2 of 3' : 'Question 2 of 2', 60, hasBudgetStep ? 'Step 2 of 3' : 'Step 2 of 2'],
-    budget: ['Question 3 of 3', 80, 'Step 3 of 3'],
+    intro: ['Your guide starts here', 0, hasWorkVisaStep ? 'About 1 minute' : hasBudgetStep ? 'About 45 seconds' : 'About 30 seconds'],
+    purpose: [hasWorkVisaStep ? 'Question 1 of 4' : hasBudgetStep ? 'Question 1 of 3' : 'Question 1 of 2', hasWorkVisaStep ? 20 : 30, hasWorkVisaStep ? 'Step 1 of 4' : hasBudgetStep ? 'Step 1 of 3' : 'Step 1 of 2'],
+    'work-visa': ['Question 2 of 4', 40, 'Step 2 of 4'],
+    purchase: [hasWorkVisaStep ? 'Question 3 of 4' : hasBudgetStep ? 'Question 2 of 3' : 'Question 2 of 2', 60, hasWorkVisaStep ? 'Step 3 of 4' : hasBudgetStep ? 'Step 2 of 3' : 'Step 2 of 2'],
+    budget: [hasWorkVisaStep ? 'Question 4 of 4' : 'Question 3 of 3', 80, hasWorkVisaStep ? 'Step 4 of 4' : 'Step 3 of 3'],
     human: ['One quick check', 90, 'Human check'],
     contact: ['Almost done', 95, 'Contact details'],
+    ineligible: ['Thank you', 100, 'Quiz complete'],
     success: ['Complete', 100, 'Thank you']
   };
   if (turkish) {
     Object.assign(progress, {
-      intro: ['Rehberiniz burada başlıyor', 0, 'Yaklaşık 45 saniye'],
-      purpose: ['3 sorudan 1.si', 30, '1 / 3'],
-      purchase: ['3 sorudan 2.si', 60, '2 / 3'],
-      budget: ['3 sorudan 3.sü', 80, '3 / 3'],
+      intro: ['Rehberiniz burada başlıyor', 0, 'Yaklaşık 1 dakika'],
+      purpose: ['4 sorudan 1.si', 20, '1 / 4'],
+      'work-visa': ['4 sorudan 2.si', 40, '2 / 4'],
+      purchase: ['4 sorudan 3.sü', 60, '3 / 4'],
+      budget: ['4 sorudan 4.sü', 80, '4 / 4'],
       human: ['Kısa bir kontrol', 90, 'Doğrulama'],
       contact: ['Neredeyse tamam', 95, 'İletişim bilgileri'],
+      ineligible: ['Teşekkürler', 100, 'Test tamamlandı'],
       success: ['Tamamlandı', 100, 'Teşekkürler']
     });
   }
@@ -31,6 +36,7 @@
   function show(name) {
     document.body.dataset.quizStep = name;
     form.dataset.quizFinished = name === 'contact' || name === 'success' ? 'true' : 'false';
+    form.dataset.disqualified = name === 'ineligible' ? 'true' : 'false';
     steps.forEach((step) => { step.hidden = step.dataset.step !== name; });
     const [label, percent, count] = progress[name];
     progressLabel.textContent = label;
@@ -60,7 +66,8 @@
         if (answer.reportValidity()) show(button.dataset.next);
         return;
       }
-      if (fieldset.querySelector('input[type="radio"]:checked')) show(button.dataset.next);
+      const selected = fieldset.querySelector('input[type="radio"]:checked');
+      if (selected) show(selected.dataset.quizDisqualify || button.dataset.next);
     });
   });
   document.querySelectorAll('[data-back]').forEach((button) => {
@@ -72,7 +79,7 @@
       if (group) {
         const next = group.querySelector('[data-next]');
         next.disabled = false;
-        show(next.dataset.next);
+        show(input.dataset.quizDisqualify || next.dataset.next);
       }
       const telegram = document.querySelector('[data-telegram-handle]');
       if (input.name === 'messenger') telegram.hidden = input.value !== 'Telegram';

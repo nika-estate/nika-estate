@@ -78,11 +78,13 @@
     const byField = new Map(answers.map(item => [item.field, item.answer]));
     const clean = value => text(value).replace(/[|\r\n]+/g, ' ').slice(0, 120);
     const goal = clean(byField.get('purchase_goal'));
+    const workVisa = clean(byField.get('work_visa'));
     const market = clean(byField.get('preferred_market'));
     const approach = clean(byField.get('purchase_approach'));
     const budget = clean(byField.get('investment_budget'));
     const parts = [baseName];
     if (goal) parts.push(`Goal: ${goal}`);
+    if (workVisa) parts.push(`Work visa: ${workVisa}`);
     if (market) parts.push(`City: ${market}`);
     if (approach) parts.push(`Purchase format: ${approach}`);
     if (budget) parts.push(`Budget: ${budget}`);
@@ -271,8 +273,14 @@
     };
   }
 
+  function isDisqualified(form) {
+    const field = form.dataset.disqualifyField;
+    return form.dataset.disqualified === 'true'
+      || Boolean(field && formDataObject(form)[field] === form.dataset.disqualifyValue);
+  }
+
   function send(form) {
-    if (!pageConfig.endpoint || !form.checkValidity() || botCheckError(form)) return Promise.resolve(false);
+    if (!pageConfig.endpoint || isDisqualified(form) || !form.checkValidity() || botCheckError(form)) return Promise.resolve(false);
     if (pendingForms.has(form)) return pendingForms.get(form);
 
     const payload = buildPayload(form);
@@ -323,6 +331,7 @@
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
+        if (isDisqualified(form)) return;
         if (!form.checkValidity()) {
           form.reportValidity();
           return;

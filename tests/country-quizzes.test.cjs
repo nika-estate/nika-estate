@@ -9,7 +9,7 @@ const routes = ['uae-quiz', 'cyprus-quiz', 'greece-quiz'];
 
 test('three English property quizzes use the shared confirmed-lead flow and real guides', () => {
   const behavior = read('assets/scripts/property-quiz.js');
-  assert.match(behavior, /show\(next\.dataset\.next\)/);
+  assert.match(behavior, /show\(input\.dataset\.quizDisqualify \|\| next\.dataset\.next\)/);
   assert.match(behavior, /event\.detail\?\.confirmed && event\.detail\?\.formId === form\.id/);
   for (const route of routes) {
     const html = read(`${route}/index.html`);
@@ -46,10 +46,16 @@ test('Greek quizzes ask about Golden Visa knowledge and residence plans in both 
   assert.match(turkish, /ÖZENLE SEÇİLMİŞ GAYRİMENKULLER \+ DANIŞMANLIK/);
   assert.match(english, /Do you already know the Golden Visa program requirements\?/);
   assert.match(turkish, /Golden Visa programının koşullarını biliyor musunuz\?/);
+  assert.match(english, /Are you looking for a work visa in Greece\?/);
+  assert.match(turkish, /Yunanistan’da çalışma vizesi mi arıyorsunuz\?/);
   assert.match(english, /Do you plan to reside permanently in Greece\?/);
   assert.match(turkish, /Yunanistan’da kalıcı olarak yaşamayı planlıyor musunuz\?/);
   for (const page of [english, turkish]) {
     assert.match(page, /name="purchase_goal" value="Knows Golden Visa requirements" required/);
+    assert.match(page, /data-step="work-visa"/);
+    assert.match(page, /name="work_visa" value="yes" data-quiz-disqualify="ineligible" required/);
+    assert.match(page, /data-step="ineligible" hidden/);
+    assert.match(page, /data-disqualify-field="work_visa" data-disqualify-value="yes"/);
     assert.match(page, /name="purchase_approach" value="Plans to reside in Greece permanently" required/);
     assert.match(page, /Golden Visa/);
     assert.doesNotMatch(page, /FREE STARTER GUIDE \+ CONSULTATION|ÜCRETSİZ REHBER \+ DANIŞMANLIK/);

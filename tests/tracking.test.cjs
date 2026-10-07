@@ -150,7 +150,9 @@ test('all published English quizzes enable answer capture and the new script ver
     'cyprus-quiz/index.html', 'greece-quiz/index.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     assert.match(html, /data-include-quiz-answers="true"/, page);
-    assert.match(html, /lead-capture\.js\?v=20261001-dedupe/, page);
+    assert.match(html, page === 'greece-quiz/index.html'
+      ? /lead-capture\.js\?v=20261007-work-visa/
+      : /lead-capture\.js\?v=20261001-dedupe/, page);
   }
 });
 
@@ -162,8 +164,11 @@ test('Greek quiz includes a required budget and sends it with the other answers'
   assert.match(html, /data-back="budget">Back/);
   const form = new Form(true);
   form.dataset.includeQuizAnswers = 'true';
+  form.dataset.disqualifyField = 'work_visa';
+  form.dataset.disqualifyValue = 'yes';
   Object.assign(form.fields, {
     purchase_goal: 'Needs Golden Visa guidance',
+    work_visa: 'no',
     purchase_approach: 'Plans to reside in Greece permanently',
     investment_budget: '€250,000–€399,999'
   });
@@ -173,8 +178,24 @@ test('Greek quiz includes a required budget and sends it with the other answers'
   const payload = JSON.parse(h.calls.fetch[0].options.body);
   assert.match(payload.form_name, /Budget: €250,000–€399,999/);
   assert.match(payload.form_name, /Goal: Needs Golden Visa guidance/);
+  assert.match(payload.form_name, /Work visa: no/);
   assert.match(payload.form_name, /Purchase format: Plans to reside in Greece permanently/);
-  assert.equal(payload.answers.length, 3);
+  assert.equal(payload.answers.length, 4);
+});
+
+test('Greek work-visa applicants cannot submit a lead or trigger a conversion', async () => {
+  const form = new Form(true);
+  form.dataset.disqualifyField = 'work_visa';
+  form.dataset.disqualifyValue = 'yes';
+  form.fields.work_visa = 'yes';
+  const h = harness([form]);
+  const submit = form.listeners.find(listener => listener.type === 'submit').callback;
+  await submit({ preventDefault() {}, stopImmediatePropagation() {} });
+  assert.equal(await h.context.NikaLeadCapture.send(form), false);
+  assert.equal(h.calls.fetch.length, 0);
+  assert.equal(h.calls.meta.length, 0);
+  assert.equal(h.calls.metrika.filter(args => args[1] === 'reachGoal').length, 0);
+  assert.equal(h.calls.events.length, 0);
 });
 
 test('Turkish Greek quiz keeps the same lead fields and confirms in Turkish', async () => {
@@ -190,8 +211,11 @@ test('Turkish Greek quiz keeps the same lead fields and confirms in Turkish', as
   const form = new Form(true);
   form.dataset.language = 'tr';
   form.dataset.includeQuizAnswers = 'true';
+  form.dataset.disqualifyField = 'work_visa';
+  form.dataset.disqualifyValue = 'yes';
   Object.assign(form.fields, {
     purchase_goal: 'Needs Golden Visa guidance',
+    work_visa: 'no',
     purchase_approach: 'Plans to reside in Greece permanently',
     investment_budget: '€250,000–€399,999'
   });
@@ -200,6 +224,7 @@ test('Turkish Greek quiz keeps the same lead fields and confirms in Turkish', as
   await submit({ preventDefault() {}, stopImmediatePropagation() {} });
   const payload = JSON.parse(h.calls.fetch[0].options.body);
   assert.match(payload.form_name, /Budget: €250,000–€399,999/);
+  assert.match(payload.form_name, /Work visa: no/);
   assert.match(form.status.textContent, /^Başvurunuz alındı/);
 });
 
