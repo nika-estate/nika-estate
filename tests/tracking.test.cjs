@@ -152,8 +152,30 @@ test('all published English quizzes enable answer capture and the new script ver
     assert.match(html, /data-include-quiz-answers="true"/, page);
     assert.match(html, page === 'greece-quiz/index.html'
       ? /lead-capture\.js\?v=20261007-work-visa/
-      : /lead-capture\.js\?v=20261001-dedupe/, page);
+      : page === 'cyprus-quiz/index.html'
+        ? /lead-capture\.js\?v=20261009-cyprus-fields/
+        : /lead-capture\.js\?v=20261001-dedupe/, page);
   }
+});
+
+test('Cyprus quiz sends budget and property type with the existing lead fields', async () => {
+  const form = new Form(true);
+  form.dataset.includeQuizAnswers = 'true';
+  Object.assign(form.fields, {
+    purchase_goal: 'Investment / rental income',
+    investment_budget: '€600,000–€1,000,000',
+    property_type: 'Villa',
+    purchase_approach: 'Prefer an on-site visit'
+  });
+  const h = harness([form]);
+  const submit = form.listeners.find(listener => listener.type === 'submit').callback;
+  await submit({ preventDefault() {}, stopImmediatePropagation() {} });
+  const payload = JSON.parse(h.calls.fetch[0].options.body);
+  assert.match(payload.form_name, /Budget: €600,000–€1,000,000/);
+  assert.match(payload.form_name, /Property type: Villa/);
+  assert.equal(payload.answers.find(answer => answer.field === 'investment_budget').answer, '€600,000–€1,000,000');
+  assert.equal(payload.answers.find(answer => answer.field === 'property_type').answer, 'Villa');
+  assert.equal(payload.answers.length, 4);
 });
 
 test('Greek quiz includes a required budget and sends it with the other answers', async () => {

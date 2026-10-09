@@ -82,12 +82,14 @@
     const market = clean(byField.get('preferred_market'));
     const approach = clean(byField.get('purchase_approach'));
     const budget = clean(byField.get('investment_budget'));
+    const propertyType = clean(byField.get('property_type'));
     const parts = [baseName];
     if (goal) parts.push(`Goal: ${goal}`);
     if (workVisa) parts.push(`Work visa: ${workVisa}`);
     if (market) parts.push(`City: ${market}`);
     if (approach) parts.push(`Purchase format: ${approach}`);
     if (budget) parts.push(`Budget: ${budget}`);
+    if (propertyType) parts.push(`Property type: ${propertyType}`);
     return parts.join(' | ');
   }
 

@@ -62,3 +62,17 @@ test('Greek quizzes ask about Golden Visa knowledge and residence plans in both 
   }
   assert.match(read('assets/styles/quiz-offers.css'), /\.greece-quiz \.visual img \{ object-position: center 54%/);
 });
+
+test('Cyprus quiz requires a budget and a property type before contact', () => {
+  const html = read('cyprus-quiz/index.html');
+  assert.match(html, /data-step="purpose"[\s\S]*?data-next="budget"/);
+  assert.match(html, /data-step="budget"[\s\S]*?name="investment_budget" value="€350,000–€600,000" required/);
+  assert.match(html, /name="investment_budget" value="€600,000–€1,000,000"/);
+  assert.match(html, /name="investment_budget" value="€1,000,000\+"/);
+  assert.match(html, /data-step="budget"[\s\S]*?data-next="property-type"/);
+  assert.match(html, /data-step="property-type"[\s\S]*?name="property_type" value="Apartment" required/);
+  assert.match(html, /name="property_type" value="Villa"/);
+  assert.match(html, /name="property_type" value="Not sure yet"/);
+  assert.match(html, /data-step="property-type"[\s\S]*?data-next="purchase"/);
+  assert.match(read('assets/scripts/property-quiz.js'), /'property-type': \['Question 3 of 4', 60, 'Step 3 of 4'\]/);
+});

@@ -2,6 +2,7 @@
   const form = document.querySelector('[data-property-quiz]');
   const hasBudgetStep = Boolean(form.querySelector('[data-step="budget"]'));
   const hasWorkVisaStep = Boolean(form.querySelector('[data-step="work-visa"]'));
+  const hasPropertyTypeStep = Boolean(form.querySelector('[data-step="property-type"]'));
   const turkish = form.dataset.language === 'tr';
   const steps = [...document.querySelectorAll('[data-step]')];
   const progressLabel = document.getElementById('progress-label');
@@ -19,6 +20,15 @@
     ineligible: ['Thank you', 100, 'Quiz complete'],
     success: ['Complete', 100, 'Thank you']
   };
+  if (hasPropertyTypeStep) {
+    Object.assign(progress, {
+      intro: ['Your guide starts here', 0, 'About 1 minute'],
+      purpose: ['Question 1 of 4', 20, 'Step 1 of 4'],
+      budget: ['Question 2 of 4', 40, 'Step 2 of 4'],
+      'property-type': ['Question 3 of 4', 60, 'Step 3 of 4'],
+      purchase: ['Question 4 of 4', 80, 'Step 4 of 4']
+    });
+  }
   if (turkish) {
     Object.assign(progress, {
       intro: ['Rehberiniz burada başlıyor', 0, 'Yaklaşık 1 dakika'],
