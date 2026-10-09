@@ -73,6 +73,8 @@ test('Cyprus quiz requires a budget and a property type before contact', () => {
   assert.match(html, /data-step="property-type"[\s\S]*?name="property_type" value="Apartment" required/);
   assert.match(html, /name="property_type" value="Villa"/);
   assert.match(html, /name="property_type" value="Not sure yet"/);
-  assert.match(html, /data-step="property-type"[\s\S]*?data-next="purchase"/);
-  assert.match(read('assets/scripts/property-quiz.js'), /'property-type': \['Question 3 of 4', 60, 'Step 3 of 4'\]/);
+  assert.match(html, /data-step="property-type"[\s\S]*?data-next="human"/);
+  assert.match(html, /data-step="human"[\s\S]*?data-back="property-type"/);
+  assert.doesNotMatch(html, /data-step="purchase"|name="purchase_approach"/);
+  assert.match(read('assets/scripts/property-quiz.js'), /'property-type': \['Question 3 of 3', 80, 'Step 3 of 3'\]/);
 });

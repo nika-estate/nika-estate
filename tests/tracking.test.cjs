@@ -164,8 +164,7 @@ test('Cyprus quiz sends budget and property type with the existing lead fields',
   Object.assign(form.fields, {
     purchase_goal: 'Investment / rental income',
     investment_budget: '€600,000–€1,000,000',
-    property_type: 'Villa',
-    purchase_approach: 'Prefer an on-site visit'
+    property_type: 'Villa'
   });
   const h = harness([form]);
   const submit = form.listeners.find(listener => listener.type === 'submit').callback;
@@ -175,7 +174,7 @@ test('Cyprus quiz sends budget and property type with the existing lead fields',
   assert.match(payload.form_name, /Property type: Villa/);
   assert.equal(payload.answers.find(answer => answer.field === 'investment_budget').answer, '€600,000–€1,000,000');
   assert.equal(payload.answers.find(answer => answer.field === 'property_type').answer, 'Villa');
-  assert.equal(payload.answers.length, 4);
+  assert.equal(payload.answers.length, 3);
 });
 
 test('Greek quiz includes a required budget and sends it with the other answers', async () => {
