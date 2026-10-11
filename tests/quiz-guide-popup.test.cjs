@@ -8,15 +8,16 @@ const root = path.resolve(__dirname, '..');
 const guideIds = {
   'uae-quiz': '1h3xfdqiPjRZ2qm_s6lffNInzGjT0oUa-',
   'saudi-quiz': '1JSx1zBQZDRsTCxqAwjv4VLouF22BOpKK',
-  'cyprus-quiz': '1x1Cz9FoF0CQeX3CQhU0lDhdqpoucWtyb',
+  'cyprus-quiz': '1-_CEQ4JRju1DlW-3A8POlf2eepH2Iin2',
   'greece-quiz': '1b3IguBGXnz7bEchn9UgtE4E8ZBtripPA'
 };
 
 test('each quiz offers its matching PDF in the success state and popup', () => {
   for (const [route, id] of Object.entries(guideIds)) {
     const html = fs.readFileSync(path.join(root, route, 'index.html'), 'utf8');
-    const url = `https://drive.google.com/file/d/${id}/view?usp=drivesdk`;
+    const url = `https://drive.google.com/file/d/${id}/view?usp=${route === 'cyprus-quiz' ? 'sharing' : 'drivesdk'}`;
     assert.equal(html.split(`href="${url}"`).length - 1, 2, route);
+    if (route === 'cyprus-quiz') assert.doesNotMatch(html, /1x1Cz9FoF0CQeX3CQhU0lDhdqpoucWtyb/);
     assert.match(html, new RegExp(`data-guide-popup-form="${route}-form"`));
     assert.match(html, /<dialog[^>]*aria-labelledby="guide-popup-title"/);
     assert.match(html, /assets\/styles\/quiz-guide-popup\.css/);
