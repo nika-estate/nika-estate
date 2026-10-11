@@ -177,6 +177,26 @@ test('Cyprus quiz sends budget and property type with the existing lead fields',
   assert.equal(payload.answers.length, 3);
 });
 
+test('Turkey quiz includes all selected goals, location, total price and timing in the sheet-bound lead', async () => {
+  const form = new Form(true);
+  form.dataset.includeQuizAnswers = 'true';
+  Object.assign(form.fields, {
+    purchase_goal: ['Living in Turkey', 'Rental income'],
+    preferred_market: 'Istanbul',
+    investment_budget: '$500,000–$750,000',
+    purchase_timing: 'Within 3 months'
+  });
+  const h = harness([form]);
+  await h.context.NikaLeadCapture.send(form);
+  const payload = JSON.parse(h.calls.fetch[0].options.body);
+  assert.match(payload.form_name, /Goal: Living in Turkey,Rental income/);
+  assert.match(payload.form_name, /City: Istanbul/);
+  assert.match(payload.form_name, /Budget: \$500,000–\$750,000/);
+  assert.match(payload.form_name, /Timing: Within 3 months/);
+  assert.deepEqual(Array.from(payload.answers.find(answer => answer.field === 'purchase_goal').answer), ['Living in Turkey', 'Rental income']);
+  assert.equal(payload.answers.length, 4);
+});
+
 test('Greek quiz includes a required budget and sends it with the other answers', async () => {
   const html = fs.readFileSync(path.join(root, 'greece-quiz/index.html'), 'utf8');
   assert.match(html, /data-step="budget"/);

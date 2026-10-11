@@ -50,6 +50,10 @@
   function labelFor(form, name) {
     const control = controlByName(form, name);
     if (!control) return name;
+    const question = typeof control.closest === 'function'
+      ? control.closest('fieldset[data-step]')?.querySelector('legend')
+      : null;
+    if (question) return text(question.textContent) || name;
     const label = control.labels && control.labels[0]
       ? control.labels[0]
       : control.closest('label');
@@ -83,6 +87,7 @@
     const approach = clean(byField.get('purchase_approach'));
     const budget = clean(byField.get('investment_budget'));
     const propertyType = clean(byField.get('property_type'));
+    const timing = clean(byField.get('purchase_timing'));
     const parts = [baseName];
     if (goal) parts.push(`Goal: ${goal}`);
     if (workVisa) parts.push(`Work visa: ${workVisa}`);
@@ -90,6 +95,7 @@
     if (approach) parts.push(`Purchase format: ${approach}`);
     if (budget) parts.push(`Budget: ${budget}`);
     if (propertyType) parts.push(`Property type: ${propertyType}`);
+    if (timing) parts.push(`Timing: ${timing}`);
     return parts.join(' | ');
   }
 
@@ -207,7 +213,7 @@
     if (form.matches('[data-quiz-form]')) {
       const allAnswered = [...form.querySelectorAll('fieldset[data-step]')]
         .filter((step) => step.dataset.step !== 'human')
-        .every((step) => Boolean(step.querySelector('input[type="radio"]:checked')));
+        .every((step) => Boolean(step.querySelector('input[type="radio"]:checked, input[type="checkbox"]:checked')));
       if (!allAnswered || form.dataset.quizFinished !== 'true') return messages.questions;
     }
     const minimumTime = form.matches('[data-quiz-form]') ? 7000 : 3000;
