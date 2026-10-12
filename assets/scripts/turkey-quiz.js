@@ -3,11 +3,11 @@
   if (!form) return;
   const russian = form.dataset.language === 'ru';
   const steps = [...document.querySelectorAll('[data-step]')];
-  const names = ['purpose', 'location', 'budget', 'timing'];
+  const names = ['purpose', 'budget', 'timing'];
   const captions = russian
-    ? { intro: 'Подбор начинается здесь', human: 'Небольшая проверка', contact: 'Почти готово', success: 'Готово' }
-    : { intro: 'Your selection starts here', human: 'One quick check', contact: 'Almost done', success: 'Complete' };
-  const progress = { intro: 0, purpose: 20, location: 40, budget: 60, timing: 80, human: 90, contact: 95, success: 100 };
+    ? { intro: 'Консультация начинается здесь', human: 'Небольшая проверка', contact: 'Почти готово', success: 'Готово' }
+    : { intro: 'Your consultation starts here', human: 'One quick check', contact: 'Almost done', success: 'Complete' };
+  const progress = { intro: 0, purpose: 25, budget: 50, timing: 75, human: 90, contact: 95, success: 100 };
   const label = document.getElementById('progress-label');
   const number = document.getElementById('progress-number');
   const bar = document.getElementById('progress-bar');
@@ -18,10 +18,10 @@
     form.dataset.quizFinished = name === 'contact' || name === 'success' ? 'true' : 'false';
     steps.forEach(step => { step.hidden = step.dataset.step !== name; });
     const index = names.indexOf(name);
-    label.textContent = index < 0 ? captions[name] : russian ? `Вопрос ${index + 1} из 4` : `Question ${index + 1} of 4`;
+    label.textContent = index < 0 ? captions[name] : russian ? `Вопрос ${index + 1} из 3` : `Question ${index + 1} of 3`;
     number.textContent = `${progress[name]}%`;
     bar.style.width = `${progress[name]}%`;
-    count.textContent = index < 0 ? (russian ? 'Около 1 минуты' : 'About 1 minute') : `${index + 1} / 4`;
+    count.textContent = index < 0 ? (russian ? 'Около 1 минуты' : 'About 1 minute') : `${index + 1} / 3`;
     if (name !== 'intro') {
       const heading = document.querySelector(`[data-step="${name}"] legend, [data-step="${name}"] h2`);
       if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
