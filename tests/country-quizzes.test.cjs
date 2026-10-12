@@ -55,7 +55,7 @@ test('Greek quizzes ask about Golden Visa knowledge and residence plans in all t
   assert.match(russian, /Вам нужна рабочая виза в Грецию\?/);
   assert.match(russian, /Планируете постоянно жить в Греции\?/);
   assert.match(russian, /data-language="ru"/);
-  assert.match(russian, /greece-property-guide-ru\.pdf/g);
+  assert.match(russian, /1KQ1HwWJLdznJ6Xx214b7zTccZ8yaV96Q/g);
   assert.match(russian, /href="\.\.\/\.\.\/privacy\/"/);
   assert.match(russian, /href="\.\.\/\.\.\/consent\/"/);
   for (const page of [english, turkish, russian]) {
@@ -73,7 +73,7 @@ test('Greek quizzes ask about Golden Visa knowledge and residence plans in all t
   assert.match(turkish, /5 yıllık, yenilenebilir Yunanistan oturma izni/);
   assert.match(russian, /ВНЖ Греции на 5 лет с возможностью продления/);
   assert.doesNotMatch(english + turkish + russian, /Not every property qualifies|Her gayrimenkul uygun değildir|не каждый объект подходит/);
-  assert.match(turkish, /greece-property-guide-tr\.pdf/g);
+  assert.match(turkish, /1QD0qNyPtnAPBdlz7c5M8aZ9Y6Qju9e3o/g);
   assert.match(read('assets/styles/quiz-offers.css'), /\.greece-quiz \.visual img \{ object-position: center 54%/);
 });
 

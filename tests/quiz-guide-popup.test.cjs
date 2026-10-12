@@ -9,19 +9,36 @@ const guideIds = {
   'uae-quiz': '1h3xfdqiPjRZ2qm_s6lffNInzGjT0oUa-',
   'saudi-quiz': '1JSx1zBQZDRsTCxqAwjv4VLouF22BOpKK',
   'cyprus-quiz': '1-_CEQ4JRju1DlW-3A8POlf2eepH2Iin2',
-  'greece-quiz': '1b3IguBGXnz7bEchn9UgtE4E8ZBtripPA'
+  'greece-quiz': '1sOMl9WU_09RGZeR4eQ_ZNCdIQZ_FYi1g'
 };
 
 test('each quiz offers its matching PDF in the success state and popup', () => {
   for (const [route, id] of Object.entries(guideIds)) {
     const html = fs.readFileSync(path.join(root, route, 'index.html'), 'utf8');
-    const url = `https://drive.google.com/file/d/${id}/view?usp=${route === 'cyprus-quiz' ? 'sharing' : 'drivesdk'}`;
+    const url = `https://drive.google.com/file/d/${id}/view${route === 'greece-quiz' ? '' : `?usp=${route === 'cyprus-quiz' ? 'sharing' : 'drivesdk'}`}`;
     assert.equal(html.split(`href="${url}"`).length - 1, 2, route);
     if (route === 'cyprus-quiz') assert.doesNotMatch(html, /1x1Cz9FoF0CQeX3CQhU0lDhdqpoucWtyb/);
     assert.match(html, new RegExp(`data-guide-popup-form="${route}-form"`));
     assert.match(html, /<dialog[^>]*aria-labelledby="guide-popup-title"/);
     assert.match(html, /assets\/styles\/quiz-guide-popup\.css/);
     assert.match(html, /assets\/scripts\/quiz-guide-popup\.js/);
+  }
+});
+
+test('Greek guides match each quiz language in both the success state and popup', () => {
+  for (const [pagePath, id] of [
+    ['greece-quiz/index.html', '1sOMl9WU_09RGZeR4eQ_ZNCdIQZ_FYi1g'],
+    ['greece-quiz/tr/index.html', '1QD0qNyPtnAPBdlz7c5M8aZ9Y6Qju9e3o'],
+    ['greece-quiz/ru/index.html', '1KQ1HwWJLdznJ6Xx214b7zTccZ8yaV96Q']
+  ]) {
+    const html = fs.readFileSync(path.join(root, pagePath), 'utf8');
+    const url = `https://drive.google.com/file/d/${id}/view`;
+    assert.equal(html.split(`href="${url}"`).length - 1, 2, pagePath);
+    assert.match(html, /assets\/scripts\/analytics\.js/);
+    assert.match(html, /assets\/scripts\/lead-capture\.js/);
+    assert.match(html, /data-include-quiz-answers="true"/);
+    assert.match(html, /data-endpoint="https:\/\/script\.google\.com\/macros\/s\/AKfycbwioz7fVEzsnDXOz5EOG5f7Db1detqxZYDZF1T8OqyU2DAeUW-_P5envHK6vwCtcNKAbg\/exec"/);
+    assert.match(html, /fbq\('init','1758103622093263'\)/);
   }
 });
 
