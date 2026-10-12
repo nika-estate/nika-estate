@@ -50,11 +50,14 @@
     });
   });
   form.querySelectorAll('fieldset[data-step] input[type="radio"]').forEach(input => {
-    input.addEventListener('change', () => {
+    const advance = () => {
       const step = input.closest('fieldset[data-step]');
+      if (document.body.dataset.quizStep !== step.dataset.step || !input.checked) return;
       step.querySelector('[data-next]').disabled = false;
       show(step.querySelector('[data-next]').dataset.next);
-    });
+    };
+    input.addEventListener('click', advance);
+    input.addEventListener('change', advance);
   });
   form.querySelectorAll('[name="messenger"]').forEach(input => {
     input.addEventListener('change', () => {
