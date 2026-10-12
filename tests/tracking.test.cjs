@@ -245,8 +245,8 @@ test('Turkish Greek quiz keeps the same lead fields and confirms in Turkish', as
   assert.match(html, /data-language="tr"/);
   assert.match(html, /name="investment_budget" value="€250,000–€399,999" required/);
   assert.match(html, /data-guide-popup-form="greece-quiz-tr-form"/);
-  assert.match(html, /İngilizce yatırım rehberini aç/);
-  assert.match(html, /drive\.google\.com\/file\/d\/1b3IguBGXnz7bEchn9UgtE4E8ZBtripPA\/view/);
+  assert.match(html, /Türkçe yatırım rehberini aç/);
+  assert.match(html, /\.\.\/\.\.\/assets\/guides\/greece-property-guide-tr\.pdf/);
   assert.match(html, /\.\.\/\.\.\/en\/privacy\//);
   assert.match(html, /\.\.\/\.\.\/en\/consent\//);
   const form = new Form(true);

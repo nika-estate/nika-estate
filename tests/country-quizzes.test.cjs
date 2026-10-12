@@ -39,9 +39,10 @@ test('three English property quizzes use the shared confirmed-lead flow and real
   assert.match(read('assets/styles/country-quiz.css'), /max-height: 600px/);
 });
 
-test('Greek quizzes ask about Golden Visa knowledge and residence plans in both languages', () => {
+test('Greek quizzes ask about Golden Visa knowledge and residence plans in all three languages', () => {
   const english = read('greece-quiz/index.html');
   const turkish = read('greece-quiz/tr/index.html');
+  const russian = read('greece-quiz/ru/index.html');
   assert.match(english, /TOP PROPERTIES SELECTION \+ CONSULTATION/);
   assert.match(turkish, /ÖZENLE SEÇİLMİŞ GAYRİMENKULLER \+ DANIŞMANLIK/);
   assert.match(english, /Do you already know the Golden Visa program requirements\?/);
@@ -50,7 +51,14 @@ test('Greek quizzes ask about Golden Visa knowledge and residence plans in both 
   assert.match(turkish, /Yunanistan’da çalışma vizesi mi arıyorsunuz\?/);
   assert.match(english, /Do you plan to reside permanently in Greece\?/);
   assert.match(turkish, /Yunanistan’da kalıcı olarak yaşamayı planlıyor musunuz\?/);
-  for (const page of [english, turkish]) {
+  assert.match(russian, /Знакомы ли вы с требованиями программы Golden Visa\?/);
+  assert.match(russian, /Вам нужна рабочая виза в Грецию\?/);
+  assert.match(russian, /Планируете постоянно жить в Греции\?/);
+  assert.match(russian, /data-language="ru"/);
+  assert.match(russian, /greece-property-guide-ru\.pdf/g);
+  assert.match(russian, /href="\.\.\/\.\.\/privacy\/"/);
+  assert.match(russian, /href="\.\.\/\.\.\/consent\/"/);
+  for (const page of [english, turkish, russian]) {
     assert.match(page, /name="purchase_goal" value="Knows Golden Visa requirements" required/);
     assert.match(page, /data-step="work-visa"/);
     assert.match(page, /name="work_visa" value="yes" data-quiz-disqualify="ineligible" required/);
@@ -60,6 +68,7 @@ test('Greek quizzes ask about Golden Visa knowledge and residence plans in both 
     assert.match(page, /Golden Visa/);
     assert.doesNotMatch(page, /FREE STARTER GUIDE \+ CONSULTATION|ÜCRETSİZ REHBER \+ DANIŞMANLIK/);
   }
+  assert.match(turkish, /greece-property-guide-tr\.pdf/g);
   assert.match(read('assets/styles/quiz-offers.css'), /\.greece-quiz \.visual img \{ object-position: center 54%/);
 });
 

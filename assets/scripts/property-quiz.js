@@ -4,6 +4,7 @@
   const hasWorkVisaStep = Boolean(form.querySelector('[data-step="work-visa"]'));
   const hasPropertyTypeStep = Boolean(form.querySelector('[data-step="property-type"]'));
   const turkish = form.dataset.language === 'tr';
+  const russian = form.dataset.language === 'ru';
   const steps = [...document.querySelectorAll('[data-step]')];
   const progressLabel = document.getElementById('progress-label');
   const progressNumber = document.getElementById('progress-number');
@@ -39,6 +40,19 @@
       contact: ['Neredeyse tamam', 95, 'İletişim bilgileri'],
       ineligible: ['Teşekkürler', 100, 'Test tamamlandı'],
       success: ['Tamamlandı', 100, 'Teşekkürler']
+    });
+  }
+  if (russian) {
+    Object.assign(progress, {
+      intro: ['Ваша подборка начинается здесь', 0, 'Около 1 минуты'],
+      purpose: ['Вопрос 1 из 4', 20, 'Шаг 1 из 4'],
+      'work-visa': ['Вопрос 2 из 4', 40, 'Шаг 2 из 4'],
+      purchase: ['Вопрос 3 из 4', 60, 'Шаг 3 из 4'],
+      budget: ['Вопрос 4 из 4', 80, 'Шаг 4 из 4'],
+      human: ['Небольшая проверка', 90, 'Проверка'],
+      contact: ['Почти готово', 95, 'Контакты'],
+      ineligible: ['Спасибо', 100, 'Квиз завершён'],
+      success: ['Готово', 100, 'Спасибо']
     });
   }
 
