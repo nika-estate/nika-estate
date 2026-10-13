@@ -26,3 +26,14 @@ All factual location and amenity wording is based on supplied brochures and cite
 Cyprus prototype assets:
 
 - `assets/images/cyprus/eligibility-hero.jpg`, `city-match-hero.jpg`, `investment-memo-hero.jpg` — generated on 2026-09-17 with OpenAI Image Generation for prototype-only Cyprus landing pages. They are illustrative editorial visuals, not photographs of a named project, and contain no factual property claims. Replace with approved local photography or developer material before a production campaign.
+
+
+## Saudi investment selection / 13 October 2026
+
+The English PDF is hosted on Drive under file ID `1JSx1zBQZDRsTCxqAwjv4VLouF22BOpKK`. Its reproducible layout and text are in `tools/build_saudi_investment_guide.py` (ReportLab + Pillow).
+
+Optimised developer renders in `assets/guides/saudi/` were extracted from the client-supplied brochures received on 12 October 2026: Élevée page 2 (`elevee.jpg`) and page 6 (`elevee-green.jpg`); OSUS Eye page 4 (`osus.jpg`); Tower Project page 1 (`tower.jpg`). They are proposed-design illustrations, not completed-property photography. Original brochures remain in the Saudi project folder on Drive.
+
+`assets/fonts/cormorant-semibold.ttf` is Cormorant Garamond, distributed under the SIL Open Font License in `assets/fonts/cormorant-OFL.txt`.
+
+Published starting prices and Élevée’s 20% starting down payment were checked on the developer sites on 13 October 2026. Rental and resale calculations in the PDF are explicitly illustrative, not project-specific forecasts.

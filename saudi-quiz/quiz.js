@@ -6,9 +6,11 @@
   const progressBar = document.getElementById('progress-bar');
   const stepCount = document.getElementById('step-count');
   const progress = {
-    intro: ['Your guide starts here', 0, 'About 30 seconds'],
-    purpose: ['Question 1 of 2', 32, 'Step 1 of 2'],
-    purchase: ['Question 2 of 2', 65, 'Step 2 of 2'],
+    intro: ['Your selection starts here', 0, 'About 1 minute'],
+    purpose: ['Question 1 of 4', 18, 'Step 1 of 4'],
+    budget: ['Question 2 of 4', 36, 'Step 2 of 4'],
+    timing: ['Question 3 of 4', 54, 'Step 3 of 4'],
+    purchase: ['Question 4 of 4', 72, 'Step 4 of 4'],
     human: ['One quick check', 90, 'Human check'],
     contact: ['Almost done', 95, 'Contact details'],
     success: ['Complete', 100, 'Thank you']
@@ -29,6 +31,10 @@
         heading.tabIndex = -1;
         heading.focus({ preventScroll: true });
       }
+    }
+    const residencyNote = form.querySelector('[data-residency-note]');
+    if (residencyNote) {
+      residencyNote.hidden = form.elements.namedItem('purchase_goal').value !== 'Property-linked residency';
     }
     window.scrollTo({ top: 0, behavior: 'instant' });
   }

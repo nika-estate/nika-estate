@@ -513,3 +513,23 @@ test('investment meeting rejects automatic submissions before the endpoint and a
   assert.equal(h.calls.fetch[0].options.body.includes('human_check'), false);
   assert.equal(h.calls.fetch[0].options.body.includes('website'), false);
 });
+
+test('Saudi investment qualification reaches the sales payload with all four answers in USD', async () => {
+  const form = new Form(true);
+  form.dataset.includeQuizAnswers = 'true';
+  Object.assign(form.fields, {
+    purchase_goal: 'Rental income',
+    investment_budget: 'USD 250,000–499,999',
+    purchase_timing: 'In 3–6 months',
+    purchase_approach: 'Off-plan with staged payments, where available'
+  });
+  const h = harness([form]);
+  h.respond(async (url, options) => ({ok: true, type: 'cors', json: async () => ({ok: true, lead_id: JSON.parse(options.body).lead_id})}));
+  await form.listeners.find(item => item.type === 'submit').callback({preventDefault(){}, stopImmediatePropagation(){}});
+  const payload = JSON.parse(h.calls.fetch[0].options.body);
+  for (const name of ['purchase_goal','investment_budget','purchase_timing','purchase_approach']) {
+    assert.equal(payload.answers.find(item => item.field === name).answer, form.fields[name]);
+    assert.ok(payload.form_name.includes(form.fields[name]));
+  }
+  assert.equal(payload.answers.some(item => item.field === 'messenger'), false);
+});
