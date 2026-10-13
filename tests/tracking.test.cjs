@@ -54,9 +54,7 @@ test('every landing exposes only lead forms, without agency phones or direct con
     assert.doesNotMatch(withoutConfirmedBotLink, /href=["'](?:tel:|mailto:|https?:\/\/(?:wa\.me|t\.me|api\.whatsapp\.com|web\.whatsapp\.com))/i, page);
     assert.doesNotMatch(html, /97145574496|971508698020|\+971 4 557 4496|Удобнее связаться|class="[^"]*\b(?:direct-contact|request-direct|request-contacts)\b/, page);
     assert.match(html, /name="phone"/, 'client contact stays on ' + page);
-    assert.match(html, page === 'invest-meeting/index.html'
-      ? /lead-capture\.js\?v=20260924-bot-check/
-      : /lead-capture\.js\?v=20260917-forms-only/, page);
+    assert.match(html, /lead-capture\.js\?v=20261013-phone-text/, page);
     assert.doesNotMatch(html, /(?:Откроется|откроется)[^<]*WhatsApp/, page);
   }
   for (const file of ['script.js', 'assets/scripts/site.js', 'assets/scripts/lead-capture.js']) {
@@ -150,11 +148,7 @@ test('all published English quizzes enable answer capture and the new script ver
     'cyprus-quiz/index.html', 'greece-quiz/index.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     assert.match(html, /data-include-quiz-answers="true"/, page);
-    assert.match(html, page === 'greece-quiz/index.html'
-      ? /lead-capture\.js\?v=20261007-work-visa/
-      : page === 'cyprus-quiz/index.html'
-        ? /lead-capture\.js\?v=20261009-cyprus-fields/
-        : /lead-capture\.js\?v=20261001-dedupe/, page);
+    assert.match(html, /lead-capture\.js\?v=20261013-phone-text/, page);
   }
 });
 
@@ -341,8 +335,7 @@ test('all static pages start the same async pixel in head, with valid body fallb
     assert.doesNotMatch(head, /<noscript>.*<img/);
     assert.match(html, /<body[^>]*>\s*<noscript><img[^>]*tr\?id=1758103622093263&amp;ev=PageView&amp;noscript=1/);
     assert.equal((html.match(/assets\/scripts\/analytics\.js\?v=20260923-time-goals/g) || []).length, 1);
-    const captureVersion = page === 'invest-meeting/index.html' ? '20260924-bot-check' : '20260917-forms-only';
-    assert.equal((html.match(new RegExp(`assets/scripts/lead-capture\\.js\\?v=${captureVersion}`, 'g')) || []).length, 1);
+    assert.equal((html.match(/assets\/scripts\/lead-capture\.js\?v=20261013-phone-text/g) || []).length, 1);
     new vm.Script(head.match(/<script>([\s\S]*?)<\/script>/)[1]);
   }
 });
@@ -454,6 +447,14 @@ test('confirmed quiz lead cannot be submitted again from the page or a reopened 
   reopenedForm.fields.phone = '+971000000001';
   assert.equal(await reopened.context.NikaLeadCapture.send(reopenedForm), true);
   assert.equal(reopened.calls.fetch.length, 1);
+});
+
+test('lead payload removes spaces from international phone numbers without losing the country prefix', () => {
+  const form = new Form();
+  form.fields.phone = '+49 163\u00a07058409';
+  const payload = harness().context.NikaLeadCapture.buildPayload(form);
+  assert.equal(payload.phone, '+491637058409');
+  assert.equal(payload.dedupe_key.split('|')[0], '491637058409');
 });
 
 test('unconfirmed success events and repeated module initialization cannot duplicate tracking', () => {

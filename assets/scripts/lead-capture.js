@@ -19,6 +19,10 @@
     return value == null ? '' : String(value).trim();
   }
 
+  function normalizePhone(value) {
+    return text(value).replace(/\s+/gu, '');
+  }
+
   function controlByName(form, name) {
     const escapedName = String(name).replace(/["\\]/g, '\\$&');
     return form.querySelector(`[name="${escapedName}"]`);
@@ -240,7 +244,7 @@
     const generalContact = byNames(form, ['contact']);
     const explicitPhone = byNames(form, ['phone', 'tel', 'telephone']);
     const explicitTelegram = byNames(form, ['telegram', 'tg']);
-    const phone = explicitPhone || (generalContact.startsWith('@') ? '' : generalContact);
+    const phone = normalizePhone(explicitPhone || (generalContact.startsWith('@') ? '' : generalContact));
     const telegram = explicitTelegram || (generalContact.startsWith('@') ? generalContact : '');
     const utm = getUtm();
 
