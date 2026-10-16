@@ -21,7 +21,8 @@ test("quiz asks only for the goal and contact details", () => {
   assert.match(app, /С какой целью рассматриваете покупку/);
   assert.match(app, /Как с вами связаться/);
   assert.match(app, /data-quiz-form/);
-  assert.match(app, /name="contact"/);
+  assert.match(app, /name="phone" type="tel"/);
+  assert.match(app, /Телефон с кодом страны/);
   assert.match(app, /privacy_consent/);
 });
 

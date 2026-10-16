@@ -54,7 +54,7 @@ test('every landing exposes only lead forms, without agency phones or direct con
     assert.doesNotMatch(withoutConfirmedBotLink, /href=["'](?:tel:|mailto:|https?:\/\/(?:wa\.me|t\.me|api\.whatsapp\.com|web\.whatsapp\.com))/i, page);
     assert.doesNotMatch(html, /97145574496|971508698020|\+971 4 557 4496|Удобнее связаться|class="[^"]*\b(?:direct-contact|request-direct|request-contacts)\b/, page);
     assert.match(html, /name="phone"/, 'client contact stays on ' + page);
-    assert.match(html, /lead-capture\.js\?v=20261013-phone-text/, page);
+    assert.match(html, /lead-capture\.js\?v=20261016-intl-phone/, page);
     assert.doesNotMatch(html, /(?:Откроется|откроется)[^<]*WhatsApp/, page);
   }
   for (const file of ['script.js', 'assets/scripts/site.js', 'assets/scripts/lead-capture.js']) {
@@ -148,7 +148,7 @@ test('all published English quizzes enable answer capture and the new script ver
     'cyprus-quiz/index.html', 'greece-quiz/index.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     assert.match(html, /data-include-quiz-answers="true"/, page);
-    assert.match(html, /lead-capture\.js\?v=20261013-phone-text/, page);
+    assert.match(html, /lead-capture\.js\?v=20261016-intl-phone/, page);
   }
 });
 
@@ -280,6 +280,34 @@ test('failed form submission allows retry and invalid contact never sends', asyn
   assert.equal(h.calls.fetch.length, 1);
 });
 
+test('all lead forms require a country code and send a compact international number', async () => {
+  const mainCapture = fs.readFileSync(path.join(root, 'assets/scripts/lead-capture.js'), 'utf8');
+  for (const copy of ['projects-app/public/project-assets/lead-capture.js', 'valia-app/public/assets/lead-capture.js']) {
+    assert.equal(fs.readFileSync(path.join(root, copy), 'utf8'), mainCapture, copy);
+  }
+  for (const phone of ['7843625381', '5309700881', '7776128648', '555121685',
+    '+555121685', '+01234567890', '+49 163 70abc58409']) {
+    const form = new Form();
+    form.fields.phone = phone;
+    const h = harness([form]);
+    const submit = form.listeners.find(listener => listener.type === 'submit').callback;
+    await submit({ preventDefault() {}, stopImmediatePropagation() {} });
+    assert.equal(form.reported, true, phone);
+    assert.equal(h.calls.fetch.length, 0, phone);
+    assert.equal(h.calls.meta.length, 0, phone);
+  }
+
+  const form = new Form();
+  form.fields.phone = '+49 163 7058409';
+  const h = harness([form]);
+  const submit = form.listeners.find(listener => listener.type === 'submit').callback;
+  await submit({ preventDefault() {}, stopImmediatePropagation() {} });
+  assert.equal(h.calls.fetch.length, 1);
+  const payload = JSON.parse(h.calls.fetch[0].options.body);
+  assert.equal(payload.phone, '+491637058409');
+  assert.equal(h.calls.meta[0][1], 'Lead');
+});
+
 function harness(forms = [], storage) {
   const listeners = new Map();
   const calls = { meta: [], metrika: [], fetch: [], events: [] };
@@ -335,7 +363,7 @@ test('all static pages start the same async pixel in head, with valid body fallb
     assert.doesNotMatch(head, /<noscript>.*<img/);
     assert.match(html, /<body[^>]*>\s*<noscript><img[^>]*tr\?id=1758103622093263&amp;ev=PageView&amp;noscript=1/);
     assert.equal((html.match(/assets\/scripts\/analytics\.js\?v=20260923-time-goals/g) || []).length, 1);
-    assert.equal((html.match(/assets\/scripts\/lead-capture\.js\?v=20261013-phone-text/g) || []).length, 1);
+    assert.equal((html.match(/assets\/scripts\/lead-capture\.js\?v=20261016-intl-phone/g) || []).length, 1);
     new vm.Script(head.match(/<script>([\s\S]*?)<\/script>/)[1]);
   }
 });

@@ -65,7 +65,7 @@ test('Russian UAE quiz mirrors English questions, lead flow and guide delivery',
   assert.equal((russian.match(/1h3xfdqiPjRZ2qm_s6lffNInzGjT0oUa-/g) || []).length, 2);
   assert.match(russian, /data-guide-popup-form="uae-quiz-ru-form"/);
   assert.match(russian, /1758103622093263/);
-  assert.match(russian, /lead-capture\.js\?v=20261013-phone-text/);
+  assert.match(russian, /lead-capture\.js\?v=20261016-intl-phone/);
   assert.match(russian, /AKfycbwioz7fVEzsnDXOz5EOG5f7Db1detqxZYDZF1T8OqyU2DAeUW-_P5envHK6vwCtcNKAbg/);
   assert.match(behavior, /const questionCount = hasWorkVisaStep \? 4 : hasBudgetStep \|\| hasPropertyTypeStep \? 3 : 2/);
   assert.match(english, /href="ru\/" hreflang="ru"/);

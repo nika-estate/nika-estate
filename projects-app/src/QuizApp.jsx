@@ -40,7 +40,10 @@ export default function QuizApp() {
   }, []);
 
   useEffect(() => {
-    if (step === 2) requestAnimationFrame(() => headingRef.current?.focus());
+    if (step === 2) requestAnimationFrame(() => {
+      headingRef.current?.focus();
+      window.NikaLeadCapture?.init(document);
+    });
   }, [step]);
 
   const goNext = () => {
@@ -94,7 +97,7 @@ export default function QuizApp() {
             <p className="quiz-hint">Оставьте контакт — пришлём варианты и расчёт без навязчивых звонков.</p>
 
             <label className="text-field"><span>Ваше имя</span><input name="name" type="text" autoComplete="given-name" minLength="2" maxLength="80" placeholder="Как к вам обращаться?" required /></label>
-            <label className="text-field"><span>Телефон или @username</span><input name="contact" type="text" autoComplete="tel" minLength="5" maxLength="80" placeholder="+7 999 000-00-00 или @username" required /></label>
+            <label className="text-field"><span>Телефон с кодом страны</span><input name="phone" type="tel" inputMode="tel" autoComplete="tel" maxLength="40" placeholder="+971501234567" required /></label>
 
             <fieldset className="contact-choice"><legend>Куда удобнее написать?</legend><div>{contacts.map((method) => <label key={method} className={contactMethod === method ? "is-selected" : ""}><input type="radio" name="preferred_contact" value={method} checked={contactMethod === method} onChange={() => setContactMethod(method)} /><span>{method}</span></label>)}</div></fieldset>
 

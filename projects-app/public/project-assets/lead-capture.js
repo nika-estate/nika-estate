@@ -10,11 +10,77 @@
     offerName: sourceScript.dataset.offerName || ''
   };
   const pendingForms = new WeakMap();
-  const english = document.documentElement?.lang === 'en';
-  const message = (ru, en) => english ? en : ru;
+  const botChecks = new WeakMap();
+  const recentQuizLeads = new Map();
+  const duplicateWindowMs = 30 * 60 * 1000;
+  let storageSalt = Math.random().toString(36).slice(2);
 
   function text(value) {
     return value == null ? '' : String(value).trim();
+  }
+
+  function normalizePhone(value) {
+    const raw = text(value);
+    if (!/^\+[\d\s().-]+$/u.test(raw)) return '';
+    const phone = `+${raw.slice(1).replace(/\D/g, '')}`;
+    return /^\+[1-9]\d{9,14}$/.test(phone) ? phone : '';
+  }
+
+  function phoneInput(form) {
+    return form.querySelector('[name="phone"], [name="tel"], [name="telephone"]');
+  }
+
+  function phoneLanguage(form) {
+    return form.dataset.language || document.documentElement?.lang || 'ru';
+  }
+
+  function phoneMessages(form) {
+    const language = phoneLanguage(form);
+    if (language === 'tr') return {
+      hint: 'Ülke koduyla girin, ör. +905301234567.',
+      error: 'Telefon numaranızı + ve ülke koduyla, toplam 10–15 rakam olarak girin.'
+    };
+    if (language === 'en') return {
+      hint: 'Include the country code, for example +971501234567.',
+      error: 'Enter + and your country code, followed by your number (10–15 digits in total).'
+    };
+    return {
+      hint: 'Укажите код страны, например +971501234567.',
+      error: 'Введите номер с + и кодом страны: всего 10–15 цифр.'
+    };
+  }
+
+  function validatePhone(form) {
+    const input = phoneInput(form);
+    if (!input) return true;
+    const valid = Boolean(normalizePhone(input.value));
+    if (typeof input.setCustomValidity === 'function') {
+      input.setCustomValidity(valid ? '' : phoneMessages(form).error);
+    }
+    return valid;
+  }
+
+  function initPhoneInput(form) {
+    const input = phoneInput(form);
+    if (!input || typeof input.addEventListener !== 'function') return;
+    const messages = phoneMessages(form);
+    // Older page patterns accepted short numbers; the shared check now owns validation.
+    input.removeAttribute('pattern');
+    input.removeAttribute('minlength');
+    input.setAttribute('required', '');
+    input.setAttribute('title', messages.error);
+    input.addEventListener('input', () => input.setCustomValidity(''));
+    input.addEventListener('blur', () => validatePhone(form));
+
+    if (input.getAttribute('aria-describedby') || !input.parentElement
+        || typeof document.createElement !== 'function') return;
+    const hint = document.createElement('small');
+    hint.textContent = messages.hint;
+    hint.className = 'phone-country-hint';
+    hint.id = `phone-country-hint-${Math.random().toString(36).slice(2, 10)}`;
+    hint.style.cssText = 'display:block;margin-top:6px;font-size:12px;line-height:1.35;color:#667085';
+    input.insertAdjacentElement('afterend', hint);
+    input.setAttribute('aria-describedby', hint.id);
   }
 
   function controlByName(form, name) {
@@ -48,6 +114,10 @@
   function labelFor(form, name) {
     const control = controlByName(form, name);
     if (!control) return name;
+    const question = typeof control.closest === 'function'
+      ? control.closest('fieldset[data-step]')?.querySelector('legend')
+      : null;
+    if (question) return text(question.textContent) || name;
     const label = control.labels && control.labels[0]
       ? control.labels[0]
       : control.closest('label');
@@ -59,7 +129,7 @@
       'name', 'first_name', 'firstname', 'last_name', 'phone', 'contact',
       'tel', 'telephone', 'email', 'e_mail', 'telegram', 'tg', 'whatsapp',
       'messenger', 'preferred_contact', 'contact_method', 'privacy_consent',
-      'consent', 'project', 'offer_name'
+      'consent', 'project', 'offer_name', 'website', 'human_check'
     ]);
 
     return Object.keys(fields)
@@ -69,6 +139,28 @@
         question: labelFor(form, key),
         answer: fields[key]
       }));
+  }
+
+  function quizFormName(form, baseName, answers) {
+    if (form.dataset.includeQuizAnswers !== 'true') return baseName;
+    const byField = new Map(answers.map(item => [item.field, item.answer]));
+    const clean = value => text(value).replace(/[|\r\n]+/g, ' ').slice(0, 120);
+    const goal = clean(byField.get('purchase_goal'));
+    const workVisa = clean(byField.get('work_visa'));
+    const market = clean(byField.get('preferred_market'));
+    const approach = clean(byField.get('purchase_approach'));
+    const budget = clean(byField.get('investment_budget'));
+    const propertyType = clean(byField.get('property_type'));
+    const timing = clean(byField.get('purchase_timing'));
+    const parts = [baseName];
+    if (goal) parts.push(`Goal: ${goal}`);
+    if (workVisa) parts.push(`Work visa: ${workVisa}`);
+    if (market) parts.push(`City: ${market}`);
+    if (approach) parts.push(`Purchase format: ${approach}`);
+    if (budget) parts.push(`Budget: ${budget}`);
+    if (propertyType) parts.push(`Property type: ${propertyType}`);
+    if (timing) parts.push(`Timing: ${timing}`);
+    return parts.join(' | ');
   }
 
   function getUtm() {
@@ -89,8 +181,120 @@
     return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   }
 
+  function quizLeadToken(payload) {
+    if (payload.form_type !== 'Квиз' || !payload.dedupe_key) return '';
+    try {
+      const storage = window.localStorage;
+      if (storage) {
+        storageSalt = storage.getItem('nika_lead_salt_v1') || storageSalt;
+        storage.setItem('nika_lead_salt_v1', storageSalt);
+      }
+    } catch (_) { /* In-memory protection still works when storage is unavailable. */ }
+    const value = `${storageSalt}|${payload.dedupe_key.toLowerCase()}`;
+    let first = 2166136261;
+    let second = 2246822519;
+    for (let i = 0; i < value.length; i += 1) {
+      first = Math.imul(first ^ value.charCodeAt(i), 16777619);
+      second = Math.imul(second ^ value.charCodeAt(i), 3266489917);
+    }
+    return `${(first >>> 0).toString(16)}${(second >>> 0).toString(16)}`;
+  }
+
+  function recentQuizSubmission(token) {
+    if (!token) return false;
+    let sentAt = recentQuizLeads.get(token) || 0;
+    try {
+      const stored = Number(window.localStorage?.getItem(`nika_quiz_sent_${token}`));
+      if (Number.isFinite(stored)) sentAt = Math.max(sentAt, stored);
+    } catch (_) { /* Storage can be disabled by the browser. */ }
+    return sentAt > 0 && Date.now() - sentAt < duplicateWindowMs;
+  }
+
+  function rememberQuizSubmission(token) {
+    if (!token) return;
+    const sentAt = Date.now();
+    recentQuizLeads.set(token, sentAt);
+    try { window.localStorage?.setItem(`nika_quiz_sent_${token}`, String(sentAt)); }
+    catch (_) { /* Keep the in-memory guard. */ }
+  }
+
+  function initBotCheck(form) {
+    if (form.dataset.botProtection !== 'true') return;
+    const question = form.querySelector('[data-human-question]');
+    const answer = form.elements.namedItem('human_check');
+    if (!question || !answer) return;
+    const left = 2 + Math.floor(Math.random() * 6);
+    const right = 2 + Math.floor(Math.random() * 6);
+    question.textContent = `${left} + ${right} = ?`;
+    botChecks.set(form, { answer: left + right, startedAt: performance.now() });
+    const wrongAnswer = form.dataset.language === 'tr'
+      ? 'İşlemin sonucunu kontrol edin.'
+      : form.dataset.language === 'en'
+        ? 'Please check the answer to the sum.'
+        : 'Проверьте ответ на пример.';
+    if (typeof answer.addEventListener === 'function' && typeof answer.setCustomValidity === 'function') {
+      answer.addEventListener('input', () => {
+        answer.setCustomValidity(text(answer.value) && text(answer.value) !== String(left + right)
+          ? wrongAnswer : '');
+      });
+    }
+  }
+
+  function botCheckError(form) {
+    if (form.dataset.botProtection !== 'true') return '';
+    const language = form.dataset.language;
+    const messages = language === 'tr'
+      ? {
+          unavailable: 'Kontrol yüklenemedi. Sayfayı yenileyip tekrar deneyin.',
+          failed: 'Başvuru doğrulanamadı. Sayfayı yenileyip tekrar deneyin.',
+          answer: 'İşlemin sonucunu kontrol edin.',
+          questions: 'Lütfen tüm soruları yanıtlayın.',
+          wait: 'Birkaç saniye bekleyip tekrar deneyin.'
+        }
+      : language === 'en'
+        ? {
+            unavailable: 'The check did not load. Refresh the page and try again.',
+            failed: 'We could not verify the request. Refresh and try again.',
+            answer: 'Please check the answer to the sum.',
+            questions: 'Please answer every quiz question.',
+            wait: 'Wait a few seconds and try again.'
+          }
+        : {
+            unavailable: 'Проверка формы не загрузилась. Обновите страницу и попробуйте снова.',
+            failed: 'Не удалось проверить заявку. Обновите страницу и попробуйте снова.',
+            answer: 'Проверьте ответ на вопрос под формой.',
+            questions: 'Ответьте на все вопросы.',
+            wait: 'Подождите несколько секунд и отправьте заявку ещё раз.'
+          };
+    const check = botChecks.get(form);
+    if (!check) return messages.unavailable;
+    const trap = form.elements.namedItem('website');
+    if (trap && text(trap.value)) return messages.failed;
+    const answer = form.elements.namedItem('human_check');
+    if (!answer || text(answer.value) !== String(check.answer)) {
+      return messages.answer;
+    }
+    if (form.matches('[data-quiz-form]')) {
+      const allAnswered = [...form.querySelectorAll('fieldset[data-step]')]
+        .filter((step) => step.dataset.step !== 'human')
+        .every((step) => Boolean(step.querySelector('input[type="radio"]:checked, input[type="checkbox"]:checked')));
+      if (!allAnswered || form.dataset.quizFinished !== 'true') return messages.questions;
+    }
+    const minimumTime = form.matches('[data-quiz-form]') ? 7000 : 3000;
+    if (performance.now() - check.startedAt < minimumTime) {
+      return messages.wait;
+    }
+    return '';
+  }
+
+  function markQuizStarted(form) {
+    const check = botChecks.get(form);
+    if (check) check.startedAt = performance.now();
+  }
+
   function buildPayload(form) {
     const fields = formDataObject(form);
+    const answers = answerList(form, fields);
     const fullName = byNames(form, ['name', 'first_name', 'firstname']);
     const nameParts = fullName.split(/\s+/).filter(Boolean);
     const isQuiz = form.matches('[data-quiz-form], .quiz-form')
@@ -100,7 +304,7 @@
     const generalContact = byNames(form, ['contact']);
     const explicitPhone = byNames(form, ['phone', 'tel', 'telephone']);
     const explicitTelegram = byNames(form, ['telegram', 'tg']);
-    const phone = explicitPhone || (generalContact.startsWith('@') ? '' : generalContact);
+    const phone = normalizePhone(explicitPhone || (generalContact.startsWith('@') ? '' : generalContact));
     const telegram = explicitTelegram || (generalContact.startsWith('@') ? generalContact : '');
     const utm = getUtm();
 
@@ -116,7 +320,7 @@
       referrer: document.referrer || '',
       channel: utm.utm_source || 'direct',
       form_id: form.id || form.dataset.formId || '',
-      form_name: text(form.getAttribute('aria-label') || form.dataset.formName || form.className),
+      form_name: quizFormName(form, text(form.getAttribute('aria-label') || form.dataset.formName || form.className), answers),
       first_name: nameParts.shift() || '',
       last_name: nameParts.join(' '),
       phone,
@@ -128,24 +332,40 @@
       privacy_consent: form.querySelector('[name="privacy_consent"], [name="consent"]')
         ? byNames(form, ['privacy_consent', 'consent'])
         : 'Да',
-      answers: answerList(form, fields),
+      answers,
       tags: [
         text(form.dataset.landingName || pageConfig.landingName),
         offerName,
         isQuiz ? 'Квиз' : 'Мини-форма'
       ].filter(Boolean),
-      dedupe_key: [phone || telegram || byNames(form, ['email']), window.location.pathname, offerName]
+      dedupe_key: [(phone || telegram || byNames(form, ['email'])).replace(/[^\dA-Za-z@.]/g, '').toLowerCase(), window.location.pathname, offerName]
         .filter(Boolean)
         .join('|'),
       ...utm
     };
   }
 
+  function isDisqualified(form) {
+    const field = form.dataset.disqualifyField;
+    return form.dataset.disqualified === 'true'
+      || Boolean(field && formDataObject(form)[field] === form.dataset.disqualifyValue);
+  }
+
   function send(form) {
-    if (!pageConfig.endpoint || !form.checkValidity()) return Promise.resolve(false);
+    if (!pageConfig.endpoint || isDisqualified(form) || !validatePhone(form)
+        || !form.checkValidity() || botCheckError(form)) return Promise.resolve(false);
     if (pendingForms.has(form)) return pendingForms.get(form);
 
     const payload = buildPayload(form);
+    const token = quizLeadToken(payload);
+    if (recentQuizSubmission(token)) {
+      form.dataset.nikaDuplicate = 'true';
+      document.dispatchEvent(new CustomEvent('nika:lead-duplicate', {
+        detail: { formId: payload.form_id }
+      }));
+      return Promise.resolve(false);
+    }
+    form.dataset.nikaDuplicate = 'false';
     const request = fetch(pageConfig.endpoint, {
       method: 'POST',
       mode: 'cors',
@@ -156,6 +376,8 @@
       if (!response.ok || response.type === 'opaque') return false;
       const result = await response.json();
       if (result.ok !== true || result.lead_id !== payload.lead_id) return false;
+
+      rememberQuizSubmission(token);
 
       document.dispatchEvent(new CustomEvent('nika:lead-sent', {
         detail: {
@@ -177,32 +399,64 @@
     (root || document).querySelectorAll('form').forEach((form) => {
       if (form.dataset.nikaLeadBound === 'true') return;
       if (!form.querySelector('[name="phone"], [name="contact"], [name="email"]')) return;
+      initBotCheck(form);
+      initPhoneInput(form);
       form.dataset.nikaLeadBound = 'true';
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
-        if (!form.checkValidity()) {
+        if (isDisqualified(form)) return;
+        if (!validatePhone(form) || !form.checkValidity()) {
           form.reportValidity();
+          return;
+        }
+        const botError = botCheckError(form);
+        if (botError) {
+          const status = form.querySelector('[data-form-status], .form-success');
+          if (status) status.textContent = botError;
           return;
         }
         if (form.dataset.nikaSubmitting === 'true') return;
         const status = form.querySelector('[data-form-status], .form-success');
+        const language = form.dataset.language;
+        const messages = language === 'tr'
+          ? {
+              unavailable: 'Başvurunuz gönderilemedi. Lütfen daha sonra tekrar deneyin.',
+              sending: 'Başvurunuz gönderiliyor…',
+              confirmed: 'Başvurunuz alındı. Nika Estate danışmanı seçtiğiniz kanaldan sizinle iletişime geçecek.',
+              duplicate: 'Başvurunuz zaten alındı. Rehberi tekrar açabilirsiniz.',
+              failed: 'Başvurunuz doğrulanamadı. Lütfen tekrar deneyin.'
+            }
+          : language === 'en'
+            ? {
+                unavailable: 'We could not send your request. Please try later.',
+                sending: 'Sending your request…',
+                confirmed: 'Request received. A Nika Estate advisor will contact you via your chosen channel.',
+                duplicate: 'We already received your request. You can open the guide again.',
+                failed: 'We could not confirm your request. Please try again.'
+              }
+            : {
+                unavailable: 'Не удалось отправить заявку. Попробуйте позже.',
+                sending: 'Отправляем заявку…',
+                confirmed: 'Заявка отправлена. Брокер Nika Estate свяжется с вами выбранным способом.',
+                duplicate: 'Мы уже получили вашу заявку. Гайд можно открыть повторно.',
+                failed: 'Не удалось подтвердить отправку заявки. Попробуйте ещё раз.'
+              };
         if (!pageConfig.endpoint) {
-          if (status) status.textContent = message('Не удалось отправить заявку. Попробуйте позже.', 'Unable to send your enquiry. Please try again later.');
+          if (status) status.textContent = messages.unavailable;
           return;
         }
         form.dataset.nikaSubmitting = 'true';
         const buttons = [...form.querySelectorAll('button[type="submit"], input[type="submit"]')];
         const disabledBefore = buttons.map((button) => button.disabled);
-        if (status) status.textContent = message('Отправляем заявку…', 'Sending your enquiry…');
+        if (status) status.textContent = messages.sending;
         // Build the payload before disabling controls. No messenger redirect or fallback.
         const request = send(form);
         buttons.forEach((button) => { button.disabled = true; });
         form.setAttribute('aria-busy', 'true');
         const confirmed = await request;
-        if (status) status.textContent = confirmed
-          ? message('Заявка отправлена. Брокер Nika Estate свяжется с вами выбранным способом.', 'Your enquiry has been sent. A Nika Estate broker will contact you.')
-          : message('Не удалось подтвердить отправку заявки. Попробуйте ещё раз.', 'We could not confirm delivery. Please try again.');
+        if (status) status.textContent = confirmed ? messages.confirmed
+          : form.dataset.nikaDuplicate === 'true' ? messages.duplicate : messages.failed;
         buttons.forEach((button, index) => { button.disabled = disabledBefore[index]; });
         form.setAttribute('aria-busy', 'false');
         form.dataset.nikaSubmitting = 'false';
@@ -210,7 +464,7 @@
     });
   }
 
-  window.NikaLeadCapture = { init, send, buildPayload };
+  window.NikaLeadCapture = { init, send, buildPayload, markQuizStarted };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => init(document));

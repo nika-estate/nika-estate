@@ -9,7 +9,7 @@ function LeadForm({ id, bare = false, onPrivacy, submitLabel = "Получить
   return <div className={`lead-form-wrap ${bare ? "is-bare" : ""}`}>
     <form id={id} className="valia-form" aria-label={`Заявка по ${project.name}`} data-offer-name={offerName}>
       <label htmlFor={`${id}-name`}>Ваше имя<input id={`${id}-name`} name="name" type="text" autoComplete="given-name" minLength="2" maxLength="80" required /></label>
-      <label htmlFor={`${id}-phone`}>Телефон для связи<input id={`${id}-phone`} name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Укажите номер с кодом страны" minLength="7" maxLength="25" pattern="[0-9\s\+\-\(\)]{7,25}" required /></label>
+      <label htmlFor={`${id}-phone`}>Телефон для связи<input id={`${id}-phone`} name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+971501234567" maxLength="40" required /></label>
       <label htmlFor={`${id}-rooms`}>Какая квартира вам интересна?
         <select id={`${id}-rooms`} name="apartment">
           {[...new Set(project.plans.map((p) => p.bedrooms))].map((n) => <option key={n}>{n === 0 ? "Студия" : `${n} ${n === 1 ? "спальня" : "спальни"}`}</option>)}

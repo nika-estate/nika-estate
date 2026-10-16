@@ -20,7 +20,67 @@
   }
 
   function normalizePhone(value) {
-    return text(value).replace(/\s+/gu, '');
+    const raw = text(value);
+    if (!/^\+[\d\s().-]+$/u.test(raw)) return '';
+    const phone = `+${raw.slice(1).replace(/\D/g, '')}`;
+    return /^\+[1-9]\d{9,14}$/.test(phone) ? phone : '';
+  }
+
+  function phoneInput(form) {
+    return form.querySelector('[name="phone"], [name="tel"], [name="telephone"]');
+  }
+
+  function phoneLanguage(form) {
+    return form.dataset.language || document.documentElement?.lang || 'ru';
+  }
+
+  function phoneMessages(form) {
+    const language = phoneLanguage(form);
+    if (language === 'tr') return {
+      hint: 'Ülke koduyla girin, ör. +905301234567.',
+      error: 'Telefon numaranızı + ve ülke koduyla, toplam 10–15 rakam olarak girin.'
+    };
+    if (language === 'en') return {
+      hint: 'Include the country code, for example +971501234567.',
+      error: 'Enter + and your country code, followed by your number (10–15 digits in total).'
+    };
+    return {
+      hint: 'Укажите код страны, например +971501234567.',
+      error: 'Введите номер с + и кодом страны: всего 10–15 цифр.'
+    };
+  }
+
+  function validatePhone(form) {
+    const input = phoneInput(form);
+    if (!input) return true;
+    const valid = Boolean(normalizePhone(input.value));
+    if (typeof input.setCustomValidity === 'function') {
+      input.setCustomValidity(valid ? '' : phoneMessages(form).error);
+    }
+    return valid;
+  }
+
+  function initPhoneInput(form) {
+    const input = phoneInput(form);
+    if (!input || typeof input.addEventListener !== 'function') return;
+    const messages = phoneMessages(form);
+    // Older page patterns accepted short numbers; the shared check now owns validation.
+    input.removeAttribute('pattern');
+    input.removeAttribute('minlength');
+    input.setAttribute('required', '');
+    input.setAttribute('title', messages.error);
+    input.addEventListener('input', () => input.setCustomValidity(''));
+    input.addEventListener('blur', () => validatePhone(form));
+
+    if (input.getAttribute('aria-describedby') || !input.parentElement
+        || typeof document.createElement !== 'function') return;
+    const hint = document.createElement('small');
+    hint.textContent = messages.hint;
+    hint.className = 'phone-country-hint';
+    hint.id = `phone-country-hint-${Math.random().toString(36).slice(2, 10)}`;
+    hint.style.cssText = 'display:block;margin-top:6px;font-size:12px;line-height:1.35;color:#667085';
+    input.insertAdjacentElement('afterend', hint);
+    input.setAttribute('aria-describedby', hint.id);
   }
 
   function controlByName(form, name) {
@@ -292,7 +352,8 @@
   }
 
   function send(form) {
-    if (!pageConfig.endpoint || isDisqualified(form) || !form.checkValidity() || botCheckError(form)) return Promise.resolve(false);
+    if (!pageConfig.endpoint || isDisqualified(form) || !validatePhone(form)
+        || !form.checkValidity() || botCheckError(form)) return Promise.resolve(false);
     if (pendingForms.has(form)) return pendingForms.get(form);
 
     const payload = buildPayload(form);
@@ -339,12 +400,13 @@
       if (form.dataset.nikaLeadBound === 'true') return;
       if (!form.querySelector('[name="phone"], [name="contact"], [name="email"]')) return;
       initBotCheck(form);
+      initPhoneInput(form);
       form.dataset.nikaLeadBound = 'true';
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
         if (isDisqualified(form)) return;
-        if (!form.checkValidity()) {
+        if (!validatePhone(form) || !form.checkValidity()) {
           form.reportValidity();
           return;
         }
