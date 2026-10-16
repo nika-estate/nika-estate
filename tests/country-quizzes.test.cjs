@@ -39,6 +39,33 @@ test('three English property quizzes use the shared confirmed-lead flow and real
   assert.match(read('assets/styles/country-quiz.css'), /max-height: 600px/);
 });
 
+test('Russian UAE quiz mirrors English questions, lead flow and guide delivery', () => {
+  const english = read('uae-quiz/index.html');
+  const russian = read('uae-quiz/ru/index.html');
+  const behavior = read('assets/scripts/property-quiz.js');
+  for (const field of ['purchase_goal', 'preferred_market', 'messenger']) {
+    const values = (html) => [...html.matchAll(new RegExp(`name="${field}" value="([^"]+)"`, 'g'))].map((match) => match[1]);
+    assert.deepEqual(values(russian), values(english), field);
+  }
+  assert.match(russian, /<html lang="ru">/);
+  assert.match(russian, /data-property-quiz data-quiz-form data-bot-protection="true" data-language="ru" data-include-quiz-answers="true"/);
+  assert.match(russian, /data-step="purpose"[\s\S]*data-next="purchase"/);
+  assert.match(russian, /data-step="purchase"[\s\S]*data-next="human"/);
+  assert.match(russian, /data-step="human"[\s\S]*data-next="contact"/);
+  assert.match(russian, /name="phone"[^>]*required/);
+  assert.match(russian, /name="privacy_consent"[^>]*required/);
+  assert.match(russian, /href="\.\.\/\.\.\/privacy\/"/);
+  assert.match(russian, /href="\.\.\/\.\.\/consent\/"/);
+  assert.equal((russian.match(/1h3xfdqiPjRZ2qm_s6lffNInzGjT0oUa-/g) || []).length, 2);
+  assert.match(russian, /data-guide-popup-form="uae-quiz-ru-form"/);
+  assert.match(russian, /1758103622093263/);
+  assert.match(russian, /lead-capture\.js\?v=20261013-phone-text/);
+  assert.match(russian, /AKfycbwioz7fVEzsnDXOz5EOG5f7Db1detqxZYDZF1T8OqyU2DAeUW-_P5envHK6vwCtcNKAbg/);
+  assert.match(behavior, /const questionCount = hasWorkVisaStep \? 4 : hasBudgetStep \|\| hasPropertyTypeStep \? 3 : 2/);
+  assert.match(english, /href="ru\/" hreflang="ru"/);
+  assert.match(russian, /href="\.\.\/" hreflang="en"/);
+});
+
 test('Greek quizzes ask about Golden Visa knowledge and residence plans in all three languages', () => {
   const english = read('greece-quiz/index.html');
   const turkish = read('greece-quiz/tr/index.html');

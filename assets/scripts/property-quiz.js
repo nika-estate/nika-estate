@@ -43,17 +43,24 @@
     });
   }
   if (russian) {
+    const questionCount = hasWorkVisaStep ? 4 : hasBudgetStep || hasPropertyTypeStep ? 3 : 2;
     Object.assign(progress, {
-      intro: ['Ваша подборка начинается здесь', 0, 'Около 1 минуты'],
-      purpose: ['Вопрос 1 из 4', 20, 'Шаг 1 из 4'],
+      intro: ['Ваша подборка начинается здесь', 0, questionCount === 4 ? 'Около 1 минуты' : questionCount === 3 ? 'Около 45 секунд' : 'Около 30 секунд'],
+      purpose: [`Вопрос 1 из ${questionCount}`, questionCount === 4 ? 20 : 30, `Шаг 1 из ${questionCount}`],
       'work-visa': ['Вопрос 2 из 4', 40, 'Шаг 2 из 4'],
-      purchase: ['Вопрос 3 из 4', 60, 'Шаг 3 из 4'],
+      purchase: [`Вопрос ${hasWorkVisaStep ? 3 : 2} из ${questionCount}`, 60, `Шаг ${hasWorkVisaStep ? 3 : 2} из ${questionCount}`],
       budget: ['Вопрос 4 из 4', 80, 'Шаг 4 из 4'],
       human: ['Небольшая проверка', 90, 'Проверка'],
       contact: ['Почти готово', 95, 'Контакты'],
       ineligible: ['Спасибо', 100, 'Квиз завершён'],
       success: ['Готово', 100, 'Спасибо']
     });
+    if (hasPropertyTypeStep) {
+      progress.budget = ['Вопрос 2 из 3', 60, 'Шаг 2 из 3'];
+      progress['property-type'] = ['Вопрос 3 из 3', 80, 'Шаг 3 из 3'];
+    } else if (hasBudgetStep && !hasWorkVisaStep) {
+      progress.budget = ['Вопрос 3 из 3', 80, 'Шаг 3 из 3'];
+    }
   }
 
   function show(name) {
