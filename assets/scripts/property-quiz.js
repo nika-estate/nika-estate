@@ -45,7 +45,7 @@
   if (russian) {
     const questionCount = hasWorkVisaStep ? 4 : hasBudgetStep || hasPropertyTypeStep ? 3 : 2;
     Object.assign(progress, {
-      intro: ['Ваша подборка начинается здесь', 0, questionCount === 4 ? 'Около 1 минуты' : questionCount === 3 ? 'Около 45 секунд' : 'Около 30 секунд'],
+      intro: [form.dataset.introProgressLabel || 'Ваша подборка начинается здесь', 0, questionCount === 4 ? 'Около 1 минуты' : questionCount === 3 ? 'Около 45 секунд' : 'Около 30 секунд'],
       purpose: [`Вопрос 1 из ${questionCount}`, questionCount === 4 ? 20 : 30, `Шаг 1 из ${questionCount}`],
       'work-visa': ['Вопрос 2 из 4', 40, 'Шаг 2 из 4'],
       purchase: [`Вопрос ${hasWorkVisaStep ? 3 : 2} из ${questionCount}`, 60, `Шаг ${hasWorkVisaStep ? 3 : 2} из ${questionCount}`],

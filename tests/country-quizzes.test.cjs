@@ -48,11 +48,17 @@ test('Russian UAE quiz mirrors English questions, lead flow and guide delivery',
     assert.deepEqual(values(russian), values(english), field);
   }
   assert.match(russian, /<html lang="ru">/);
-  assert.match(russian, /data-property-quiz data-quiz-form data-bot-protection="true" data-language="ru" data-include-quiz-answers="true"/);
+  assert.match(russian, /data-property-quiz data-quiz-form data-bot-protection="true" data-language="ru"[^>]*data-include-quiz-answers="true"/);
   assert.match(russian, /data-step="purpose"[\s\S]*data-next="purchase"/);
   assert.match(russian, /data-step="purchase"[\s\S]*data-next="human"/);
   assert.match(russian, /data-step="human"[\s\S]*data-next="contact"/);
   assert.match(russian, /name="phone"[^>]*required/);
+  assert.match(russian, /name="phone"[^>]*maxlength="40"[^>]*aria-describedby="uae-phone-hint"/);
+  assert.doesNotMatch(russian, /placeholder="\+7 999 000 00 00"/);
+  assert.match(russian, /номер любой страны/);
+  assert.match(russian, /Получить консультацию/);
+  assert.match(russian, /data-intro-progress-label="Консультация начинается здесь"/);
+  assert.match(behavior, /form\.dataset\.introProgressLabel \|\| 'Ваша подборка начинается здесь'/);
   assert.match(russian, /name="privacy_consent"[^>]*required/);
   assert.match(russian, /href="\.\.\/\.\.\/privacy\/"/);
   assert.match(russian, /href="\.\.\/\.\.\/consent\/"/);
